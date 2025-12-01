@@ -238,6 +238,7 @@ return [
     'left_this_month' => 'left this month.',
     'expenses_by_category' => 'Expenses by Category',
     'income_trend' => 'Income Trend',
+    'expenses_trend' => 'Expenses Trend',
     'savings_trend' => 'Savings Trend',
     'active_goals' => 'Active Goals',
     'monthly_needed' => 'Monthly Needed',

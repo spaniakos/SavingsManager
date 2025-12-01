@@ -92,6 +92,20 @@
         ];
     }
     
+    // Expenses trend (last 6 months)
+    $expensesTrend = [];
+    for ($i = 5; $i >= 0; $i--) {
+        $month = $now->copy()->subMonths($i);
+        $monthExpenses = ExpenseEntry::where('user_id', $user->id)
+            ->whereYear('date', $month->year)
+            ->whereMonth('date', $month->month)
+            ->sum('amount');
+        $expensesTrend[] = [
+            'month' => $month->format('M Y'),
+            'amount' => $monthExpenses
+        ];
+    }
+    
     // Savings trend (last 6 months)
     $savingsTrend = [];
     $previousMonthSavings = null;
@@ -327,6 +341,14 @@
         </div>
     </div>
     
+    <!-- Expenses Trend Chart -->
+    <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
+        <h3 class="text-lg font-semibold mb-4">{{ __('common.expenses_trend') }}</h3>
+        <div class="chart-container">
+            <canvas id="expensesTrendChart"></canvas>
+        </div>
+    </div>
+    
     <!-- Savings Trend Chart -->
     <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
         <div class="flex items-center justify-between mb-4">
@@ -407,6 +429,40 @@ new Chart(incomeCtx, {
             data: {!! json_encode(array_column($incomeTrend, 'amount')) !!},
             borderColor: '#10b981',
             backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return '€' + value.toFixed(0);
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Expenses Trend Chart
+const expensesTrendCtx = document.getElementById('expensesTrendChart').getContext('2d');
+new Chart(expensesTrendCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode(array_column($expensesTrend, 'month')) !!},
+        datasets: [{
+            label: '{{ __('common.expenses') }}',
+            data: {!! json_encode(array_column($expensesTrend, 'amount')) !!},
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
             tension: 0.4,
             fill: true
         }]

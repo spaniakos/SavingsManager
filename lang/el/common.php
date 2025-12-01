@@ -238,6 +238,7 @@ return [
     'left_this_month' => 'απομένουν αυτό το μήνα.',
     'expenses_by_category' => 'Δαπάνες ανά Κατηγορία',
     'income_trend' => 'Τάση Εισοδημάτων',
+    'expenses_trend' => 'Τάση Εξόδων',
     'savings_trend' => 'Τάση Αποταμιεύσεων',
     'active_goals' => 'Ενεργοί Στόχοι',
     'monthly_needed' => 'Μηνιαία Απαιτούμενη',
