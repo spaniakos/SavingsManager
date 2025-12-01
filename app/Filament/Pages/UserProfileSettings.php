@@ -9,16 +9,18 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
+use BackedEnum;
 use Filament\Pages\Page;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 
 class UserProfileSettings extends Page implements HasForms
 {
     use InteractsWithForms;
     
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
     
-    protected static string $view = 'filament.pages.user-profile-settings';
+    protected string $view = 'filament.pages.user-profile-settings';
     
     public static function getNavigationLabel(): string
     {
