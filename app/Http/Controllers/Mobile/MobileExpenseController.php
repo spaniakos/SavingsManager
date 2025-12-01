@@ -71,6 +71,11 @@ class MobileExpenseController extends Controller
             $this->addToSavingsGoals($expense);
         }
         
+        // Handle Savings category expenses - add to savings goals
+        if ($category->expenseSuperCategory && $category->expenseSuperCategory->name === 'savings') {
+            $this->addToSavingsGoals($expense);
+        }
+        
         return redirect('/admin/mobile')->with('success', __('common.created_successfully'));
     }
     

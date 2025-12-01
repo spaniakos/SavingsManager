@@ -14,10 +14,6 @@ class MobileSavingsGoalsAdminController extends Controller
     {
         $user = Auth::user();
         $goals = SavingsGoal::where('user_id', $user->id)
-            ->orWhereHas('members', function ($query) use ($user) {
-                $query->where('users.id', $user->id)
-                    ->where('savings_goal_members.status', 'accepted');
-            })
             ->orderBy('created_at', 'desc')
             ->get();
         
@@ -26,8 +22,7 @@ class MobileSavingsGoalsAdminController extends Controller
     
     public function create()
     {
-        $users = User::where('id', '!=', Auth::id())->orderBy('name')->get();
-        return view('mobile.savings-goals-admin.create', compact('users'));
+        return view('mobile.savings-goals-admin.create');
     }
     
     public function store(Request $request)
@@ -35,30 +30,32 @@ class MobileSavingsGoalsAdminController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'target_amount' => 'required|numeric|min:0.01',
-            'current_amount' => 'nullable|numeric|min:0',
+            'current_amount' => 'nullable|numeric',
             'initial_checkpoint' => 'nullable|numeric|min:0',
             'start_date' => 'required|date',
             'target_date' => 'required|date|after:start_date',
-            'is_joint' => 'boolean',
-            'members' => 'nullable|array',
-            'members.*' => 'exists:users,id',
             'notes' => 'nullable|string',
         ]);
+        
+        // Ensure current_amount defaults to 0 if not provided or empty
+        $currentAmount = isset($validated['current_amount']) && $validated['current_amount'] !== null && $validated['current_amount'] !== '' 
+            ? (float)$validated['current_amount'] 
+            : 0;
+        
+        // Ensure initial_checkpoint defaults to 0 if not provided
+        $initialCheckpoint = isset($validated['initial_checkpoint']) && $validated['initial_checkpoint'] !== null && $validated['initial_checkpoint'] !== '' 
+            ? (float)$validated['initial_checkpoint'] 
+            : 0;
         
         $goal = SavingsGoal::create([
             'user_id' => Auth::id(),
             'name' => $validated['name'],
             'target_amount' => $validated['target_amount'],
-            'current_amount' => $validated['current_amount'] ?? 0,
-            'initial_checkpoint' => $validated['initial_checkpoint'] ?? 0,
+            'current_amount' => $currentAmount,
+            'initial_checkpoint' => $initialCheckpoint,
             'start_date' => $validated['start_date'],
             'target_date' => $validated['target_date'],
-            'is_joint' => $validated['is_joint'] ?? false,
         ]);
-        
-        if ($goal->is_joint && isset($validated['members'])) {
-            $goal->members()->sync($validated['members']);
-        }
         
         return redirect()->route('mobile.savings-goals-admin.index')
             ->with('success', __('common.created_successfully'));
@@ -69,9 +66,7 @@ class MobileSavingsGoalsAdminController extends Controller
         $goal = SavingsGoal::where('user_id', Auth::id())
             ->findOrFail($id);
         
-        $users = User::where('id', '!=', Auth::id())->orderBy('name')->get();
-        
-        return view('mobile.savings-goals-admin.edit', compact('goal', 'users'));
+        return view('mobile.savings-goals-admin.edit', compact('goal'));
     }
     
     public function update(Request $request, $id)
@@ -82,23 +77,31 @@ class MobileSavingsGoalsAdminController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'target_amount' => 'required|numeric|min:0.01',
-            'current_amount' => 'nullable|numeric|min:0',
+            'current_amount' => 'nullable|numeric',
             'initial_checkpoint' => 'nullable|numeric|min:0',
             'start_date' => 'required|date',
             'target_date' => 'required|date|after:start_date',
-            'is_joint' => 'boolean',
-            'members' => 'nullable|array',
-            'members.*' => 'exists:users,id',
             'notes' => 'nullable|string',
         ]);
         
-        $goal->update($validated);
+        // Ensure current_amount defaults to 0 if not provided or empty
+        $currentAmount = isset($validated['current_amount']) && $validated['current_amount'] !== null && $validated['current_amount'] !== '' 
+            ? (float)$validated['current_amount'] 
+            : 0;
         
-        if ($goal->is_joint && isset($validated['members'])) {
-            $goal->members()->sync($validated['members']);
-        } else {
-            $goal->members()->detach();
-        }
+        // Ensure initial_checkpoint defaults to 0 if not provided
+        $initialCheckpoint = isset($validated['initial_checkpoint']) && $validated['initial_checkpoint'] !== null && $validated['initial_checkpoint'] !== '' 
+            ? (float)$validated['initial_checkpoint'] 
+            : 0;
+        
+        $goal->update([
+            'name' => $validated['name'],
+            'target_amount' => $validated['target_amount'],
+            'current_amount' => $currentAmount,
+            'initial_checkpoint' => $initialCheckpoint,
+            'start_date' => $validated['start_date'],
+            'target_date' => $validated['target_date'],
+        ]);
         
         return redirect()->route('mobile.savings-goals-admin.index')
             ->with('success', __('common.updated_successfully'));

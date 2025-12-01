@@ -12,26 +12,22 @@ use Illuminate\Support\Facades\DB;
 class ReportService
 {
     /**
-     * Calculate total saved money (seed_capital + savings goals + save_for_later)
+     * Calculate total saved money (seed_capital + sum(initial_checkpoint + current_amount for all goals))
+     * Note: save_for_later expenses are NOT added separately because they already modify current_amount
      */
     public function calculateTotalSaved(User $user): float
     {
         $seedCapital = $user->seed_capital ?? 0;
         
-        // Sum of all savings goals current amounts
+        // Sum of all savings goals (initial_checkpoint + current_amount)
+        // Note: current_amount already includes contributions from Savings category expenses and save_for_later expenses
         $savingsGoalsTotal = SavingsGoal::where('user_id', $user->id)
-            ->orWhereHas('members', function ($query) use ($user) {
-                $query->where('users.id', $user->id)
-                    ->where('savings_goal_members.status', 'accepted');
-            })
-            ->sum('current_amount');
+            ->get()
+            ->sum(function ($goal) {
+                return ($goal->initial_checkpoint ?? 0) + ($goal->current_amount ?? 0);
+            });
         
-        // Sum of all save_for_later expense amounts
-        $saveForLaterTotal = ExpenseEntry::where('user_id', $user->id)
-            ->where('is_save_for_later', true)
-            ->sum('amount');
-        
-        return round($seedCapital + $savingsGoalsTotal + $saveForLaterTotal, 2);
+        return round($seedCapital + $savingsGoalsTotal, 2);
     }
 
     /**
@@ -147,10 +143,6 @@ class ReportService
         $month = $month ?? Carbon::now();
 
         $goals = SavingsGoal::where('user_id', $user->id)
-            ->orWhereHas('members', function ($query) use ($user) {
-                $query->where('users.id', $user->id)
-                    ->where('savings_goal_members.status', 'accepted');
-            })
             ->get();
 
         $calculator = app(SavingsCalculatorService::class);
@@ -168,7 +160,6 @@ class ReportService
                     'progress_percentage' => $calculator->calculateOverallProgress($goal),
                     'monthly_saving_needed' => $calculator->calculateMonthlySavingNeeded($goal),
                     'months_remaining' => $calculator->calculateMonthsRemaining($goal),
-                    'is_joint' => $goal->is_joint,
                 ];
             }),
             'total_target' => $goals->sum('target_amount'),

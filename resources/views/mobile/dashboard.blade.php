@@ -46,6 +46,9 @@
         })
         ->get();
     
+    // All goals for monthly calculation check
+    $allGoals = $user->savingsGoals()->get();
+    
     // Expenses by super category this month
     $expensesBySuperCategory = ExpenseEntry::where('expense_entries.user_id', $user->id)
         ->whereBetween('expense_entries.date', [$startOfMonth, $endOfMonth])
@@ -181,12 +184,14 @@
         $previousMonthEnd = $previousMonth->copy()->endOfMonth();
         
         // Check if previous month has been calculated
+        // We check ALL goals because if any goal was calculated for that month, we shouldn't show the button
+        // If last_monthly_calculation_at is after the end of previous month, it means previous month was calculated
         $previousMonthCalculated = false;
-        foreach ($activeGoals as $goal) {
+        foreach ($allGoals as $goal) {
             if ($goal->last_monthly_calculation_at) {
                 $lastCalc = Carbon::parse($goal->last_monthly_calculation_at);
-                if ($lastCalc->year === $previousMonth->year 
-                    && $lastCalc->month === $previousMonth->month) {
+                // If calculation was done after the previous month ended, it means previous month was calculated
+                if ($lastCalc->isAfter($previousMonthEnd)) {
                     $previousMonthCalculated = true;
                     break;
                 }

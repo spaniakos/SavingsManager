@@ -12,6 +12,7 @@ class EditExpenseEntry extends EditRecord
     
     protected $previousSaveForLater = false;
     protected $previousAmount = 0;
+    protected $previousWasSavingsCategory = false;
 
     protected function getHeaderActions(): array
     {
@@ -29,6 +30,9 @@ class EditExpenseEntry extends EditRecord
         // Store previous values for comparison
         $this->previousSaveForLater = $this->record->is_save_for_later ?? false;
         $this->previousAmount = $this->record->amount ?? 0;
+        $this->previousWasSavingsCategory = $this->record->expenseCategory 
+            && $this->record->expenseCategory->expenseSuperCategory 
+            && $this->record->expenseCategory->expenseSuperCategory->name === 'savings';
         return $data;
     }
     
@@ -43,14 +47,17 @@ class EditExpenseEntry extends EditRecord
     {
         $currentSaveForLater = $this->record->is_save_for_later ?? false;
         $currentAmount = $this->record->amount ?? 0;
+        $currentIsSavingsCategory = $this->record->expenseCategory 
+            && $this->record->expenseCategory->expenseSuperCategory 
+            && $this->record->expenseCategory->expenseSuperCategory->name === 'savings';
         
-        // If it was save for later before, remove the previous amount
-        if ($this->previousSaveForLater) {
+        // If it was save for later or Savings category before, remove the previous amount
+        if ($this->previousSaveForLater || $this->previousWasSavingsCategory) {
             $this->removeFromSavingsGoals($this->previousAmount);
         }
         
-        // If it's now save for later, add the current amount
-        if ($currentSaveForLater) {
+        // If it's now save for later or Savings category, add the current amount
+        if ($currentSaveForLater || $currentIsSavingsCategory) {
             $this->addToSavingsGoals($this->record);
         }
     }
@@ -84,10 +91,7 @@ class EditExpenseEntry extends EditRecord
         
         foreach ($goals as $goal) {
             $goal->decrement('current_amount', $amount);
-            // Ensure current_amount doesn't go below 0
-            if ($goal->current_amount < 0) {
-                $goal->update(['current_amount' => 0]);
-            }
+            // Allow negative values - don't clamp to 0
         }
     }
 }

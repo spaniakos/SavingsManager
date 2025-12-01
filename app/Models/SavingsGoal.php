@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SavingsGoal extends Model
 {
@@ -20,7 +18,7 @@ class SavingsGoal extends Model
         'initial_checkpoint',
         'start_date',
         'target_date',
-        'is_joint',
+        'last_monthly_calculation_at',
     ];
 
     protected function casts(): array
@@ -31,24 +29,17 @@ class SavingsGoal extends Model
             'initial_checkpoint' => 'decimal:2',
             'start_date' => 'date',
             'target_date' => 'date',
-            'is_joint' => 'boolean',
+            'last_monthly_calculation_at' => 'datetime',
         ];
     }
+    
+    protected $attributes = [
+        'current_amount' => 0,
+        'initial_checkpoint' => 0,
+    ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function members(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'savings_goal_members')
-                    ->withPivot('invited_by', 'status', 'invited_at', 'accepted_at', 'role')
-                    ->withTimestamps();
-    }
-
-    public function contributions(): HasMany
-    {
-        return $this->hasMany(SavingsContribution::class);
     }
 }

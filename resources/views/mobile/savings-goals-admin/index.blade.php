@@ -17,21 +17,32 @@
     <div class="space-y-3">
         @forelse($goals as $goal)
             @php
-                $progress = $calculator->getProgressData($goal);
+                try {
+                    // Ensure current_amount is not null
+                    if ($goal->current_amount === null) {
+                        $goal->current_amount = 0;
+                        $goal->save();
+                    }
+                    $progress = $calculator->getProgressData($goal);
+                } catch (\Exception $e) {
+                    // Fallback if calculation fails
+                    $progress = [
+                        'overall_progress' => $goal->target_amount > 0 ? round(($goal->current_amount ?? 0) / $goal->target_amount * 100, 0) : 0,
+                        'months_remaining' => 0,
+                        'monthly_saving_needed' => 0,
+                    ];
+                }
             @endphp
             <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
                 <div class="flex items-start justify-between mb-2">
                     <div class="flex-1">
                         <div class="font-semibold text-lg">{{ $goal->name }}</div>
                         <div class="text-sm text-gray-600">
-                            €{{ number_format($goal->current_amount, 2) }} / €{{ number_format($goal->target_amount, 2) }}
+                            €{{ number_format($goal->current_amount ?? 0, 2) }} / €{{ number_format($goal->target_amount, 2) }}
                         </div>
                         <div class="text-xs text-gray-500">
                             {{ $goal->start_date->format('d/m/Y') }} - {{ $goal->target_date->format('d/m/Y') }}
                         </div>
-                        @if($goal->is_joint)
-                            <span class="inline-block mt-1 px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">{{ __('common.joint_goal') }}</span>
-                        @endif
                     </div>
                     <div class="flex gap-2">
                         <a href="{{ route('mobile.savings-goals-admin.edit', $goal->id) }}" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">

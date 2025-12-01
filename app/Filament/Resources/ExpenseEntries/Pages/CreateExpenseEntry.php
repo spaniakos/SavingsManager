@@ -25,6 +25,13 @@ class CreateExpenseEntry extends CreateRecord
         if ($this->record->is_save_for_later) {
             $this->addToSavingsGoals($this->record);
         }
+        
+        // Handle Savings category expenses - add to savings goals
+        if ($this->record->expenseCategory && $this->record->expenseCategory->expenseSuperCategory) {
+            if ($this->record->expenseCategory->expenseSuperCategory->name === 'savings') {
+                $this->addToSavingsGoals($this->record);
+            }
+        }
     }
     
     protected function addToSavingsGoals(ExpenseEntry $entry): void

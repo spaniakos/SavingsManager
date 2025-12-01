@@ -270,5 +270,16 @@ return [
     'savings_goal' => 'Savings Goal',
     'created_successfully' => 'Created successfully',
     'saved' => 'Saved',
+    
+    // Monthly Calculation
+    'calculate_previous_month' => 'Calculate Previous Month',
+    'calculate' => 'Calculate',
+    'confirm_monthly_calculation' => 'Are you sure you want to calculate savings for :month? This will add/subtract the net savings to all active goals.',
+    'monthly_calculation_already_done' => 'Monthly calculation for this month has already been completed.',
+    'monthly_calculation_completed' => 'Monthly calculation completed for :month. Net savings: €:amount',
+    
+    // Progress Bars
+    'savings_goals_progress' => 'Savings Goals Progress',
+    'total_savings' => 'Total Savings',
 ];
 

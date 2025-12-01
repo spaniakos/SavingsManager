@@ -29,7 +29,7 @@ return [
         'water' => 'Νερό',
         'home_insurance' => 'Ασφάλεια Κατοικίας',
         'maintenance' => 'Συντήρηση',
-        'home_office' => 'Spiti-grafeio',
+        'home_office' => 'Σπίτι-Γραφείο',
         
         // Transportation
         'fuel' => 'Καύσιμα',
@@ -38,16 +38,16 @@ return [
         'tolls' => 'Διόδια',
         'public_transport' => 'Δημόσιες Συγκοινωνίες',
         'parking' => 'Στάθμευση',
-        'car' => 'Amaksi',
-        'motorcycle' => 'Mhxanh',
-        'mobile_transport' => 'Kin',
+        'car' => 'Αυτοκίνητο',
+        'motorcycle' => 'Μοτοσυκλέτα',
+        'mobile_transport' => 'Κινητό (Μεταφορές)',
         
         // Food
         'supermarket' => 'Σούπερ Μάρκετ',
         'restaurants' => 'Εστιατόρια',
         'coffee' => 'Καφές',
-        'potatoes' => 'Patata',
-        'groceries' => 'Keao',
+        'potatoes' => 'Πατάτες',
+        'groceries' => 'Είδη Προμήθειας',
         
         // Utilities
         'landline' => 'Σταθερό Τηλέφωνο',
@@ -56,8 +56,8 @@ return [
         'spotify' => 'Spotify',
         'netflix' => 'Netflix',
         'disney_plus' => 'Disney+',
-        'log' => 'Log',
-        'stathero' => 'Stathero',
+        'log' => 'Κούτσουρο',
+        'stathero' => 'Σταθερό',
         
         // Health
         'medical_visits' => 'Ιατρικές Επισκέψεις',
@@ -70,8 +70,8 @@ return [
         'life_insurance' => 'Ασφάλεια Ζωής',
         'home_insurance_insurance' => 'Ασφάλεια Κατοικίας',
         'car_insurance_insurance' => 'Ασφάλεια Αυτοκινήτου',
-        'insurance' => 'Asfaleia',
-        'tax' => 'Eforia',
+        'insurance' => 'Ασφάλεια',
+        'tax' => 'Φόρος',
         
         // Education
         'seminars' => 'Σεμινάρια',
@@ -82,36 +82,36 @@ return [
         'gym' => 'Γυμναστήριο',
         'travel' => 'Ταξίδια',
         'events' => 'Εκδηλώσεις',
-        'gymnastirio' => 'Gymnastirio',
-        'taksidia' => 'Taksidia',
+        'gymnastirio' => 'Γυμναστήριο',
+        'taksidia' => 'Ταξίδια',
         
         // Personal
         'clothing' => 'Ρουχισμός',
         'cosmetics' => 'Καλλυντικά',
         'hair_salon' => 'Κομμωτήριο',
         'gifts' => 'Δώρα',
-        'dwra' => 'Dwra',
-        'personal_life' => 'Prosopikh zwh+',
+        'dwra' => 'Δώρα',
+        'personal_life' => 'Προσωπική Ζωή',
         
         // Work/Business
         'work_materials' => 'Υλικά Δουλειάς',
         'server' => 'Server',
         'domains' => 'Domains',
         'ai_services' => 'AI Υπηρεσίες',
-        'ylika_douleias' => 'Ylika douleias',
+        'ylika_douleias' => 'Υλικά Δουλειάς',
         'ai' => 'AI',
-        'aproblepta' => 'Aproblepta',
+        'aproblepta' => 'Απρόβλεπτα',
         
         // Other
         'unexpected' => 'Απρόβλεπτα',
         'donations' => 'Δωρεές',
         'other_expenses' => 'Λοιπά Έξοδα',
-        'eksodoi' => 'Eksodoi',
-        'erini' => 'Erini',
-        'spanos' => 'Spanos',
-        'revma' => 'Revma',
-        'super' => 'Super',
-        'loipa' => 'Loipa',
+        'eksodoi' => 'Έξοδα',
+        'erini' => 'Ερήνη',
+        'spanos' => 'Σπανός',
+        'revma' => 'Ρεύμα',
+        'super' => 'Σούπερ',
+        'loipa' => 'Λοιπά',
         'savings' => 'Αποταμιεύσεις',
     ],
     

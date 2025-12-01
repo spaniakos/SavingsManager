@@ -21,12 +21,7 @@ class MilestoneNotificationService
      */
     public function checkMilestones(User $user): void
     {
-        $goals = SavingsGoal::where('user_id', $user->id)
-            ->orWhereHas('members', function ($query) use ($user) {
-                $query->where('users.id', $user->id)
-                    ->where('savings_goal_members.status', 'accepted');
-            })
-            ->get();
+        $goals = SavingsGoal::where('user_id', $user->id)->get();
 
         foreach ($goals as $goal) {
             $this->checkGoalMilestones($goal, $user);

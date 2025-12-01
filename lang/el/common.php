@@ -270,5 +270,16 @@ return [
     'savings_goal' => 'Στόχος Αποταμίευσης',
     'created_successfully' => 'Δημιουργήθηκε επιτυχώς',
     'saved' => 'Αποταμιεύθηκε',
+    
+    // Monthly Calculation
+    'calculate_previous_month' => 'Υπολογισμός Προηγούμενου Μήνα',
+    'calculate' => 'Υπολογισμός',
+    'confirm_monthly_calculation' => 'Είστε σίγουροι ότι θέλετε να υπολογίσετε τις αποταμιεύσεις για :month? Αυτό θα προσθέσει/αφαιρέσει την καθαρή αποταμίευση σε όλους τους ενεργούς στόχους.',
+    'monthly_calculation_already_done' => 'Ο μηνιαίος υπολογισμός για αυτόν τον μήνα έχει ήδη ολοκληρωθεί.',
+    'monthly_calculation_completed' => 'Ο μηνιαίος υπολογισμός ολοκληρώθηκε για :month. Καθαρή αποταμίευση: €:amount',
+    
+    // Progress Bars
+    'savings_goals_progress' => 'Πρόοδος Στόχων Αποταμίευσης',
+    'total_savings' => 'Συνολικές Αποταμιεύσεις',
 ];
 

@@ -23,7 +23,8 @@ class SavingsCalculatorService
             return 0;
         }
         
-        $remainingAmount = $goal->target_amount - $goal->current_amount;
+        $currentAmount = $goal->current_amount ?? 0;
+        $remainingAmount = $goal->target_amount - $currentAmount;
         
         if ($remainingAmount <= 0) {
             return 0;
@@ -62,7 +63,8 @@ class SavingsCalculatorService
             return 0;
         }
         
-        $progress = ($goal->current_amount / $goal->target_amount) * 100;
+        $currentAmount = $goal->current_amount ?? 0;
+        $progress = ($currentAmount / $goal->target_amount) * 100;
         
         return min(100, max(0, round($progress, 2)));
     }
@@ -160,12 +162,8 @@ class SavingsCalculatorService
      */
     protected function getGoalUserIds(SavingsGoal $goal, ?int $userId = null): array
     {
+        // Single user account - only return the goal owner
         $userIds = [$goal->user_id];
-        
-        if ($goal->is_joint) {
-            $memberIds = $goal->members()->pluck('users.id')->toArray();
-            $userIds = array_merge($userIds, $memberIds);
-        }
         
         // If specific userId provided, filter to that user only
         if ($userId !== null) {
@@ -198,8 +196,8 @@ class SavingsCalculatorService
             'monthly_progress' => $monthlyProgress,
             'current_month_savings' => $currentMonthSavings,
             'projected_monthly_savings' => $projectedSavings,
-            'remaining_amount' => max(0, $goal->target_amount - $goal->current_amount),
-            'current_amount' => $goal->current_amount,
+            'remaining_amount' => max(0, $goal->target_amount - ($goal->current_amount ?? 0)),
+            'current_amount' => $goal->current_amount ?? 0,
             'target_amount' => $goal->target_amount,
         ];
     }

@@ -139,4 +139,8 @@ Route::middleware(['auth'])->group(function () {
     // Reports
     Route::get('/admin/mobile/reports', [\App\Http\Controllers\Mobile\MobileReportsController::class, 'index'])
         ->name('mobile.reports.index');
+    
+    // Monthly Calculation
+    Route::post('/admin/mobile/monthly-calculation', [\App\Http\Controllers\Mobile\MonthlyCalculationController::class, 'calculate'])
+        ->name('mobile.monthly-calculation.calculate');
 });

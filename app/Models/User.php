@@ -84,17 +84,6 @@ class User extends Authenticatable
         return $this->hasMany(SavingsGoal::class);
     }
 
-    public function jointSavingsGoals(): BelongsToMany
-    {
-        return $this->belongsToMany(SavingsGoal::class, 'savings_goal_members')
-                    ->withTimestamps();
-    }
-
-    public function savingsContributions(): HasMany
-    {
-        return $this->hasMany(SavingsContribution::class);
-    }
-
     public function recurringExpenses(): HasMany
     {
         return $this->hasMany(RecurringExpense::class);

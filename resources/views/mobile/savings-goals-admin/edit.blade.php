@@ -7,6 +7,16 @@
         <h1 class="text-2xl font-bold">{{ __('common.edit') }} {{ __('common.savings_goal') }}</h1>
     </div>
     
+    @if($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
     <form method="POST" action="{{ route('mobile.savings-goals-admin.update', $goal->id) }}" class="space-y-4">
         @csrf
         @method('PUT')
@@ -50,9 +60,8 @@
             <input 
                 type="number" 
                 name="current_amount" 
-                value="{{ old('current_amount', $goal->current_amount) }}"
+                value="{{ old('current_amount', $goal->current_amount ?? 0) }}"
                 step="0.01"
-                min="0"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"
             >
         </div>
@@ -65,7 +74,7 @@
             <input 
                 type="number" 
                 name="initial_checkpoint" 
-                value="{{ old('initial_checkpoint', $goal->initial_checkpoint) }}"
+                value="{{ old('initial_checkpoint', $goal->initial_checkpoint ?? 0) }}"
                 step="0.01"
                 min="0"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"
@@ -100,47 +109,10 @@
             >
         </div>
         
-        <!-- Joint Goal -->
-        <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
-            <label class="flex items-center">
-                <input 
-                    type="checkbox" 
-                    name="is_joint" 
-                    value="1"
-                    {{ old('is_joint', $goal->is_joint) ? 'checked' : '' }}
-                    onchange="toggleMembers(this)"
-                    class="mr-2"
-                >
-                <span class="text-sm font-semibold text-gray-700">{{ __('common.joint_goal') }}</span>
-            </label>
-        </div>
-        
-        <!-- Members (only shown if joint) -->
-        <div id="membersSection" class="bg-white p-4 rounded-xl border-2 border-gray-200" style="display: {{ old('is_joint', $goal->is_joint) ? 'block' : 'none' }};">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                {{ __('common.members') }}
-            </label>
-            <select name="members[]" multiple class="w-full px-4 py-2 border border-gray-300 rounded-lg" size="5">
-                @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ in_array($user->id, old('members', $goal->members->pluck('id')->toArray())) ? 'selected' : '' }}>
-                        {{ $user->name }} ({{ $user->email }})
-                    </option>
-                @endforeach
-            </select>
-            <p class="text-xs text-gray-500 mt-1">{{ __('common.select_multiple_help') }}</p>
-        </div>
-        
         <button type="submit" class="w-full p-4 bg-amber-600 text-white rounded-xl font-semibold">
             {{ __('common.save') }}
         </button>
     </form>
 </div>
-
-<script>
-function toggleMembers(checkbox) {
-    const membersSection = document.getElementById('membersSection');
-    membersSection.style.display = checkbox.checked ? 'block' : 'none';
-}
-</script>
 @endsection
 

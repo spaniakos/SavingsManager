@@ -95,19 +95,25 @@ class MobileExpenseEntriesController extends Controller
         
         $oldSaveForLater = $entry->is_save_for_later;
         $oldAmount = $entry->amount;
+        $oldCategory = $entry->expenseCategory;
+        $oldWasSavingsCategory = $oldCategory 
+            && $oldCategory->expenseSuperCategory 
+            && $oldCategory->expenseSuperCategory->name === 'savings';
         
         $entry->update($validated);
+        $entry->refresh();
         
-        // Handle save for later changes
-        if ($oldSaveForLater && !$entry->is_save_for_later) {
-            // Remove from savings goals
+        $currentIsSavingsCategory = $entry->expenseCategory 
+            && $entry->expenseCategory->expenseSuperCategory 
+            && $entry->expenseCategory->expenseSuperCategory->name === 'savings';
+        
+        // If it was save for later or Savings category before, remove the previous amount
+        if ($oldSaveForLater || $oldWasSavingsCategory) {
             $this->removeFromSavingsGoals($entry, $oldAmount);
-        } elseif (!$oldSaveForLater && $entry->is_save_for_later) {
-            // Add to savings goals
-            $this->addToSavingsGoals($entry);
-        } elseif ($oldSaveForLater && $entry->is_save_for_later && $oldAmount != $entry->amount) {
-            // Update amount in savings goals
-            $this->removeFromSavingsGoals($entry, $oldAmount);
+        }
+        
+        // If it's now save for later or Savings category, add the current amount
+        if ($entry->is_save_for_later || $currentIsSavingsCategory) {
             $this->addToSavingsGoals($entry);
         }
         
@@ -117,10 +123,16 @@ class MobileExpenseEntriesController extends Controller
     
     public function destroy($id)
     {
-        $entry = ExpenseEntry::where('user_id', Auth::id())->findOrFail($id);
+        $entry = ExpenseEntry::where('user_id', Auth::id())
+            ->with(['expenseCategory.expenseSuperCategory'])
+            ->findOrFail($id);
         
-        // Remove from savings goals if it was save for later
-        if ($entry->is_save_for_later) {
+        // Remove from savings goals if it was save for later or Savings category
+        $isSavingsCategory = $entry->expenseCategory 
+            && $entry->expenseCategory->expenseSuperCategory 
+            && $entry->expenseCategory->expenseSuperCategory->name === 'savings';
+        
+        if ($entry->is_save_for_later || $isSavingsCategory) {
             $this->removeFromSavingsGoals($entry, $entry->amount);
         }
         
@@ -159,9 +171,7 @@ class MobileExpenseEntriesController extends Controller
         
         foreach ($goals as $goal) {
             $goal->decrement('current_amount', $amount);
-            if ($goal->current_amount < 0) {
-                $goal->update(['current_amount' => 0]);
-            }
+            // Allow negative values - don't clamp to 0
         }
     }
 }

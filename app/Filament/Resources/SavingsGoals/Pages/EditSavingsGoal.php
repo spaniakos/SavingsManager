@@ -16,14 +16,4 @@ class EditSavingsGoal extends EditRecord
             DeleteAction::make(),
         ];
     }
-    
-    protected function afterSave(): void
-    {
-        $members = $this->form->getState()['members'] ?? [];
-        if ($this->record->is_joint) {
-            $this->record->members()->sync($members);
-        } else {
-            $this->record->members()->detach();
-        }
-    }
 }

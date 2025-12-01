@@ -6,8 +6,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,13 +15,7 @@ class SavingsGoalsTable
     {
         return $table
             ->modifyQueryUsing(function ($query) {
-                $userId = Auth::id();
-                return $query->where(function ($q) use ($userId) {
-                    $q->where('user_id', $userId)
-                      ->orWhereHas('members', function ($memberQuery) use ($userId) {
-                          $memberQuery->where('users.id', $userId);
-                      });
-                });
+                return $query->where('user_id', Auth::id());
             })
             ->columns([
                 TextColumn::make('name')
@@ -57,25 +49,11 @@ class SavingsGoalsTable
                     ->label(__('common.target_date'))
                     ->date('d/m/Y')
                     ->sortable(),
-                ToggleColumn::make('is_joint')
-                    ->label(__('common.joint')),
-                TextColumn::make('members.name')
-                    ->label(__('common.members'))
-                    ->badge()
-                    ->visible(fn ($record) => $record && $record->is_joint),
                 TextColumn::make('created_at')
                     ->label(__('common.created_at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                SelectFilter::make('is_joint')
-                    ->label(__('common.type'))
-                    ->options([
-                        0 => __('common.individual'),
-                        1 => __('common.joint'),
-                    ]),
             ])
             ->defaultSort('target_date', 'asc')
             ->recordActions([

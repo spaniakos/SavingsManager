@@ -37,10 +37,7 @@ class SavingsGoalResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            RelationManagers\MembersRelationManager::class,
-            RelationManagers\ContributionsRelationManager::class,
-        ];
+        return [];
     }
 
     public static function getPages(): array

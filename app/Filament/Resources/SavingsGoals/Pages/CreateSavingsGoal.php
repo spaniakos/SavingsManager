@@ -15,12 +15,4 @@ class CreateSavingsGoal extends CreateRecord
         $data['user_id'] = Auth::id();
         return $data;
     }
-    
-    protected function afterCreate(): void
-    {
-        $members = $this->form->getState()['members'] ?? [];
-        if (!empty($members)) {
-            $this->record->members()->sync($members);
-        }
-    }
 }
