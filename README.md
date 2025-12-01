@@ -39,7 +39,7 @@ This application helps individuals manage their finances, track savings goals, a
 
 ### Requirements
 
-- PHP 8.2+
+- PHP 8.4+
 - Composer
 - MySQL 8.0+ or PostgreSQL 13+
 - Node.js 20.19+ or 22.12+

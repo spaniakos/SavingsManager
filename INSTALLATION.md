@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- PHP 8.2 or higher
+- PHP 8.4 or higher
 - Composer
 - MySQL 8.0+ or PostgreSQL 13+
 - Node.js 20.19+ or 22.12+

@@ -198,7 +198,7 @@ See [RULES.md](RULES.md) for detailed development guidelines, coding standards, 
 ## CI/CD
 
 GitHub Actions workflows automatically test the application:
-- PHP tests across multiple PHP versions (8.2, 8.3, 8.4)
+- PHP tests on PHP 8.4
 - Code quality checks (Laravel Pint)
 - E2E tests with Playwright
 

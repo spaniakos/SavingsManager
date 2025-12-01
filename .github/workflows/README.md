@@ -8,7 +8,7 @@ This directory contains GitHub Actions workflows for automated testing and code 
 **Triggers:** Push/PR to `main` or `develop` branches
 
 **Jobs:**
-- **php-tests**: Runs PHPUnit tests across PHP 8.2, 8.3, and 8.4
+- **php-tests**: Runs PHPUnit tests on PHP 8.4
   - Sets up MySQL service
   - Runs migrations and seeders
   - Executes all unit and feature tests
@@ -76,7 +76,7 @@ Check workflow status in the GitHub Actions tab:
 
 The workflows automatically configure:
 - `APP_ENV=testing`
-- `DB_CONNECTION=mysql` (or `sqlite` for E2E)
+- `DB_CONNECTION=mysql` (MySQL service for all jobs)
 - Database credentials for MySQL service
 
 ### Required Extensions
@@ -90,8 +90,8 @@ PHP extensions required:
 ## Test Coverage
 
 Current test coverage:
-- **48 PHP tests** (Unit + Feature)
-- **100 assertions**
+- **56 PHP tests** (Unit + Feature + Authentication)
+- **124 assertions**
 - **6 E2E test files** (Playwright)
 
 See `TEST_RESULTS.md` for detailed test results.
