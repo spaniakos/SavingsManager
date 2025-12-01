@@ -121,5 +121,19 @@ return [
         'super' => 'Super',
         'loipa' => 'Loipa',
     ],
+    
+    // Category Management
+    'translation_key' => 'Translation Key',
+    'translation_key_help' => 'Enter a translation key (e.g., categories.income.salary). This will be used for multilingual support.',
+    'translation_info' => 'Translation Information',
+    'translation_instructions' => 'To add translations, add entries to lang/en/categories.php and lang/el/categories.php files. For example, if your key is "categories.income.my_category", add "my_category" => "My Category" in the income array.',
+    'system_category' => 'System Category',
+    'created_by' => 'Created By',
+    'system' => 'System',
+    'usage_count' => 'Usage Count',
+    'type' => 'Type',
+    'system_categories' => 'System Categories',
+    'custom_categories' => 'Custom Categories',
+    'cannot_delete_system' => 'Cannot delete system categories',
 ];
 

@@ -61,12 +61,20 @@ return [
     'monthly_saving_needed' => 'Απαιτούμενη Μηνιαία Αποταμίευση',
     'months_remaining' => 'Απομένουσες Μήνες',
     'if_no_spending' => 'Αν δεν ξοδέψετε τίποτα περισσότερο μέχρι το τέλος του μήνα, θα αποταμιεύσετε',
+    'overall' => 'Συνολικά',
+    'monthly' => 'Μηνιαία',
+    'current_month_savings' => 'Αποταμίευση Τρέχοντος Μήνα',
+    'projected_savings' => 'Εκτιμώμενη Αποταμίευση',
+    'no_savings_goals' => 'Δεν βρέθηκαν στόχοι αποταμίευσης. Δημιουργήστε έναν για να ξεκινήσετε!',
     
     // Reports
     'monthly_report' => 'Μηνιαία Αναφορά',
     'category_report' => 'Αναφορά Κατηγορίας',
     'savings_report' => 'Αναφορά Αποταμίευσης',
     'mom_comparison' => 'Σύγκριση Μήνα προς Μήνα',
+    'expenses_by_category' => 'Έξοδα ανά Κατηγορία',
+    'income_trends' => 'Τάσεις Εσόδων',
+    'uncategorized' => 'Μη Κατηγοριοποιημένα',
     
     // Messages
     'created_successfully' => 'Δημιουργήθηκε επιτυχώς',
@@ -75,5 +83,11 @@ return [
     'are_you_sure' => 'Είστε σίγουροι;',
     'this_action_cannot_be_undone' => 'Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.',
     'allow_other_users_to_contribute' => 'Επιτρέψτε σε άλλους χρήστες να συνεισφέρουν σε αυτόν τον στόχο',
+    
+    // Category Management
+    'category_management' => 'Διαχείριση Κατηγοριών',
+    'income_categories' => 'Κατηγορίες Εσόδων',
+    'expense_categories' => 'Κατηγορίες Εξόδων',
+    'expense_super_categories' => 'Υπερ-Κατηγορίες Εξόδων',
 ];
 

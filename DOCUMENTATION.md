@@ -43,8 +43,17 @@ app/
 │   ├── Resources/          # CRUD resources
 │   │   ├── IncomeEntries/
 │   │   ├── ExpenseEntries/
-│   │   └── SavingsGoals/
-│   └── Pages/              # Custom pages
+│   │   ├── SavingsGoals/
+│   │   ├── IncomeCategories/
+│   │   ├── ExpenseCategories/
+│   │   └── ExpenseSuperCategories/
+│   ├── Pages/              # Custom pages
+│   │   └── Dashboard.php
+│   └── Widgets/            # Dashboard widgets
+│       ├── SavingsGoalProgressWidget.php
+│       ├── ExpensesByCategoryChart.php
+│       ├── IncomeTrendsChart.php
+│       └── MoMSavingsChart.php
 ├── Models/                 # Eloquent models
 └── Services/               # Business logic
     ├── SavingsCalculatorService.php
@@ -149,6 +158,115 @@ APP_LOCALE=el  # Greek
 - ExpenseCategory belongsTo ExpenseSuperCategory, hasMany ExpenseEntry
 - SavingsGoal belongsTo User, belongsToMany User (members), hasMany SavingsContribution
 
+## Services
+
+The application uses service classes to encapsulate business logic and calculations.
+
+### SavingsCalculatorService
+
+Located at `app/Services/SavingsCalculatorService.php`, this service handles all savings goal calculations.
+
+#### Methods
+
+- `calculateMonthlySavingNeeded(SavingsGoal $goal): float`
+  - Calculates the monthly saving amount needed to reach the goal
+  - Formula: `(target_amount - current_amount) / months_remaining`
+  - Returns 0 if goal is reached or past due
+
+- `calculateMonthsRemaining(SavingsGoal $goal): int`
+  - Calculates months remaining until target date
+  - Returns 0 if target date has passed
+
+- `calculateOverallProgress(SavingsGoal $goal): float`
+  - Calculates overall progress percentage (0-100)
+  - Formula: `(current_amount / target_amount) * 100`
+
+- `calculateMonthlyProgress(SavingsGoal $goal): float`
+  - Calculates current month progress percentage (0-100)
+  - Compares current month savings vs monthly target needed
+
+- `calculateCurrentMonthSavings(?int $userId = null): float`
+  - Calculates total savings for the current month
+  - Formula: `total_income - total_expenses` for current month
+
+- `calculateProjectedSavings(SavingsGoal $goal): float`
+  - Projects savings if no additional spending occurs
+  - Uses current month savings as baseline
+
+### ChartDataService
+
+Located at `app/Services/ChartDataService.php`, this service aggregates data for charts and visualizations.
+
+#### Methods
+
+- `getExpensesByCategory(?Carbon $startDate, ?Carbon $endDate, ?int $userId): array`
+  - Aggregates expenses by category for a given period
+  - Returns array with category names and amounts
+
+- `getExpensesByItem(?Carbon $startDate, ?Carbon $endDate, ?int $userId): array`
+  - Aggregates expenses by individual items within categories
+  - Returns detailed breakdown
+
+- `getIncomeTrends(?Carbon $startDate, ?Carbon $endDate, ?int $userId): array`
+  - Calculates income trends over time
+  - Returns monthly income totals
+
+- `getMoMSavingsComparison(int $months, ?int $userId): array`
+  - Compares savings month-over-month
+  - Returns array with monthly savings data
+
+- `formatForPieChart(array $data): array`
+  - Formats data for pie chart widgets
+  - Returns Chart.js compatible format
+
+- `formatForBarChart(array $data): array`
+  - Formats data for bar chart widgets
+  - Returns Chart.js compatible format
+
+- `formatForMoMChart(array $data): array`
+  - Formats month-over-month data for charts
+  - Returns Chart.js compatible format
+
+## Widgets
+
+The application includes several Filament widgets for dashboard visualization.
+
+### SavingsGoalProgressWidget
+
+Located at `app/Filament/Widgets/SavingsGoalProgressWidget.php`, displays dual progress bars for savings goals.
+
+**Features:**
+- Overall goal progress bar (total saved vs target)
+- Monthly progress bar (current month savings vs monthly target)
+- Shows monthly saving needed, months remaining
+- Displays projected savings message
+- Game-like XP bar styling
+
+**View:** `resources/views/filament/widgets/savings-goal-progress-widget.blade.php`
+
+### ExpensesByCategoryChart
+
+Located at `app/Filament/Widgets/ExpensesByCategoryChart.php`, displays expenses by category as a pie chart.
+
+**Chart Type:** Pie
+**Data Source:** ChartDataService::getExpensesByCategory()
+
+### IncomeTrendsChart
+
+Located at `app/Filament/Widgets/IncomeTrendsChart.php`, displays income trends over time as a line chart.
+
+**Chart Type:** Line
+**Data Source:** ChartDataService::getIncomeTrends()
+
+### MoMSavingsChart
+
+Located at `app/Filament/Widgets/MoMSavingsChart.php`, displays month-over-month savings comparison as a bar chart.
+
+**Chart Type:** Bar
+**Data Source:** ChartDataService::getMoMSavingsComparison()
+
+**Note:** All widgets are auto-discovered by Filament and appear on the dashboard automatically.
+
 ## API Documentation
 
 ### Filament Resources
@@ -169,6 +287,14 @@ All resources are accessible through the Filament admin panel at `/admin`.
 - **List**: `/admin/savings-goals`
 - **Create**: `/admin/savings-goals/create`
 - **Edit**: `/admin/savings-goals/{id}/edit`
+
+#### Category Management
+- **Income Categories**: `/admin/income-categories`
+- **Expense Categories**: `/admin/expense-categories`
+- **Expense Super Categories**: `/admin/expense-super-categories`
+
+#### Dashboard
+- **Dashboard**: `/admin` (default Filament dashboard with widgets)
 
 ## Testing
 

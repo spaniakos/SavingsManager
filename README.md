@@ -2,14 +2,29 @@
 
 A comprehensive savings management application built with Laravel 12 and Filament 4. Track income, expenses, and savings goals with full bilingual support (English/Greek).
 
+# 🌟 Why This Program Was Created
+
+This project wasn’t born from a technical challenge alone — it comes from a real-life goal and a shared dream.
+We are building this software to help us save money and stay organized as we work toward three major milestones in our life:
+1) Our marriage — creating the financial stability and peace of mind to start our life together.
+2) A master’s degree in Swansea — supporting my spouse in completing a postgraduate program abroad, which requires careful planning, budgeting, and long-term focus.
+3) A future home and speech therapy center — our vision is to move out of the city, build a house of our own, create a dedicated speech therapy practice, and grow my IT business in parallel.
+
+This program exists to bring clarity, structure, and momentum to those goals.
+It’s more than a tool — it’s a roadmap for the life we’re building.
+
 ## Features
 
 - **Income Management**: Track income entries with categories
 - **Expense Management**: Track expenses with categories and super categories
 - **Savings Goals**: Create individual or joint savings goals with progress tracking
+- **Progress Tracking**: Dual progress bars showing monthly and overall goal progress
 - **Bilingual Support**: Full English/Greek translation support
 - **Custom Categories**: Users can create their own income and expense categories
-- **Analytics & Reports**: View expenses per category, income trends, and month-over-month comparisons
+- **Analytics Dashboard**: Interactive charts showing:
+  - Expenses by category (pie chart)
+  - Income trends over time (line chart)
+  - Month-over-month savings comparison (bar chart)
 - **Mobile Responsive**: Works seamlessly on mobile and desktop browsers
 
 ## Requirements

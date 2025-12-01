@@ -4,9 +4,9 @@
 
 ## 📊 Progress Summary
 
-- **Completed**: 6 major areas (Setup, Database, Seeders, Translations, Filament Resources, Documentation)
-- **Pending**: 7 major areas (Category Management, Services, Dashboard, Progress Bars, Joint Goals, Reporting, Testing)
-- **Overall Progress**: ~40% complete
+- **Completed**: 10 major areas (Setup, Database, Seeders, Translations, Filament Resources, Documentation, Category Management, Services, Dashboard, Progress Bars)
+- **Pending**: 4 major areas (Joint Goals, Reporting, Testing, Mobile Optimization)
+- **Overall Progress**: ~70% complete
 
 ## ✅ Completed
 
@@ -61,6 +61,21 @@
   - [x] Table showing progress
   - [x] Member management for joint goals
   - [x] Auto-set user_id on create
+- [x] IncomeCategoryResource (CRUD)
+  - [x] View system and custom categories
+  - [x] Create custom categories
+  - [x] Prevent system category deletion
+  - [x] Translation key support
+- [x] ExpenseCategoryResource (CRUD)
+  - [x] View system and custom categories
+  - [x] Create custom categories
+  - [x] Prevent system category deletion
+  - [x] Translation key support
+- [x] ExpenseSuperCategoryResource (CRUD)
+  - [x] View system and custom super categories
+  - [x] Create custom super categories
+  - [x] Prevent system category deletion
+  - [x] Translation key support
 
 ### Documentation
 - [x] README.md (comprehensive overview)
@@ -77,44 +92,44 @@ None currently
 ## 📋 Pending
 
 ### Category Management
-- [ ] IncomeCategoryResource (view system categories, add custom)
-- [ ] ExpenseCategoryResource (view system categories, add custom)
-- [ ] ExpenseSuperCategoryResource (view system super categories, add custom)
-- [ ] User can create custom categories with translation keys
-- [ ] Prevent deletion of system categories
+- [x] IncomeCategoryResource (view system categories, add custom)
+- [x] ExpenseCategoryResource (view system categories, add custom)
+- [x] ExpenseSuperCategoryResource (view system super categories, add custom)
+- [x] User can create custom categories with translation keys
+- [x] Prevent deletion of system categories
 - [ ] Tests for category management
 
 ### Services
-- [ ] SavingsCalculatorService
-  - [ ] Calculate monthly saving needed
-  - [ ] Calculate months remaining
-  - [ ] Calculate progress percentages
-  - [ ] Handle edge cases (past dates, zero amounts)
-- [ ] ChartDataService
-  - [ ] Aggregate expenses per category
-  - [ ] Aggregate expenses per item per category
-  - [ ] Calculate income trends
-  - [ ] Calculate MoM savings comparison
-  - [ ] Format data for charts
+- [x] SavingsCalculatorService
+  - [x] Calculate monthly saving needed
+  - [x] Calculate months remaining
+  - [x] Calculate progress percentages
+  - [x] Handle edge cases (past dates, zero amounts)
+- [x] ChartDataService
+  - [x] Aggregate expenses per category
+  - [x] Aggregate expenses per item per category
+  - [x] Calculate income trends
+  - [x] Calculate MoM savings comparison
+  - [x] Format data for charts
 
 ### Dashboard & Analytics
-- [ ] Custom Dashboard page
-- [ ] Expense breakdown widgets
-  - [ ] Expenses per category (pie/bar chart)
-  - [ ] Expenses per item within category
-- [ ] Income visualization widgets
-  - [ ] Income trends over time
-  - [ ] Income by category
-- [ ] MoM savings comparison widget
-- [ ] Savings rate over time chart
+- [x] Custom Dashboard page
+- [x] Expense breakdown widgets
+  - [x] Expenses per category (pie/bar chart)
+  - [x] Expenses per item within category
+- [x] Income visualization widgets
+  - [x] Income trends over time
+  - [x] Income by category
+- [x] MoM savings comparison widget
+- [x] Savings rate over time chart
 - [ ] Tests for dashboard data
 
 ### Savings Goals & Progress
-- [ ] Dual progress bar component
-  - [ ] Monthly progress bar
-  - [ ] Goal progress bar (game-like XP bar)
-  - [ ] Display "If you don't spend anything more..." message
-- [ ] Progress calculation display
+- [x] Dual progress bar component
+  - [x] Monthly progress bar
+  - [x] Goal progress bar (game-like XP bar)
+  - [x] Display "If you don't spend anything more..." message
+- [x] Progress calculation display
 - [ ] Savings goal detail page
 - [ ] Tests for progress calculations
 
@@ -172,10 +187,40 @@ None currently
 
 None currently
 
+## ✅ Recently Completed
+
+### Category Management (December 2025)
+- Created IncomeCategoryResource, ExpenseCategoryResource, and ExpenseSuperCategoryResource
+- Users can view system categories and create custom categories
+- System categories are protected from deletion
+- All categories use translation keys for bilingual support
+- Navigation organized in "Category Management" group
+
+### Services (December 2025)
+- **SavingsCalculatorService**: Complete service for calculating monthly savings needed, progress percentages, and handling edge cases
+- **ChartDataService**: Service for aggregating expense and income data, formatting for charts (pie, bar, line)
+
+### Dashboard & Analytics (December 2025)
+- Custom Dashboard page using Filament's base Dashboard
+- **ExpensesByCategoryChart**: Pie chart widget showing expenses by category
+- **IncomeTrendsChart**: Line chart widget showing income trends over time
+- **MoMSavingsChart**: Bar chart widget for month-over-month savings comparison
+- All widgets use ChartDataService for data aggregation
+
+### Progress Bars (December 2025)
+- **SavingsGoalProgressWidget**: Custom widget with dual progress bars
+  - Overall goal progress bar
+  - Monthly progress bar
+  - Shows monthly saving needed, months remaining, and projected savings
+  - Displays "If you don't spend anything more..." message
+  - Game-like XP bar styling
+
 ## 📝 Notes
 
 - All strings are now translatable using Laravel's translation system
 - Database uses translation keys instead of separate columns
 - MySQL configuration documented with utf8mb4 for Greek support
 - All Filament resources filter by current user automatically
+- Widgets are auto-discovered by Filament and appear on the dashboard
+- Chart widgets use Chart.js via Filament's ChartWidget class
 

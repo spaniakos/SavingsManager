@@ -61,12 +61,20 @@ return [
     'monthly_saving_needed' => 'Monthly Saving Needed',
     'months_remaining' => 'Months Remaining',
     'if_no_spending' => 'If you don\'t spend anything more by end of month, you\'ll save',
+    'overall' => 'Overall',
+    'monthly' => 'Monthly',
+    'current_month_savings' => 'Current Month Savings',
+    'projected_savings' => 'Projected Savings',
+    'no_savings_goals' => 'No savings goals found. Create one to get started!',
     
     // Reports
     'monthly_report' => 'Monthly Report',
     'category_report' => 'Category Report',
     'savings_report' => 'Savings Report',
     'mom_comparison' => 'Month-over-Month Comparison',
+    'expenses_by_category' => 'Expenses by Category',
+    'income_trends' => 'Income Trends',
+    'uncategorized' => 'Uncategorized',
     
     // Messages
     'created_successfully' => 'Created successfully',
@@ -75,5 +83,11 @@ return [
     'are_you_sure' => 'Are you sure?',
     'this_action_cannot_be_undone' => 'This action cannot be undone.',
     'allow_other_users_to_contribute' => 'Allow other users to contribute to this goal',
+    
+    // Category Management
+    'category_management' => 'Category Management',
+    'income_categories' => 'Income Categories',
+    'expense_categories' => 'Expense Categories',
+    'expense_super_categories' => 'Expense Super Categories',
 ];
 

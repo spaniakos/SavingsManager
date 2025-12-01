@@ -121,5 +121,19 @@ return [
         'super' => 'Super',
         'loipa' => 'Loipa',
     ],
+    
+    // Category Management
+    'translation_key' => 'Κλειδί Μετάφρασης',
+    'translation_key_help' => 'Εισάγετε ένα κλειδί μετάφρασης (π.χ., categories.income.salary). Αυτό θα χρησιμοποιηθεί για πολυγλωσσική υποστήριξη.',
+    'translation_info' => 'Πληροφορίες Μετάφρασης',
+    'translation_instructions' => 'Για να προσθέσετε μεταφράσεις, προσθέστε καταχωρήσεις στα αρχεία lang/en/categories.php και lang/el/categories.php. Για παράδειγμα, αν το κλειδί σας είναι "categories.income.my_category", προσθέστε "my_category" => "Η Κατηγορία μου" στον πίνακα income.',
+    'system_category' => 'Κατηγορία Συστήματος',
+    'created_by' => 'Δημιουργήθηκε Από',
+    'system' => 'Σύστημα',
+    'usage_count' => 'Αριθμός Χρήσεων',
+    'type' => 'Τύπος',
+    'system_categories' => 'Κατηγορίες Συστήματος',
+    'custom_categories' => 'Προσαρμοσμένες Κατηγορίες',
+    'cannot_delete_system' => 'Δεν μπορείτε να διαγράψετε κατηγορίες συστήματος',
 ];
 
