@@ -1,0 +1,29 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\ExpenseSuperCategory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ExpenseSuperCategory>
+ */
+class ExpenseSuperCategoryFactory extends Factory
+{
+    protected $model = ExpenseSuperCategory::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->unique()->word(),
+            'is_system' => false,
+            'user_id' => null,
+            'allocation_percentage' => null,
+        ];
+    }
+}

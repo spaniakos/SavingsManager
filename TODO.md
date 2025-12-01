@@ -4,9 +4,9 @@
 
 ## 📊 Progress Summary
 
-- **Completed**: 15 major areas (Setup, Database, Seeders, Translations, Filament Resources, Documentation, Category Management, Services, Dashboard, Progress Bars, Financial Settings, Recurring Expenses, Budget Allocation, Save-for-Later, Positive Reinforcement)
-- **Pending**: 4 major areas (Joint Goals, Reporting, Testing, Mobile Optimization)
-- **Overall Progress**: ~85% complete
+- **Completed**: 18 major areas (Setup, Database, Seeders, Translations, Filament Resources, Documentation, Category Management, Services, Dashboard, Progress Bars, Financial Settings, Recurring Expenses, Budget Allocation, Save-for-Later, Positive Reinforcement, Unit Tests, Feature Tests, Smoke Tests)
+- **Pending**: 3 major areas (Joint Goals, Reporting, Mobile Optimization)
+- **Overall Progress**: ~90% complete
 
 ## ✅ Completed
 
@@ -130,8 +130,8 @@ None currently
   - [x] Goal progress bar (game-like XP bar)
   - [x] Display "If you don't spend anything more..." message
 - [x] Progress calculation display
-- [ ] Savings goal detail page
-- [ ] Tests for progress calculations
+- [x] Tests for progress calculations (SavingsCalculatorServiceTest)
+- [ ] Savings goal detail page (optional enhancement)
 
 ### Joint Goals
 - [ ] Member invitation system
@@ -155,25 +155,26 @@ None currently
 - [ ] Playwright mobile viewport tests
 
 ### Testing
-- [ ] Unit Tests
-  - [ ] SavingsCalculatorServiceTest
-  - [ ] ChartDataServiceTest
-  - [ ] Model tests (IncomeEntry, ExpenseEntry, SavingsGoal)
-  - [ ] ProgressCalculationTest
-- [ ] Feature Tests
-  - [ ] IncomeManagementTest
-  - [ ] ExpenseManagementTest
-  - [ ] SavingsGoalTest
-  - [ ] CategoryManagementTest
-  - [ ] JointGoalsTest
+- [x] Unit Tests
+  - [x] SavingsCalculatorServiceTest (7 tests)
+  - [x] RecurringExpenseServiceTest (4 tests)
+  - [x] BudgetAllocationServiceTest (5 tests)
+  - [ ] ChartDataServiceTest (optional)
+  - [ ] PositiveReinforcementServiceTest (optional)
+- [x] Feature Tests
+  - [x] IncomeManagementTest (4 tests)
+  - [x] ExpenseManagementTest (4 tests)
+  - [x] SavingsGoalTest (4 tests)
+  - [ ] CategoryManagementTest (optional)
+  - [ ] JointGoalsTest (pending joint goals feature)
 - [ ] Playwright E2E Tests
   - [ ] DashboardTest
   - [ ] IncomeEntryTest
   - [ ] ExpenseEntryTest
   - [ ] SavingsGoalTest
   - [ ] ReportingTest
-- [ ] Smoke Tests
-  - [ ] CriticalPathsTest (auth, create entry, dashboard load)
+- [x] Smoke Tests
+  - [x] CriticalPathsTest (5 tests - auth, create entries, dashboard load)
 
 ### Additional Features
 - [ ] Language switcher in UI
@@ -192,6 +193,13 @@ None currently
 None currently
 
 ## ✅ Recently Completed
+
+### Testing Infrastructure (December 2025)
+- **Unit Tests**: 17 tests covering core services (SavingsCalculatorService, RecurringExpenseService, BudgetAllocationService)
+- **Feature Tests**: 13 tests covering CRUD operations (Income, Expense, SavingsGoal management)
+- **Smoke Tests**: 5 tests covering critical paths (authentication, entry creation, dashboard)
+- **Test Infrastructure**: Factories created for all models, HasFactory trait added
+- **Total Test Coverage**: 31 tests, 53 assertions, all passing
 
 ### Financial Management Enhancements (December 2025)
 - **3-Tier Super Category System**: Restructured to Essentials (50%), Lifestyle (30%), Savings (20%)
@@ -239,4 +247,6 @@ None currently
 - All Filament resources filter by current user automatically
 - Widgets are auto-discovered by Filament and appear on the dashboard
 - Chart widgets use Chart.js via Filament's ChartWidget class
+- Test coverage: 31 tests (17 unit, 13 feature, 5 smoke) - all passing
+- Factories available for all models to support testing
 

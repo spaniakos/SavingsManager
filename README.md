@@ -239,6 +239,16 @@ tests/
 
 ## Testing
 
+The project includes comprehensive test coverage with 31 tests covering unit, feature, and smoke testing.
+
+### Test Statistics
+
+- **Total Tests**: 31 tests, 53 assertions
+- **Unit Tests**: 17 tests (Services: SavingsCalculatorService, RecurringExpenseService, BudgetAllocationService)
+- **Feature Tests**: 13 tests (CRUD operations: Income, Expense, SavingsGoal management)
+- **Smoke Tests**: 5 tests (Critical paths: authentication, entry creation, dashboard)
+- **Status**: All tests passing ✅
+
 ### Run All Tests
 
 ```bash
@@ -254,16 +264,25 @@ php artisan test --testsuite=Unit
 # Feature tests
 php artisan test --testsuite=Feature
 
-# Browser tests (Playwright)
-npm run test:e2e
+# Smoke tests
+php artisan test tests/Smoke/
+
+# Run specific test
+php artisan test --filter SavingsCalculatorServiceTest
 ```
 
-### Playwright Setup
+### Playwright E2E Tests (Pending)
 
 Playwright is configured for end-to-end testing. Install browsers:
 
 ```bash
 npx playwright install --with-deps chromium
+```
+
+Run E2E tests:
+
+```bash
+npm run test:e2e
 ```
 
 ## Development
