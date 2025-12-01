@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 class MoMSavingsChart extends ChartWidget
 {
     protected ?string $heading = null;
-    
-    protected int | string | array $columnSpan = 'full';
-    
+
+    protected int|string|array $columnSpan = 'full';
+
     public function getHeading(): string
     {
         return __('common.mom_comparison');
@@ -21,6 +21,7 @@ class MoMSavingsChart extends ChartWidget
     {
         $chartDataService = app(ChartDataService::class);
         $data = $chartDataService->getMoMSavingsComparison(6, Auth::id());
+
         return $chartDataService->formatForMoMChart($data);
     }
 
@@ -28,7 +29,7 @@ class MoMSavingsChart extends ChartWidget
     {
         return 'bar';
     }
-    
+
     protected function getOptions(): array
     {
         return [

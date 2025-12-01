@@ -90,6 +90,7 @@ class User extends Authenticatable
     {
         $seedCapital = $this->seed_capital ?? 0;
         $currentSavings = $this->savingsGoals()->sum('current_amount');
+
         return (float) ($seedCapital + $currentSavings);
     }
 
@@ -100,6 +101,7 @@ class User extends Authenticatable
     {
         $monthlyIncome = $this->median_monthly_income ?? 0;
         $percentage = $superCategory->allocation_percentage ?? 0;
+
         return (float) ($monthlyIncome * ($percentage / 100));
     }
 
@@ -115,6 +117,7 @@ class User extends Authenticatable
             })
             ->whereBetween('date', [$startDate, $endDate])
             ->sum('amount');
+
         return (float) max(0, $allocation - $spent);
     }
 }

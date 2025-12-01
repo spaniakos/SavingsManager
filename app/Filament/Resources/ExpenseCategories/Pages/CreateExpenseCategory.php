@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\Auth;
 class CreateExpenseCategory extends CreateRecord
 {
     protected static string $resource = ExpenseCategoryResource::class;
-    
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['is_system'] = false;
         $data['user_id'] = Auth::id();
+
         return $data;
     }
 }

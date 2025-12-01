@@ -24,7 +24,7 @@ class CriticalPathsTest extends TestCase
         ]);
 
         $this->actingAs($user);
-        
+
         $this->assertAuthenticatedAs($user);
     }
 
@@ -54,7 +54,7 @@ class CriticalPathsTest extends TestCase
 
         $this->artisan('db:seed', ['--class' => 'ExpenseSuperCategorySeeder']);
         $this->artisan('db:seed', ['--class' => 'ExpenseCategorySeeder']);
-        
+
         $superCategory = ExpenseSuperCategory::firstOrCreate(
             ['name' => 'essentials'],
             ['is_system' => true, 'allocation_percentage' => 50.00]
@@ -117,4 +117,3 @@ class CriticalPathsTest extends TestCase
         $this->assertIsInt($savingsGoals);
     }
 }
-

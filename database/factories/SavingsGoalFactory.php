@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use App\Models\SavingsGoal;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SavingsGoal>

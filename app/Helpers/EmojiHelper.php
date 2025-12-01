@@ -7,10 +7,6 @@ class EmojiHelper
     /**
      * Convert emoji Unicode to Twemoji image tag for PDF
      * Uses Twemoji CDN which provides SVG emoji images
-     * 
-     * @param string|null $emoji
-     * @param int $size
-     * @return string
      */
     public static function emojiToImageTag(?string $emoji, int $size = 14): string
     {
@@ -19,11 +15,11 @@ class EmojiHelper
         }
 
         $emoji = trim($emoji);
-        
+
         // Convert emoji to Unicode code points
         $codes = [];
         $chars = mb_str_split($emoji, 1, 'UTF-8');
-        
+
         foreach ($chars as $char) {
             $code = mb_ord($char, 'UTF-8');
             if ($code) {
@@ -47,15 +43,15 @@ class EmojiHelper
                 }
             }
         }
-        
+
         if (empty($codes)) {
             return '';
         }
-        
+
         // Use Twemoji CDN - it provides SVG emoji images
         $unicode = implode('-', $codes);
         $imageUrl = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/{$unicode}.svg";
-        
+
         return sprintf(
             '<img src="%s" style="width: %dpx; height: %dpx; vertical-align: middle; display: inline-block;" />',
             htmlspecialchars($imageUrl),

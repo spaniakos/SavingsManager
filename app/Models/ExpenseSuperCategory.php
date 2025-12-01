@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ExpenseSuperCategory extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name', // Translation key
         'emoji',
@@ -17,7 +18,7 @@ class ExpenseSuperCategory extends Model
         'user_id',
         'allocation_percentage',
     ];
-    
+
     public function getTranslatedName(): string
     {
         return __("categories.expense_super.{$this->name}", [], app()->getLocale());
@@ -45,7 +46,7 @@ class ExpenseSuperCategory extends Model
     {
         return $query->where(function ($q) use ($userId) {
             $q->where('is_system', true)
-              ->orWhere('user_id', $userId);
+                ->orWhere('user_id', $userId);
         });
     }
 

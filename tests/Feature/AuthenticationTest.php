@@ -23,11 +23,11 @@ class AuthenticationTest extends TestCase
         // Filament uses Livewire, so we need to use the actual login page
         $response = $this->get('/admin/login');
         $response->assertStatus(200);
-        
+
         // Verify seeded user exists and can authenticate
         $user = User::where('email', 'test@makeasite.gr')->first();
         $this->assertNotNull($user);
-        
+
         // Test authentication directly
         $this->actingAs($user);
         $this->assertAuthenticated();
@@ -71,7 +71,7 @@ class AuthenticationTest extends TestCase
     {
         // Test that wrong password doesn't authenticate
         $user = User::where('email', 'test@makeasite.gr')->first();
-        
+
         // Verify password check works
         $this->assertFalse(\Hash::check('wrongpassword', $user->password));
         $this->assertTrue(\Hash::check('12341234', $user->password));
@@ -82,7 +82,7 @@ class AuthenticationTest extends TestCase
         // Test that non-existent user doesn't exist
         $user = User::where('email', 'wrong@example.com')->first();
         $this->assertNull($user);
-        
+
         // Verify correct user exists
         $correctUser = User::where('email', 'test@makeasite.gr')->first();
         $this->assertNotNull($correctUser);
@@ -105,7 +105,7 @@ class AuthenticationTest extends TestCase
         // This test verifies that protected routes cannot be accessed without login
         // The actual redirect behavior may vary, but the key is that it's protected
         $response = $this->get('/admin/mobile');
-        
+
         // Should not return 200 (either redirect, 401, 403, or 500)
         $this->assertNotEquals(200, $response->status(), 'Protected route should not be accessible without authentication');
     }
@@ -113,7 +113,7 @@ class AuthenticationTest extends TestCase
     public function test_seeded_user_credentials_are_correct(): void
     {
         $user = User::where('email', 'test@makeasite.gr')->first();
-        
+
         $this->assertNotNull($user);
         $this->assertEquals('test@makeasite.gr', $user->email);
         $this->assertTrue(Hash::check('12341234', $user->password));
@@ -127,16 +127,15 @@ class AuthenticationTest extends TestCase
         // Verify user can access mobile routes (which is the main interface)
         $response = $this->get('/admin/mobile');
         $response->assertStatus(200);
-        
+
         // Verify all mobile routes are accessible
         $response = $this->get('/admin/mobile/expense-entries');
         $response->assertStatus(200);
-        
+
         $response = $this->get('/admin/mobile/income-entries');
         $response->assertStatus(200);
-        
+
         $response = $this->get('/admin/mobile/savings-goals');
         $response->assertStatus(200);
     }
 }
-

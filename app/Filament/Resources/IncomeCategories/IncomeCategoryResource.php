@@ -19,12 +19,12 @@ class IncomeCategoryResource extends Resource
     protected static ?string $model = IncomeCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    
+
     public static function getNavigationGroup(): ?string
     {
         return __('common.category_management');
     }
-    
+
     public static function getNavigationLabel(): string
     {
         return __('common.income_categories');

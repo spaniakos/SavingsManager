@@ -60,7 +60,7 @@ class IncomeManagementTest extends TestCase
 
         $this->actingAs($user1);
         $user1Entries = IncomeEntry::where('user_id', $user1->id)->get();
-        
+
         $this->assertCount(1, $user1Entries);
         $this->assertEquals(1000.00, $user1Entries->first()->amount);
     }

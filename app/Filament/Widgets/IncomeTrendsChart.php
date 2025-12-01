@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 class IncomeTrendsChart extends ChartWidget
 {
     protected ?string $heading = null;
-    
-    protected int | string | array $columnSpan = 'full';
-    
+
+    protected int|string|array $columnSpan = 'full';
+
     public function getHeading(): string
     {
         return __('common.income_trends');
@@ -21,6 +21,7 @@ class IncomeTrendsChart extends ChartWidget
     {
         $chartDataService = app(ChartDataService::class);
         $data = $chartDataService->getIncomeTrends(null, null, Auth::id());
+
         return $chartDataService->formatForBarChart($data);
     }
 
@@ -28,7 +29,7 @@ class IncomeTrendsChart extends ChartWidget
     {
         return 'line';
     }
-    
+
     protected function getOptions(): array
     {
         return [

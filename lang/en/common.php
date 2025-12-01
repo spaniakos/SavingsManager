@@ -12,7 +12,7 @@ return [
     'savings_goals' => 'Savings Goals',
     'reports' => 'Reports',
     'settings' => 'Settings',
-    
+
     // Common actions
     'create' => 'Create',
     'edit' => 'Edit',
@@ -27,7 +27,7 @@ return [
     'export' => 'Export',
     'import' => 'Import',
     'actions' => 'Actions',
-    
+
     // Common fields
     'name' => 'Name',
     'amount' => 'Amount',
@@ -37,21 +37,21 @@ return [
     'super_category' => 'Super Category',
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
-    
+
     // Income
     'income_category' => 'Income Category',
     'income_entry' => 'Income Entry',
     'income_entries' => 'Income Entries',
     'add_income' => 'Add Income',
     'total_income' => 'Total Income',
-    
+
     // Expenses
     'expense_category' => 'Expense Category',
     'expense_entry' => 'Expense Entry',
     'expense_entries' => 'Expense Entries',
     'add_expense' => 'Add Expense',
     'total_expenses' => 'Total Expenses',
-    
+
     // Savings Goals
     'goal_name' => 'Goal Name',
     'target_amount' => 'Target Amount',
@@ -99,7 +99,7 @@ return [
     'current_month_savings' => 'Current Month Savings',
     'projected_savings' => 'Projected Savings',
     'no_savings_goals' => 'No savings goals found. Create one to get started!',
-    
+
     // Reports
     'reports' => 'Reports',
     'report_type' => 'Report Type',
@@ -138,7 +138,7 @@ return [
     'expenses_by_category' => 'Expenses by Category',
     'income_trends' => 'Income Trends',
     'uncategorized' => 'Uncategorized',
-    
+
     // Messages
     'created_successfully' => 'Created successfully',
     'updated_successfully' => 'Updated successfully',
@@ -146,20 +146,20 @@ return [
     'are_you_sure' => 'Are you sure?',
     'this_action_cannot_be_undone' => 'This action cannot be undone.',
     'allow_other_users_to_contribute' => 'Allow other users to contribute to this goal',
-    
+
     // Category Management
     'category_management' => 'Category Management',
     'income_categories' => 'Income Categories',
     'expense_categories' => 'Expense Categories',
     'expense_super_categories' => 'Expense Super Categories',
-    
+
     // Financial Settings
     'seed_capital' => 'Seed Capital',
     'median_monthly_income' => 'Median Monthly Income',
     'income_last_verified_at' => 'Income Last Verified',
     'verify_income' => 'Verify Income',
     'net_worth' => 'Net Worth',
-    
+
     // Recurring Expenses
     'recurring_expenses' => 'Recurring Expenses',
     'recurring_expense' => 'Recurring Expense',
@@ -175,7 +175,7 @@ return [
     'next_due_date' => 'Next Due Date',
     'generate_expenses' => 'Generate Expenses',
     'recurring_expense_generated' => 'Recurring expense: :name',
-    
+
     // Save for Later
     'save_for_later' => 'Save for Later',
     'save_for_later_target' => 'Save Target',
@@ -184,7 +184,7 @@ return [
     'save_for_later_expense_help' => 'Mark this expense as "save for later" to track it separately from regular expenses',
     'save_progress' => 'Save Progress',
     'remaining_to_save' => 'Remaining to Save',
-    
+
     // Budget Allocation
     'budget_allocation' => 'Budget Allocation',
     'allocation_percentage' => 'Allocation Percentage',
@@ -194,13 +194,13 @@ return [
     'remaining_allowance' => 'Remaining Allowance',
     'over_budget' => 'Over Budget',
     'under_budget' => 'Under Budget',
-    
+
     // Positive Reinforcement
     'encouragement_days_remaining' => 'Good job! Month is due in :days days and you still have :amount allowance to spend!',
     'encouragement_excellent' => 'Nice! You have only spent :spent from :allowance this month in :category!',
     'encouragement_good' => 'Good progress! You\'ve spent :spent from :allowance in :category, with :remaining remaining.',
     'encouragement_ok' => 'You still have :remaining remaining in :category this month.',
-    
+
     // Savings Goal Checkpoint
     'initial_checkpoint' => 'Initial Checkpoint',
     'initial_checkpoint_help' => 'The amount already saved when this goal was created',
@@ -211,11 +211,11 @@ return [
     'median_monthly_income_help' => 'Your typical monthly income for budget calculations',
     'income_last_verified_at_help' => 'When you last verified your monthly income',
     'financial_settings' => 'Financial Settings',
-    
+
     // Emoji
     'emoji' => 'Emoji',
     'emoji_help' => 'Select an emoji to display for this category (e.g., 🏠, 🚗, 💰)',
-    
+
     // Mobile
     'add_expense' => 'Add Expense',
     'add_income' => 'Add Income',
@@ -271,18 +271,18 @@ return [
     'savings_goal' => 'Savings Goal',
     'created_successfully' => 'Created successfully',
     'saved' => 'Saved',
-    
+
     // Monthly Calculation
     'calculate_previous_month' => 'Calculate Previous Month',
     'calculate' => 'Calculate',
     'confirm_monthly_calculation' => 'Are you sure you want to calculate savings for :month? This will add/subtract the net savings to all active goals.',
     'monthly_calculation_already_done' => 'Monthly calculation for this month has already been completed.',
     'monthly_calculation_completed' => 'Monthly calculation completed for :month. Net savings: €:amount',
-    
+
     // Progress Bars
     'savings_goals_progress' => 'Savings Goals Progress',
     'total_savings' => 'Total Savings',
-    
+
     // Validation Messages
     'cannot_delete_past_month_entry' => 'Cannot delete entries from past months. Once a month has ended, entries cannot be deleted.',
     'cannot_edit_past_month_entry' => 'Cannot edit entries from past months. Once a month has ended, entries cannot be modified.',
@@ -291,7 +291,7 @@ return [
     'date_current_month_only' => 'Only dates from the current month are allowed.',
     'date_current_or_previous_month' => 'You can select dates from the current month or previous month (if not yet calculated).',
     'past_month_locked' => 'Past month (locked)',
-    
+
     // Reports
     'income_analysis' => 'Income Analysis',
     'expenses_analysis' => 'Expenses Analysis',
@@ -313,4 +313,3 @@ return [
     'refresh' => 'Refresh',
     'items' => 'items',
 ];
-

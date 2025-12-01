@@ -30,7 +30,7 @@ return [
         'home_insurance' => 'Home Insurance',
         'maintenance' => 'Maintenance',
         'home_office' => 'Home-Office',
-        
+
         // Transportation
         'fuel' => 'Fuel',
         'public_transport' => 'Public Transport',
@@ -41,46 +41,46 @@ return [
         'self_insured' => 'Self Insured',
         'parking' => 'Parking',
         'tolls' => 'Tolls',
-        
+
         // Food
         'supermarket' => 'Supermarket',
         'groceries' => 'Groceries',
-        
+
         // Utilities
         'landline' => 'Landline',
         'mobile_phone' => 'Mobile Phone',
         'internet' => 'Internet',
-        
+
         // Health
         'medical_visits' => 'Medical Visits',
         'medications' => 'Medications',
         'dental_care' => 'Dental Care',
-        
+
         // Pets
         'vet' => 'Vet',
         'pet_food' => 'Pet Food',
-        
+
         // Work/Business
         'work_materials' => 'Work Materials',
         'server' => 'Server',
         'domains' => 'Domains',
         'ai_services' => 'AI Services',
-        
+
         // Education
         'seminars' => 'Seminars',
         'tuition' => 'Tuition',
         'educational_materials' => 'Educational Materials',
-        
+
         // Financial Obligations
         'loan_payments' => 'Loan Payments',
         'credit_card_payments' => 'Credit Card Payments',
-        
+
         // Lifestyle - Food & Drinks
         'restaurants' => 'Restaurants',
         'coffee' => 'Coffee',
         'drinks' => 'Drinks',
         'beers' => 'Beers',
-        
+
         // Lifestyle - Entertainment
         'subscriptions' => 'Subscriptions',
         'gaming' => 'Gaming',
@@ -89,23 +89,23 @@ return [
         'gym' => 'Gym',
         'travel' => 'Travel',
         'events' => 'Events',
-        
+
         // Lifestyle - Personal
         'clothing' => 'Clothing',
         'cosmetics' => 'Cosmetics',
         'hair_salon' => 'Hair Salon',
         'gifts' => 'Gifts',
         'tech' => 'Tech',
-        
+
         // Lifestyle - Insurance (optional)
         'life_insurance' => 'Life Insurance',
         'home_insurance' => 'Home Insurance',
         'private_health_insurance' => 'Private Health Insurance',
-        
+
         // Lifestyle - Children (optional)
         'childcare' => 'Childcare',
         'school' => 'School',
-        
+
         // Lifestyle - Soft categories
         'donations' => 'Donations',
         'unexpected' => 'Unexpected',
@@ -118,7 +118,7 @@ return [
         'loipa' => 'Loipa',
         'savings' => 'Savings',
     ],
-    
+
     // Category Management
     'translation_key' => 'Translation Key',
     'translation_key_help' => 'Enter a translation key (e.g., categories.income.salary). This will be used for multilingual support.',
@@ -133,4 +133,3 @@ return [
     'custom_categories' => 'Custom Categories',
     'cannot_delete_system' => 'Cannot delete system categories',
 ];
-

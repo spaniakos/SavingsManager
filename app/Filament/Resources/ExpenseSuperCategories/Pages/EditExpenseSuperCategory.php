@@ -16,13 +16,14 @@ class EditExpenseSuperCategory extends EditRecord
         return [
             DeleteAction::make()
                 ->requiresConfirmation()
-                ->visible(fn () => !$this->record->is_system && $this->record->user_id === Auth::id())
+                ->visible(fn () => ! $this->record->is_system && $this->record->user_id === Auth::id())
                 ->action(function () {
                     if ($this->record->is_system) {
                         \Filament\Notifications\Notification::make()
                             ->title(__('categories.cannot_delete_system'))
                             ->danger()
                             ->send();
+
                         return;
                     }
                     $this->record->delete();
@@ -30,7 +31,7 @@ class EditExpenseSuperCategory extends EditRecord
                 }),
         ];
     }
-    
+
     protected function mutateFormDataBeforeFill(array $data): array
     {
         // Allow editing allocation_percentage even for system categories

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('is_system')->default(false);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->index(['user_id', 'is_system']);
         });
 
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->boolean('is_system')->default(false);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->index(['user_id', 'is_system']);
         });
 
@@ -48,7 +48,7 @@ return new class extends Migration
             $table->enum('save_for_later_frequency', ['week', 'month', 'quarter', 'year'])->nullable();
             $table->decimal('save_for_later_amount', 10, 2)->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'is_system']);
             $table->index('expense_super_category_id');
         });
@@ -62,7 +62,7 @@ return new class extends Migration
             $table->date('date');
             $table->text('notes')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'date']);
             $table->index('income_category_id');
         });
@@ -77,7 +77,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->boolean('is_save_for_later')->default(false);
             $table->timestamps();
-            
+
             $table->index(['user_id', 'date']);
             $table->index('expense_category_id');
         });
@@ -94,7 +94,7 @@ return new class extends Migration
             $table->date('target_date')->nullable();
             $table->timestamp('last_monthly_calculation_at')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id']);
             $table->index('target_date');
         });

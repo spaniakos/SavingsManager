@@ -12,18 +12,13 @@ class ChartDataService
 {
     /**
      * Get expenses aggregated by category for a given period
-     *
-     * @param Carbon|null $startDate
-     * @param Carbon|null $endDate
-     * @param int|null $userId
-     * @return array
      */
     public function getExpensesByCategory(?Carbon $startDate = null, ?Carbon $endDate = null, ?int $userId = null): array
     {
         $userId = $userId ?? Auth::id();
         $startDate = $startDate ?? Carbon::now()->startOfMonth();
         $endDate = $endDate ?? Carbon::now()->endOfMonth();
-        
+
         return ExpenseEntry::where('expense_entries.user_id', $userId)
             ->whereBetween('expense_entries.date', [$startDate, $endDate])
             ->join('expense_categories', 'expense_entries.expense_category_id', '=', 'expense_categories.id')
@@ -42,21 +37,16 @@ class ChartDataService
             })
             ->toArray();
     }
-    
+
     /**
      * Get expenses aggregated by super category for a given period
-     *
-     * @param Carbon|null $startDate
-     * @param Carbon|null $endDate
-     * @param int|null $userId
-     * @return array
      */
     public function getExpensesBySuperCategory(?Carbon $startDate = null, ?Carbon $endDate = null, ?int $userId = null): array
     {
         $userId = $userId ?? Auth::id();
         $startDate = $startDate ?? Carbon::now()->startOfMonth();
         $endDate = $endDate ?? Carbon::now()->endOfMonth();
-        
+
         return ExpenseEntry::where('expense_entries.user_id', $userId)
             ->whereBetween('expense_entries.date', [$startDate, $endDate])
             ->join('expense_categories', 'expense_entries.expense_category_id', '=', 'expense_categories.id')
@@ -76,22 +66,16 @@ class ChartDataService
             })
             ->toArray();
     }
-    
+
     /**
      * Get expenses per item within a category
-     *
-     * @param string $categoryName
-     * @param Carbon|null $startDate
-     * @param Carbon|null $endDate
-     * @param int|null $userId
-     * @return array
      */
     public function getExpensesByItemInCategory(string $categoryName, ?Carbon $startDate = null, ?Carbon $endDate = null, ?int $userId = null): array
     {
         $userId = $userId ?? Auth::id();
         $startDate = $startDate ?? Carbon::now()->startOfMonth();
         $endDate = $endDate ?? Carbon::now()->endOfMonth();
-        
+
         return ExpenseEntry::where('expense_entries.user_id', $userId)
             ->whereBetween('expense_entries.date', [$startDate, $endDate])
             ->join('expense_categories', 'expense_entries.expense_category_id', '=', 'expense_categories.id')
@@ -111,21 +95,16 @@ class ChartDataService
             })
             ->toArray();
     }
-    
+
     /**
      * Get income trends over time
-     *
-     * @param Carbon|null $startDate
-     * @param Carbon|null $endDate
-     * @param int|null $userId
-     * @return array
      */
     public function getIncomeTrends(?Carbon $startDate = null, ?Carbon $endDate = null, ?int $userId = null): array
     {
         $userId = $userId ?? Auth::id();
         $startDate = $startDate ?? Carbon::now()->subMonths(6)->startOfMonth();
         $endDate = $endDate ?? Carbon::now()->endOfMonth();
-        
+
         return IncomeEntry::where('user_id', $userId)
             ->whereBetween('date', [$startDate, $endDate])
             ->select(
@@ -143,21 +122,16 @@ class ChartDataService
             })
             ->toArray();
     }
-    
+
     /**
      * Get income by category
-     *
-     * @param Carbon|null $startDate
-     * @param Carbon|null $endDate
-     * @param int|null $userId
-     * @return array
      */
     public function getIncomeByCategory(?Carbon $startDate = null, ?Carbon $endDate = null, ?int $userId = null): array
     {
         $userId = $userId ?? Auth::id();
         $startDate = $startDate ?? Carbon::now()->startOfMonth();
         $endDate = $endDate ?? Carbon::now()->endOfMonth();
-        
+
         return IncomeEntry::where('income_entries.user_id', $userId)
             ->whereBetween('income_entries.date', [$startDate, $endDate])
             ->join('income_categories', 'income_entries.income_category_id', '=', 'income_categories.id')
@@ -176,55 +150,48 @@ class ChartDataService
             })
             ->toArray();
     }
-    
+
     /**
      * Get month-over-month savings comparison
-     *
-     * @param int $months
-     * @param int|null $userId
-     * @return array
      */
     public function getMoMSavingsComparison(int $months = 6, ?int $userId = null): array
     {
         $userId = $userId ?? Auth::id();
         $startDate = Carbon::now()->subMonths($months)->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
-        
+
         $data = [];
         $current = $startDate->copy();
-        
+
         while ($current->lte($endDate)) {
             $monthStart = $current->copy()->startOfMonth();
             $monthEnd = $current->copy()->endOfMonth();
-            
+
             $income = IncomeEntry::where('user_id', $userId)
                 ->whereBetween('date', [$monthStart, $monthEnd])
                 ->sum('amount');
-            
+
             $expenses = ExpenseEntry::where('user_id', $userId)
                 ->whereBetween('date', [$monthStart, $monthEnd])
                 ->sum('amount');
-            
+
             $savings = $income - $expenses;
-            
+
             $data[] = [
                 'label' => $current->format('M Y'),
                 'income' => (float) $income,
                 'expenses' => (float) $expenses,
                 'savings' => (float) $savings,
             ];
-            
+
             $current->addMonth();
         }
-        
+
         return $data;
     }
-    
+
     /**
      * Format data for Chart.js pie/doughnut chart
-     *
-     * @param array $data
-     * @return array
      */
     public function formatForPieChart(array $data): array
     {
@@ -237,12 +204,9 @@ class ChartDataService
             ],
         ];
     }
-    
+
     /**
      * Format data for Chart.js bar/line chart
-     *
-     * @param array $data
-     * @return array
      */
     public function formatForBarChart(array $data): array
     {
@@ -256,12 +220,9 @@ class ChartDataService
             ],
         ];
     }
-    
+
     /**
      * Format data for MoM comparison chart
-     *
-     * @param array $data
-     * @return array
      */
     public function formatForMoMChart(array $data): array
     {
@@ -287,4 +248,3 @@ class ChartDataService
         ];
     }
 }
-

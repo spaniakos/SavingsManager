@@ -10,13 +10,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class IncomeCategory extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name', // Translation key
         'emoji',
         'is_system',
         'user_id',
     ];
-    
+
     public function getTranslatedName(): string
     {
         return __("categories.income.{$this->name}", [], app()->getLocale());
@@ -43,7 +44,7 @@ class IncomeCategory extends Model
     {
         return $query->where(function ($q) use ($userId) {
             $q->where('is_system', true)
-              ->orWhere('user_id', $userId);
+                ->orWhere('user_id', $userId);
         });
     }
 }

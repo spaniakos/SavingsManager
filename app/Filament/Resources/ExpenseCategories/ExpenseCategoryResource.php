@@ -19,12 +19,12 @@ class ExpenseCategoryResource extends Resource
     protected static ?string $model = ExpenseCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    
+
     public static function getNavigationGroup(): ?string
     {
         return __('common.category_management');
     }
-    
+
     public static function getNavigationLabel(): string
     {
         return __('common.expense_categories');

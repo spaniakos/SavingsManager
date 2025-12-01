@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ExpenseEntry extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'expense_category_id',

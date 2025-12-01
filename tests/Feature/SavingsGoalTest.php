@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\SavingsGoal;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -63,7 +62,7 @@ class SavingsGoalTest extends TestCase
 
         $this->actingAs($user1);
         $user1Goals = SavingsGoal::where('user_id', $user1->id)->get();
-        
+
         $this->assertCount(1, $user1Goals);
         $this->assertEquals('User 1 Goal', $user1Goals->first()->name);
     }

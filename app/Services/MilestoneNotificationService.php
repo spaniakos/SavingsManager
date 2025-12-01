@@ -34,16 +34,16 @@ class MilestoneNotificationService
     protected function checkGoalMilestones(SavingsGoal $goal, User $user): void
     {
         $progress = $this->calculator->calculateOverallProgress($goal);
-        
+
         // Check for percentage milestones (25%, 50%, 75%, 100%)
         $milestones = [25, 50, 75, 100];
-        
+
         foreach ($milestones as $milestone) {
             if ($progress >= $milestone && $progress < $milestone + 1) {
                 $this->notifyMilestone($goal, $milestone, $user);
             }
         }
-        
+
         // Check if goal is completed
         if ($progress >= 100 && $goal->current_amount >= $goal->target_amount) {
             $this->notifyGoalCompleted($goal, $user);
@@ -93,7 +93,7 @@ class MilestoneNotificationService
 
         foreach ($goals as $goal) {
             $progress = $this->calculator->calculateOverallProgress($goal);
-            
+
             if ($progress >= 100) {
                 $notifications[] = [
                     'type' => 'completed',
@@ -124,4 +124,3 @@ class MilestoneNotificationService
         return $notifications;
     }
 }
-

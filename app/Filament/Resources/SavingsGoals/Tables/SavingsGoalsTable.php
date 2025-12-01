@@ -35,14 +35,15 @@ class SavingsGoalsTable
                     ->formatStateUsing(function ($record) {
                         if ($record->target_amount > 0) {
                             $percentage = ($record->current_amount / $record->target_amount) * 100;
-                            return number_format($percentage, 1) . '%';
+
+                            return number_format($percentage, 1).'%';
                         }
+
                         return '0%';
                     })
                     ->badge()
-                    ->color(fn ($record) => 
-                        $record->target_amount > 0 && ($record->current_amount / $record->target_amount) >= 1 
-                            ? 'success' 
+                    ->color(fn ($record) => $record->target_amount > 0 && ($record->current_amount / $record->target_amount) >= 1
+                            ? 'success'
                             : 'warning'
                     ),
                 TextColumn::make('target_date')

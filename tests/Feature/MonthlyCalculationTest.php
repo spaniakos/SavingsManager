@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\ExpenseCategory;
 use App\Models\ExpenseEntry;
+use App\Models\IncomeCategory;
 use App\Models\IncomeEntry;
 use App\Models\SavingsGoal;
 use App\Models\User;
-use App\Models\ExpenseCategory;
-use App\Models\ExpenseSuperCategory;
-use App\Models\IncomeCategory;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -72,7 +71,7 @@ class MonthlyCalculationTest extends TestCase
         $response->assertSessionHas('success');
 
         $goal->refresh();
-        
+
         // Current amount should be updated: 1000 + 1500 = 2500
         $this->assertEquals(2500.00, $goal->current_amount);
         $this->assertNotNull($goal->last_monthly_calculation_at);
@@ -123,7 +122,7 @@ class MonthlyCalculationTest extends TestCase
         $response->assertSessionHas('success');
 
         $goal->refresh();
-        
+
         // Current amount should be updated: 1000 - 1000 = 0 (or could be negative)
         $this->assertEquals(0.00, $goal->current_amount);
     }
@@ -179,7 +178,7 @@ class MonthlyCalculationTest extends TestCase
 
         $goal1->refresh();
         $goal2->refresh();
-        
+
         // Both goals should be updated with the net savings
         $this->assertEquals(2000.00, $goal1->current_amount);
         $this->assertEquals(1500.00, $goal2->current_amount);
@@ -205,9 +204,8 @@ class MonthlyCalculationTest extends TestCase
         $response = $this->post('/admin/mobile/monthly-calculation');
 
         $response->assertRedirect();
-        
+
         // Should show error or success message indicating already calculated
         // The exact behavior depends on implementation
     }
 }
-

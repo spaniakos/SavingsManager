@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\ExpenseEntry;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseSuperCategory;
 use App\Models\SavingsGoal;
@@ -41,7 +40,7 @@ class SaveForLaterTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/expense/category/' . $category->id, [
+        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
             'amount' => 500.00,
             'date' => Carbon::now()->format('Y-m-d'),
             'notes' => 'Save for later',
@@ -49,12 +48,12 @@ class SaveForLaterTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        
+
         $goal->refresh();
-        
+
         // Current amount should be increased by 500
         $this->assertEquals(1500.00, $goal->current_amount);
-        
+
         // Expense entry should exist with is_save_for_later flag
         $this->assertDatabaseHas('expense_entries', [
             'user_id' => $user->id,
@@ -93,7 +92,7 @@ class SaveForLaterTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/expense/category/' . $category->id, [
+        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
             'amount' => 300.00,
             'date' => Carbon::now()->format('Y-m-d'),
             'notes' => 'Save for later',
@@ -101,10 +100,10 @@ class SaveForLaterTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        
+
         $goal1->refresh();
         $goal2->refresh();
-        
+
         // Both goals should be increased by 300
         $this->assertEquals(1300.00, $goal1->current_amount);
         $this->assertEquals(800.00, $goal2->current_amount);
@@ -130,18 +129,17 @@ class SaveForLaterTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/expense/category/' . $savingsCategory->id, [
+        $response = $this->post('/admin/mobile/expense/category/'.$savingsCategory->id, [
             'amount' => 250.00,
             'date' => Carbon::now()->format('Y-m-d'),
             'notes' => 'Direct savings',
         ]);
 
         $response->assertRedirect();
-        
+
         $goal->refresh();
-        
+
         // Current amount should be increased by 250 (from savings category)
         $this->assertEquals(1250.00, $goal->current_amount);
     }
 }
-

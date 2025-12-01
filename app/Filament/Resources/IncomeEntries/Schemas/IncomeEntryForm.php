@@ -22,6 +22,7 @@ class IncomeEntryForm
                     ->label(__('common.income_category'))
                     ->options(function () {
                         $userId = Auth::id();
+
                         return IncomeCategory::forUser($userId)
                             ->get()
                             ->mapWithKeys(function ($category) {
@@ -53,8 +54,9 @@ class IncomeEntryForm
                         }
                         // For create or current/previous month edit
                         $previousMonthCalculated = self::isPreviousMonthCalculated();
-                        return $previousMonthCalculated 
-                            ? Carbon::now()->startOfMonth() 
+
+                        return $previousMonthCalculated
+                            ? Carbon::now()->startOfMonth()
                             : Carbon::now()->subMonth()->startOfMonth();
                     })
                     ->maxDate(now()->endOfMonth())
@@ -67,7 +69,8 @@ class IncomeEntryForm
                             }
                         }
                         $previousMonthCalculated = self::isPreviousMonthCalculated();
-                        return $previousMonthCalculated 
+
+                        return $previousMonthCalculated
                             ? __('common.date_current_month_only')
                             : __('common.date_current_or_previous_month');
                     })
@@ -78,19 +81,19 @@ class IncomeEntryForm
                     ->columnSpanFull(),
             ]);
     }
-    
+
     protected static function isPreviousMonthCalculated(): bool
     {
         $userId = Auth::id();
-        if (!$userId) {
+        if (! $userId) {
             return false;
         }
-        
+
         $previousMonth = Carbon::now()->subMonth();
         $previousMonthEnd = $previousMonth->copy()->endOfMonth();
-        
+
         $allGoals = SavingsGoal::where('user_id', $userId)->get();
-        
+
         foreach ($allGoals as $goal) {
             if ($goal->last_monthly_calculation_at) {
                 $lastCalc = Carbon::parse($goal->last_monthly_calculation_at);
@@ -99,7 +102,7 @@ class IncomeEntryForm
                 }
             }
         }
-        
+
         return false;
     }
 }

@@ -19,7 +19,7 @@ class SavingsGoalResource extends Resource
     protected static ?string $model = SavingsGoal::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    
+
     public static function getNavigationLabel(): string
     {
         return __('common.savings_goals');

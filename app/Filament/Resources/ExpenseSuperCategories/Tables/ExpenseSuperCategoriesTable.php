@@ -18,6 +18,7 @@ class ExpenseSuperCategoriesTable
         return $table
             ->modifyQueryUsing(function ($query) {
                 $userId = Auth::id();
+
                 return $query->forUser($userId);
             })
             ->columns([
@@ -37,7 +38,7 @@ class ExpenseSuperCategoriesTable
                     ->toggleable(),
                 TextColumn::make('allocation_percentage')
                     ->label(__('common.allocation_percentage'))
-                    ->formatStateUsing(fn ($state) => $state ? number_format($state, 2) . '%' : '-')
+                    ->formatStateUsing(fn ($state) => $state ? number_format($state, 2).'%' : '-')
                     ->sortable(),
                 IconColumn::make('is_system')
                     ->label(__('categories.system_category'))
@@ -68,7 +69,7 @@ class ExpenseSuperCategoriesTable
             ->defaultSort('is_system', 'desc')
             ->recordActions([
                 EditAction::make()
-                    ->visible(fn ($record) => !$record->is_system || Auth::user()->isAdmin ?? false),
+                    ->visible(fn ($record) => ! $record->is_system || Auth::user()->isAdmin ?? false),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -81,6 +82,7 @@ class ExpenseSuperCategoriesTable
                                     ->title(__('categories.cannot_delete_system'))
                                     ->danger()
                                     ->send();
+
                                 return;
                             }
                             $records->each->delete();

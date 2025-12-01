@@ -14,21 +14,21 @@ class MobileReportsController extends Controller
     {
         $user = Auth::user();
         $reportData = null;
-        
+
         // Default values
         $startDate = $request->get('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = $request->get('end_date', now()->endOfMonth()->format('Y-m-d'));
         $breakdownType = $request->get('breakdown_type', 'super_category');
-        
+
         // Generate report if dates are provided
         if ($request->has('generate')) {
             $startDate = Carbon::parse($startDate);
             $endDate = Carbon::parse($endDate);
-            
+
             $reportService = app(ReportService::class);
             $reportData = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType);
         }
-        
+
         return view('mobile.reports', [
             'reportData' => $reportData,
             'startDate' => is_string($startDate) ? $startDate : $startDate->format('Y-m-d'),
@@ -36,17 +36,17 @@ class MobileReportsController extends Controller
             'breakdownType' => $breakdownType,
         ]);
     }
-    
+
     public function exportPdf(Request $request)
     {
         $user = Auth::user();
         $startDate = Carbon::parse($request->get('start_date'));
         $endDate = Carbon::parse($request->get('end_date'));
         $breakdownType = $request->get('breakdown_type', 'super_category');
-        
+
         $reportService = app(ReportService::class);
         $reportData = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType);
-        
+
         try {
             $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('filament.reports.comprehensive-pdf', [
                 'reportData' => $reportData,
@@ -55,12 +55,12 @@ class MobileReportsController extends Controller
                 'breakdownType' => $breakdownType,
                 'user' => $user,
             ]);
-            
+
             // Configure PDF options to enable remote images (for emoji support)
             $pdf->setOption('isRemoteEnabled', true);
             $pdf->setOption('isHtml5ParserEnabled', true);
 
-            $filename = 'report_' . $startDate->format('Y-m-d') . '_to_' . $endDate->format('Y-m-d') . '.pdf';
+            $filename = 'report_'.$startDate->format('Y-m-d').'_to_'.$endDate->format('Y-m-d').'.pdf';
 
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->output();
@@ -69,7 +69,7 @@ class MobileReportsController extends Controller
             ]);
         } catch (\Exception $e) {
             return redirect()->route('mobile.reports.index')
-                ->with('error', __('common.pdf_export_error') . ': ' . $e->getMessage());
+                ->with('error', __('common.pdf_export_error').': '.$e->getMessage());
         }
     }
 }

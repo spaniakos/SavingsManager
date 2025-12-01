@@ -6,7 +6,6 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Auth;
 
 class SavingsGoalForm
 {

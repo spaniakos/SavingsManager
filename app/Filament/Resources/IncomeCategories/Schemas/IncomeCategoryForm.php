@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources\IncomeCategories\Schemas;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Auth;
 
 class IncomeCategoryForm
 {
@@ -30,7 +29,7 @@ class IncomeCategoryForm
                     ->helperText(__('categories.translation_instructions'))
                     ->disabled()
                     ->dehydrated(false)
-                    ->visible(fn ($record) => !$record || !$record->is_system)
+                    ->visible(fn ($record) => ! $record || ! $record->is_system)
                     ->columnSpanFull(),
             ]);
     }

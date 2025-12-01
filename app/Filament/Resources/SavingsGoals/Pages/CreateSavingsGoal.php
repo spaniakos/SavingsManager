@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Auth;
 class CreateSavingsGoal extends CreateRecord
 {
     protected static string $resource = SavingsGoalResource::class;
-    
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['user_id'] = Auth::id();
+
         return $data;
     }
 }

@@ -16,23 +16,23 @@ class MobileIncomeController extends Controller
     {
         $userId = Auth::id();
         $categories = IncomeCategory::forUser($userId)->get();
-        
+
         return view('mobile.income.index', [
             'categories' => $categories,
         ]);
     }
-    
+
     public function create($categoryId)
     {
         $userId = Auth::id();
         $category = IncomeCategory::forUser($userId)->findOrFail($categoryId);
-        
+
         // Check if previous month was calculated
         $previousMonthCalculated = $this->isPreviousMonthCalculated($userId);
-        $minDate = $previousMonthCalculated 
-            ? Carbon::now()->startOfMonth() 
+        $minDate = $previousMonthCalculated
+            ? Carbon::now()->startOfMonth()
             : Carbon::now()->subMonth()->startOfMonth();
-        
+
         return view('mobile.income.create', [
             'category' => $category,
             'minDate' => $minDate,
@@ -40,29 +40,29 @@ class MobileIncomeController extends Controller
             'previousMonthCalculated' => $previousMonthCalculated,
         ]);
     }
-    
+
     public function store(Request $request, $categoryId)
     {
         $userId = Auth::id();
         $category = IncomeCategory::forUser($userId)->findOrFail($categoryId);
-        
+
         // Check if previous month was calculated
         $previousMonthCalculated = $this->isPreviousMonthCalculated($userId);
-        $minDate = $previousMonthCalculated 
-            ? Carbon::now()->startOfMonth() 
+        $minDate = $previousMonthCalculated
+            ? Carbon::now()->startOfMonth()
             : Carbon::now()->subMonth()->startOfMonth();
-        
+
         $validated = $request->validate([
             'amount' => 'required|numeric|min:0.01',
-            'date' => 'required|date|after_or_equal:' . $minDate->format('Y-m-d') . '|before_or_equal:' . Carbon::now()->endOfMonth()->format('Y-m-d'),
+            'date' => 'required|date|after_or_equal:'.$minDate->format('Y-m-d').'|before_or_equal:'.Carbon::now()->endOfMonth()->format('Y-m-d'),
             'notes' => 'nullable|string|max:255',
         ], [
-            'date.after_or_equal' => $previousMonthCalculated 
-                ? __('common.cannot_create_past_month_entry') 
+            'date.after_or_equal' => $previousMonthCalculated
+                ? __('common.cannot_create_past_month_entry')
                 : __('common.can_only_create_current_or_previous_month'),
             'date.before_or_equal' => __('common.can_only_create_current_month'),
         ]);
-        
+
         IncomeEntry::create([
             'user_id' => $userId,
             'income_category_id' => $categoryId,
@@ -70,17 +70,17 @@ class MobileIncomeController extends Controller
             'date' => $validated['date'],
             'notes' => $validated['notes'] ?? null,
         ]);
-        
+
         return redirect('/admin/mobile')->with('success', __('common.created_successfully'));
     }
-    
+
     protected function isPreviousMonthCalculated(int $userId): bool
     {
         $previousMonth = Carbon::now()->subMonth();
         $previousMonthEnd = $previousMonth->copy()->endOfMonth();
-        
+
         $allGoals = SavingsGoal::where('user_id', $userId)->get();
-        
+
         foreach ($allGoals as $goal) {
             if ($goal->last_monthly_calculation_at) {
                 $lastCalc = Carbon::parse($goal->last_monthly_calculation_at);
@@ -89,7 +89,7 @@ class MobileIncomeController extends Controller
                 }
             }
         }
-        
+
         return false;
     }
 }

@@ -18,6 +18,7 @@ class IncomeCategoriesTable
         return $table
             ->modifyQueryUsing(function ($query) {
                 $userId = Auth::id();
+
                 return $query->forUser($userId);
             })
             ->columns([
@@ -64,7 +65,7 @@ class IncomeCategoriesTable
             ->defaultSort('is_system', 'desc')
             ->recordActions([
                 EditAction::make()
-                    ->visible(fn ($record) => !$record->is_system || Auth::user()->isAdmin ?? false),
+                    ->visible(fn ($record) => ! $record->is_system || Auth::user()->isAdmin ?? false),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -77,6 +78,7 @@ class IncomeCategoriesTable
                                     ->title(__('categories.cannot_delete_system'))
                                     ->danger()
                                     ->send();
+
                                 return;
                             }
                             $records->each->delete();

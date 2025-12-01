@@ -15,5 +15,4 @@ class ListExpenseEntries extends ListRecords
             \Filament\Actions\CreateAction::make(),
         ];
     }
-    
 }

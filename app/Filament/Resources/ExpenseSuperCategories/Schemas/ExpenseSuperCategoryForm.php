@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\ExpenseSuperCategories\Schemas;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class ExpenseSuperCategoryForm
@@ -38,7 +38,7 @@ class ExpenseSuperCategoryForm
                     ->helperText(__('categories.translation_instructions'))
                     ->disabled()
                     ->dehydrated(false)
-                    ->visible(fn ($record) => !$record || !$record->is_system)
+                    ->visible(fn ($record) => ! $record || ! $record->is_system)
                     ->columnSpanFull(),
             ]);
     }

@@ -79,7 +79,7 @@ class ExpenseManagementTest extends TestCase
 
         $this->actingAs($user1);
         $user1Entries = ExpenseEntry::where('user_id', $user1->id)->get();
-        
+
         $this->assertCount(1, $user1Entries);
         $this->assertEquals(50.00, $user1Entries->first()->amount);
     }

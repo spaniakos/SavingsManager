@@ -19,12 +19,12 @@ class ExpenseSuperCategoryResource extends Resource
     protected static ?string $model = ExpenseSuperCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    
+
     public static function getNavigationGroup(): ?string
     {
         return __('common.category_management');
     }
-    
+
     public static function getNavigationLabel(): string
     {
         return __('common.expense_super_categories');
@@ -55,7 +55,7 @@ class ExpenseSuperCategoryResource extends Resource
             'edit' => EditExpenseSuperCategory::route('/{record}/edit'),
         ];
     }
-    
+
     public static function canCreate(): bool
     {
         return false; // Super categories are fixed (essentials, lifestyle, savings)

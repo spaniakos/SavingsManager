@@ -32,7 +32,7 @@ class SavingsGoal extends Model
             'last_monthly_calculation_at' => 'datetime',
         ];
     }
-    
+
     protected $attributes = [
         'current_amount' => 0,
         'initial_checkpoint' => 0,

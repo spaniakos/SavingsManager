@@ -19,9 +19,9 @@ class IncomeEntryResource extends Resource
     protected static ?string $model = IncomeEntry::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    
+
     protected static ?string $navigationLabel = null;
-    
+
     public static function getNavigationLabel(): string
     {
         return __('common.income_entries');

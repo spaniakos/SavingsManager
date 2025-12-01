@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\ExpenseSuperCategory;
+use App\Models\User;
 use Carbon\Carbon;
 
 class PositiveReinforcementService
@@ -20,10 +20,10 @@ class PositiveReinforcementService
      */
     public function getEncouragementMessages(User $user, ?Carbon $periodStart = null, ?Carbon $periodEnd = null): array
     {
-        if (!$periodStart) {
+        if (! $periodStart) {
             $periodStart = Carbon::now()->startOfMonth();
         }
-        if (!$periodEnd) {
+        if (! $periodEnd) {
             $periodEnd = Carbon::now()->endOfMonth();
         }
 
@@ -33,7 +33,7 @@ class PositiveReinforcementService
         $allocationStatus = $this->budgetService->getAllocationStatus($user, $periodStart, $periodEnd);
 
         foreach ($allocationStatus as $status) {
-            if (!$status['is_over_budget'] && $status['remaining'] > 0) {
+            if (! $status['is_over_budget'] && $status['remaining'] > 0) {
                 $message = $this->getSuperCategoryMessage($user, $status['super_category'], $periodStart, $periodEnd);
                 if ($message) {
                     $messages[] = $message;
@@ -66,7 +66,7 @@ class PositiveReinforcementService
         $status = $this->budgetService->getAllocationStatus($user, $startDate, $endDate);
         $categoryStatus = collect($status)->firstWhere('super_category.id', $superCategory->id);
 
-        if (!$categoryStatus || $categoryStatus['is_over_budget']) {
+        if (! $categoryStatus || $categoryStatus['is_over_budget']) {
             return null;
         }
 
@@ -112,7 +112,7 @@ class PositiveReinforcementService
     {
         $now = Carbon::now();
         $endOfMonth = $now->copy()->endOfMonth();
+
         return max(0, $now->diffInDays($endOfMonth));
     }
 }
-

@@ -19,7 +19,7 @@ class ExpenseEntryResource extends Resource
     protected static ?string $model = ExpenseEntry::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    
+
     public static function getNavigationLabel(): string
     {
         return __('common.expense_entries');

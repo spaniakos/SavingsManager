@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class IncomeEntry extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'income_category_id',

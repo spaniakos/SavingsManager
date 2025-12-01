@@ -16,5 +16,4 @@ class ListExpenseSuperCategories extends ListRecords
             CreateAction::make(),
         ];
     }
-    
 }

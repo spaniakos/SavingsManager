@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 class ExpensesByCategoryChart extends ChartWidget
 {
     protected ?string $heading = null;
-    
-    protected int | string | array $columnSpan = 'full';
-    
+
+    protected int|string|array $columnSpan = 'full';
+
     public function getHeading(): string
     {
         return __('common.expenses_by_category');
@@ -21,6 +21,7 @@ class ExpensesByCategoryChart extends ChartWidget
     {
         $chartDataService = app(ChartDataService::class);
         $data = $chartDataService->getExpensesByCategory(null, null, Auth::id());
+
         return $chartDataService->formatForPieChart($data);
     }
 
@@ -28,7 +29,7 @@ class ExpensesByCategoryChart extends ChartWidget
     {
         return 'doughnut';
     }
-    
+
     protected function getOptions(): array
     {
         return [

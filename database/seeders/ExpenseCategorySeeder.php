@@ -11,7 +11,7 @@ class ExpenseCategorySeeder extends Seeder
     public function run(): void
     {
         $superCategories = ExpenseSuperCategory::where('is_system', true)->get()->keyBy('name');
-        
+
         // Clean categories - no duplicates, properly categorized
         $categories = [
             // Essentials (50%)
@@ -47,7 +47,7 @@ class ExpenseCategorySeeder extends Seeder
             ['name' => 'educational_materials', 'super' => 'essentials'],
             ['name' => 'loan_payments', 'super' => 'essentials'],
             ['name' => 'credit_card_payments', 'super' => 'essentials'],
-            
+
             // Lifestyle (30%)
             ['name' => 'restaurants', 'super' => 'lifestyle'],
             ['name' => 'coffee', 'super' => 'lifestyle'],
@@ -73,7 +73,7 @@ class ExpenseCategorySeeder extends Seeder
             ['name' => 'donations', 'super' => 'lifestyle'],
             ['name' => 'unexpected', 'super' => 'lifestyle'],
             ['name' => 'other_expenses', 'super' => 'lifestyle'],
-            
+
             // Savings (20%)
             ['name' => 'savings', 'super' => 'savings'],
         ];

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\ExpenseSuperCategory;
+use App\Models\User;
 use Carbon\Carbon;
 
 class BudgetAllocationService
@@ -13,11 +13,12 @@ class BudgetAllocationService
      */
     public function calculateSuperCategoryAllowance(User $user, ExpenseSuperCategory $superCategory, ?float $monthlyIncome = null): float
     {
-        if (!$monthlyIncome) {
+        if (! $monthlyIncome) {
             $monthlyIncome = $user->median_monthly_income ?? 0;
         }
 
         $percentage = $superCategory->allocation_percentage ?? 0;
+
         return (float) ($monthlyIncome * ($percentage / 100));
     }
 
@@ -41,6 +42,7 @@ class BudgetAllocationService
     {
         $allowance = $this->calculateSuperCategoryAllowance($user, $superCategory);
         $spent = $this->getSpentInSuperCategory($user, $superCategory, $startDate, $endDate);
+
         return (float) max(0, $allowance - $spent);
     }
 
@@ -75,4 +77,3 @@ class BudgetAllocationService
         return $status;
     }
 }
-

@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\ExpenseEntry;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseEntry;
 use App\Models\ExpenseSuperCategory;
-use App\Models\IncomeEntry;
 use App\Models\IncomeCategory;
 use App\Models\SavingsGoal;
 use App\Models\User;
@@ -28,7 +27,7 @@ class EntryDateRestrictionsTest extends TestCase
     public function test_cannot_create_expense_for_month_before_previous_month(): void
     {
         $user = User::factory()->create();
-        
+
         $superCategory = ExpenseSuperCategory::where('name', 'essentials')->first();
         $category = ExpenseCategory::where('expense_super_category_id', $superCategory->id)->first();
 
@@ -37,7 +36,7 @@ class EntryDateRestrictionsTest extends TestCase
         // Try to create expense for 2 months ago
         $oldDate = Carbon::now()->subMonths(2)->format('Y-m-d');
 
-        $response = $this->post('/admin/mobile/expense/category/' . $category->id, [
+        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
             'amount' => 100.00,
             'date' => $oldDate,
             'notes' => 'Old expense',
@@ -49,7 +48,7 @@ class EntryDateRestrictionsTest extends TestCase
     public function test_can_create_expense_for_current_month(): void
     {
         $user = User::factory()->create();
-        
+
         $superCategory = ExpenseSuperCategory::where('name', 'essentials')->first();
         $category = ExpenseCategory::where('expense_super_category_id', $superCategory->id)->first();
 
@@ -57,7 +56,7 @@ class EntryDateRestrictionsTest extends TestCase
 
         $currentDate = Carbon::now()->format('Y-m-d');
 
-        $response = $this->post('/admin/mobile/expense/category/' . $category->id, [
+        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
             'amount' => 100.00,
             'date' => $currentDate,
             'notes' => 'Current expense',
@@ -73,7 +72,7 @@ class EntryDateRestrictionsTest extends TestCase
     public function test_can_create_expense_for_previous_month_before_calculation(): void
     {
         $user = User::factory()->create();
-        
+
         $superCategory = ExpenseSuperCategory::where('name', 'essentials')->first();
         $category = ExpenseCategory::where('expense_super_category_id', $superCategory->id)->first();
 
@@ -81,7 +80,7 @@ class EntryDateRestrictionsTest extends TestCase
 
         $previousMonthDate = Carbon::now()->subMonth()->addDays(5)->format('Y-m-d');
 
-        $response = $this->post('/admin/mobile/expense/category/' . $category->id, [
+        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
             'amount' => 100.00,
             'date' => $previousMonthDate,
             'notes' => 'Previous month expense',
@@ -97,12 +96,12 @@ class EntryDateRestrictionsTest extends TestCase
     public function test_cannot_edit_expense_after_monthly_calculation(): void
     {
         $user = User::factory()->create();
-        
+
         $superCategory = ExpenseSuperCategory::where('name', 'essentials')->first();
         $category = ExpenseCategory::where('expense_super_category_id', $superCategory->id)->first();
 
         $previousMonth = Carbon::now()->subMonth();
-        
+
         $entry = ExpenseEntry::create([
             'user_id' => $user->id,
             'expense_category_id' => $category->id,
@@ -124,7 +123,7 @@ class EntryDateRestrictionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->put('/admin/mobile/expense-entries/' . $entry->id, [
+        $response = $this->put('/admin/mobile/expense-entries/'.$entry->id, [
             'amount' => 200.00,
             'date' => $entry->date->format('Y-m-d'),
             'notes' => 'Updated',
@@ -132,7 +131,7 @@ class EntryDateRestrictionsTest extends TestCase
 
         // Should redirect with error or prevent update
         $response->assertRedirect();
-        
+
         // Entry should not be updated
         $entry->refresh();
         $this->assertEquals(100.00, $entry->amount);
@@ -141,12 +140,12 @@ class EntryDateRestrictionsTest extends TestCase
     public function test_cannot_delete_expense_after_monthly_calculation(): void
     {
         $user = User::factory()->create();
-        
+
         $superCategory = ExpenseSuperCategory::where('name', 'essentials')->first();
         $category = ExpenseCategory::where('expense_super_category_id', $superCategory->id)->first();
 
         $previousMonth = Carbon::now()->subMonth();
-        
+
         $entry = ExpenseEntry::create([
             'user_id' => $user->id,
             'expense_category_id' => $category->id,
@@ -168,10 +167,10 @@ class EntryDateRestrictionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->delete('/admin/mobile/expense-entries/' . $entry->id);
+        $response = $this->delete('/admin/mobile/expense-entries/'.$entry->id);
 
         $response->assertRedirect();
-        
+
         // Entry should still exist
         $this->assertDatabaseHas('expense_entries', [
             'id' => $entry->id,
@@ -188,7 +187,7 @@ class EntryDateRestrictionsTest extends TestCase
         // Try to create income for 2 months ago
         $oldDate = Carbon::now()->subMonths(2)->format('Y-m-d');
 
-        $response = $this->post('/admin/mobile/income/category/' . $category->id, [
+        $response = $this->post('/admin/mobile/income/category/'.$category->id, [
             'amount' => 1000.00,
             'date' => $oldDate,
             'notes' => 'Old income',
@@ -197,4 +196,3 @@ class EntryDateRestrictionsTest extends TestCase
         $response->assertSessionHasErrors('date');
     }
 }
-

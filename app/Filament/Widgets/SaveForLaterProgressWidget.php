@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Auth;
 class SaveForLaterProgressWidget extends Widget
 {
     protected string $view = 'filament.widgets.save-for-later-progress-widget';
-    
-    protected int | string | array $columnSpan = 'full';
-    
+
+    protected int|string|array $columnSpan = 'full';
+
     public function getSaveForLaterCategories()
     {
         $userId = Auth::id();
-        
+
         return ExpenseCategory::forUser($userId)
             ->whereNotNull('save_for_later_target')
             ->where('save_for_later_target', '>', 0)
@@ -31,7 +31,6 @@ class SaveForLaterProgressWidget extends Widget
                 ];
             });
     }
-    
+
     protected static ?int $sort = 3;
 }
-

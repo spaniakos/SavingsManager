@@ -18,7 +18,7 @@ class ReportService
     public function calculateTotalSaved(User $user): float
     {
         $seedCapital = $user->seed_capital ?? 0;
-        
+
         // Sum of all savings goals (initial_checkpoint + current_amount)
         // Note: current_amount already includes contributions from Savings category expenses and save_for_later expenses
         $savingsGoalsTotal = SavingsGoal::where('user_id', $user->id)
@@ -26,7 +26,7 @@ class ReportService
             ->sum(function ($goal) {
                 return ($goal->initial_checkpoint ?? 0) + ($goal->current_amount ?? 0);
             });
-        
+
         return round($seedCapital + $savingsGoalsTotal, 2);
     }
 
@@ -113,6 +113,7 @@ class ReportService
                     'categories' => $group->groupBy('expense_category_id')
                         ->map(function ($categoryGroup) {
                             $category = $categoryGroup->first()->expenseCategory;
+
                             return [
                                 'name' => $category->getTranslatedName(),
                                 'total' => $categoryGroup->sum('amount'),
@@ -123,7 +124,7 @@ class ReportService
             });
 
         $totalSaved = $this->calculateTotalSaved($user);
-        
+
         return [
             'period' => [
                 'start' => $startDate->format('Y-m-d'),
@@ -148,7 +149,7 @@ class ReportService
         $calculator = app(SavingsCalculatorService::class);
 
         $totalSaved = $this->calculateTotalSaved($user);
-        
+
         return [
             'month' => $month->format('F Y'),
             'goals' => $goals->map(function ($goal) use ($calculator) {
@@ -164,8 +165,8 @@ class ReportService
             }),
             'total_target' => $goals->sum('target_amount'),
             'total_current' => $goals->sum('current_amount'),
-            'total_progress' => $goals->sum('target_amount') > 0 
-                ? ($goals->sum('current_amount') / $goals->sum('target_amount')) * 100 
+            'total_progress' => $goals->sum('target_amount') > 0
+                ? ($goals->sum('current_amount') / $goals->sum('target_amount')) * 100
                 : 0,
             'total_saved' => $totalSaved,
         ];
@@ -324,7 +325,7 @@ class ReportService
             }
 
             // Sort categories by total descending
-            if (!empty($categories)) {
+            if (! empty($categories)) {
                 usort($categories, function ($a, $b) {
                     return $b['total'] <=> $a['total'];
                 });
@@ -458,8 +459,8 @@ class ReportService
             ->whereBetween('expense_entries.date', [$startDate, $endDate])
             ->join('expense_categories', 'expense_entries.expense_category_id', '=', 'expense_categories.id')
             ->join('expense_super_categories', 'expense_categories.expense_super_category_id', '=', 'expense_super_categories.id')
-            ->select('expense_super_categories.id', 'expense_super_categories.name', 'expense_super_categories.emoji', 
-                     DB::raw('SUM(expense_entries.amount) as total'), DB::raw('COUNT(*) as count'))
+            ->select('expense_super_categories.id', 'expense_super_categories.name', 'expense_super_categories.emoji',
+                DB::raw('SUM(expense_entries.amount) as total'), DB::raw('COUNT(*) as count'))
             ->groupBy('expense_super_categories.id', 'expense_super_categories.name', 'expense_super_categories.emoji')
             ->get()
             ->map(function ($entry) {
@@ -533,7 +534,7 @@ class ReportService
         $csv = fopen('php://temp', 'r+');
 
         // Write headers
-        if (!empty($data)) {
+        if (! empty($data)) {
             $headers = array_keys(is_array($data[0]) ? $data[0] : $data);
             fputcsv($csv, $headers);
         }
@@ -554,4 +555,3 @@ class ReportService
         return $content;
     }
 }
-

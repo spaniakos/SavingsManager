@@ -24,6 +24,7 @@ class ExpenseEntryForm
                     ->label(__('common.super_category'))
                     ->options(function () {
                         $userId = Auth::id();
+
                         return ExpenseSuperCategory::forUser($userId)
                             ->get()
                             ->mapWithKeys(function ($superCategory) {
@@ -37,10 +38,11 @@ class ExpenseEntryForm
                     ->label(__('common.category'))
                     ->options(function (callable $get) {
                         $superCategoryId = $get('expense_super_category_id');
-                        if (!$superCategoryId) {
+                        if (! $superCategoryId) {
                             return [];
                         }
                         $userId = Auth::id();
+
                         return ExpenseCategory::forUser($userId)
                             ->where('expense_super_category_id', $superCategoryId)
                             ->get()
@@ -73,8 +75,9 @@ class ExpenseEntryForm
                         }
                         // For create or current/previous month edit
                         $previousMonthCalculated = self::isPreviousMonthCalculated();
-                        return $previousMonthCalculated 
-                            ? Carbon::now()->startOfMonth() 
+
+                        return $previousMonthCalculated
+                            ? Carbon::now()->startOfMonth()
                             : Carbon::now()->subMonth()->startOfMonth();
                     })
                     ->maxDate(now()->endOfMonth())
@@ -87,7 +90,8 @@ class ExpenseEntryForm
                             }
                         }
                         $previousMonthCalculated = self::isPreviousMonthCalculated();
-                        return $previousMonthCalculated 
+
+                        return $previousMonthCalculated
                             ? __('common.date_current_month_only')
                             : __('common.date_current_or_previous_month');
                     })
@@ -102,19 +106,19 @@ class ExpenseEntryForm
                     ->columnSpanFull(),
             ]);
     }
-    
+
     protected static function isPreviousMonthCalculated(): bool
     {
         $userId = Auth::id();
-        if (!$userId) {
+        if (! $userId) {
             return false;
         }
-        
+
         $previousMonth = Carbon::now()->subMonth();
         $previousMonthEnd = $previousMonth->copy()->endOfMonth();
-        
+
         $allGoals = SavingsGoal::where('user_id', $userId)->get();
-        
+
         foreach ($allGoals as $goal) {
             if ($goal->last_monthly_calculation_at) {
                 $lastCalc = Carbon::parse($goal->last_monthly_calculation_at);
@@ -123,7 +127,7 @@ class ExpenseEntryForm
                 }
             }
         }
-        
+
         return false;
     }
 }

@@ -4,17 +4,17 @@ namespace App\Filament\Pages;
 
 use App\Services\ReportService;
 use BackedEnum;
+use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class Reports extends Page implements HasForms
 {
@@ -77,7 +77,7 @@ class Reports extends Page implements HasForms
             Action::make('export_csv')
                 ->label(__('common.export_csv'))
                 ->icon('heroicon-o-arrow-down-tray')
-                ->visible(fn () => !empty($this->reportData))
+                ->visible(fn () => ! empty($this->reportData))
                 ->action(function () {
                     if (empty($this->reportData)) {
                         return;
@@ -85,7 +85,7 @@ class Reports extends Page implements HasForms
 
                     $reportService = app(ReportService::class);
                     $csv = $reportService->exportToCsv($this->reportData);
-                    $filename = 'report_' . now()->format('Y-m-d_His') . '.csv';
+                    $filename = 'report_'.now()->format('Y-m-d_His').'.csv';
 
                     return response()->streamDownload(function () use ($csv) {
                         echo $csv;
@@ -96,7 +96,7 @@ class Reports extends Page implements HasForms
             Action::make('export_pdf')
                 ->label(__('common.export_pdf'))
                 ->icon('heroicon-o-document-arrow-down')
-                ->visible(fn () => !empty($this->reportData))
+                ->visible(fn () => ! empty($this->reportData))
                 ->action(function () {
                     if (empty($this->reportData)) {
                         return;
@@ -113,13 +113,13 @@ class Reports extends Page implements HasForms
     {
         $data = $this->form->getState();
         $user = Auth::user();
-        
+
         $startDate = Carbon::parse($data['start_date']);
         $endDate = Carbon::parse($data['end_date']);
         $breakdownType = $data['breakdown_type'] ?? 'super_category';
 
         $reportService = app(ReportService::class);
-        
+
         // Generate comprehensive report with all breakdowns
         $report = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType);
 
@@ -139,7 +139,7 @@ class Reports extends Page implements HasForms
         }
 
         $data = $this->form->getState();
-        
+
         try {
             $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('filament.reports.comprehensive-pdf', [
                 'reportData' => $this->reportData,
@@ -148,12 +148,12 @@ class Reports extends Page implements HasForms
                 'breakdownType' => $data['breakdown_type'] ?? 'super_category',
                 'user' => Auth::user(),
             ]);
-            
+
             // Configure PDF options to enable remote images (for emoji support)
             $pdf->setOption('isRemoteEnabled', true);
             $pdf->setOption('isHtml5ParserEnabled', true);
 
-            $filename = 'report_' . Carbon::parse($data['start_date'])->format('Y-m-d') . '_to_' . Carbon::parse($data['end_date'])->format('Y-m-d') . '.pdf';
+            $filename = 'report_'.Carbon::parse($data['start_date'])->format('Y-m-d').'_to_'.Carbon::parse($data['end_date'])->format('Y-m-d').'.pdf';
 
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->output();

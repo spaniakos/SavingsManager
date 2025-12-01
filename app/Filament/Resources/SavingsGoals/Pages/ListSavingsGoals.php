@@ -16,5 +16,4 @@ class ListSavingsGoals extends ListRecords
             CreateAction::make(),
         ];
     }
-    
 }

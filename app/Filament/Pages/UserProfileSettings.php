@@ -2,38 +2,38 @@
 
 namespace App\Filament\Pages;
 
+use BackedEnum;
 use Filament\Forms\Components\DatePicker;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
-use BackedEnum;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 
 class UserProfileSettings extends Page implements HasForms
 {
     use InteractsWithForms;
-    
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
-    
+
     protected string $view = 'filament.pages.user-profile-settings';
-    
+
     public static function getNavigationLabel(): string
     {
         return __('common.settings');
     }
-    
+
     public static function getNavigationGroup(): ?string
     {
         return null;
     }
-    
+
     public ?array $data = [];
-    
+
     public function mount(): void
     {
         $user = Auth::user();
@@ -43,7 +43,7 @@ class UserProfileSettings extends Page implements HasForms
             'income_last_verified_at' => $user->income_last_verified_at ?? null,
         ]);
     }
-    
+
     public function form(Schema $schema): Schema
     {
         return $schema
@@ -87,18 +87,18 @@ class UserProfileSettings extends Page implements HasForms
             ])
             ->statePath('data');
     }
-    
+
     public function save(): void
     {
         $data = $this->form->getState();
         $user = Auth::user();
-        
+
         // Remove language from data as it's handled separately
         $language = $data['language'] ?? null;
         unset($data['language']);
-        
+
         $user->update($data);
-        
+
         Notification::make()
             ->title(__('common.updated_successfully'))
             ->success()

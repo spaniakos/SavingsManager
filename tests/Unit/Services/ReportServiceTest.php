@@ -20,8 +20,8 @@ class ReportServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->reportService = new ReportService();
-        
+        $this->reportService = new ReportService;
+
         // Seed categories once for all tests
         $this->artisan('db:seed', ['--class' => 'IncomeCategorySeeder']);
         $this->artisan('db:seed', ['--class' => 'ExpenseSuperCategorySeeder']);

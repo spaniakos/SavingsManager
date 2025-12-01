@@ -4,8 +4,8 @@ namespace App\Filament\Resources\ExpenseCategories\Schemas;
 
 use App\Models\ExpenseSuperCategory;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +32,7 @@ class ExpenseCategoryForm
                     ->label(__('common.super_category'))
                     ->options(function () {
                         $userId = Auth::id();
+
                         return ExpenseSuperCategory::forUser($userId)
                             ->get()
                             ->mapWithKeys(function ($superCategory) {
@@ -46,7 +47,7 @@ class ExpenseCategoryForm
                     ->helperText(__('categories.translation_instructions'))
                     ->disabled()
                     ->dehydrated(false)
-                    ->visible(fn ($record) => !$record || !$record->is_system)
+                    ->visible(fn ($record) => ! $record || ! $record->is_system)
                     ->columnSpanFull(),
                 Section::make(__('common.save_for_later'))
                     ->schema([

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ExpenseCategory extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name', // Translation key
         'emoji',
@@ -20,7 +21,7 @@ class ExpenseCategory extends Model
         'save_for_later_frequency',
         'save_for_later_amount',
     ];
-    
+
     public function getTranslatedName(): string
     {
         return __("categories.expense.{$this->name}", [], app()->getLocale());
@@ -54,7 +55,7 @@ class ExpenseCategory extends Model
     {
         return $query->where(function ($q) use ($userId) {
             $q->where('is_system', true)
-              ->orWhere('user_id', $userId);
+                ->orWhere('user_id', $userId);
         });
     }
 
@@ -63,15 +64,15 @@ class ExpenseCategory extends Model
      */
     public function getSaveForLaterProgress(): float
     {
-        if (!$this->save_for_later_target || $this->save_for_later_target <= 0) {
+        if (! $this->save_for_later_target || $this->save_for_later_target <= 0) {
             return 0;
         }
-        
+
         // Calculate total saved from expense entries (negative amounts = savings)
         $saved = abs($this->expenseEntries()
             ->where('amount', '<', 0)
             ->sum('amount'));
-        
+
         return min(100, ($saved / $this->save_for_later_target) * 100);
     }
 
@@ -80,14 +81,14 @@ class ExpenseCategory extends Model
      */
     public function getRemainingSaveForLaterAmount(): float
     {
-        if (!$this->save_for_later_target) {
+        if (! $this->save_for_later_target) {
             return 0;
         }
-        
+
         $saved = abs($this->expenseEntries()
             ->where('amount', '<', 0)
             ->sum('amount'));
-        
+
         return max(0, $this->save_for_later_target - $saved);
     }
 }
