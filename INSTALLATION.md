@@ -71,6 +71,8 @@ This will create:
 - System income categories (13 categories)
 - System expense super categories (3: Essentials, Lifestyle, Savings)
 - System expense categories (70+ categories)
+- Default emojis for all categories
+- Test user: `test@makeasite.gr` / `12341234`
 
 ### 8. Build Frontend Assets
 
@@ -94,9 +96,11 @@ Visit `http://localhost:8000` and navigate to `/admin/login`.
 
 ## First User Setup
 
-1. Visit `/admin/register` to create your first user account
+1. Use the seeded test user or register a new account:
+   - **Test User**: `test@makeasite.gr` / `12341234` (created by seeders)
+   - Or visit `/admin/register` to create your first user account
 2. Log in at `/admin/login`
-3. Configure your financial settings:
+3. Configure your financial settings (Profile Settings):
    - Set seed capital (starting balance)
    - Set median monthly income
    - Verify income date

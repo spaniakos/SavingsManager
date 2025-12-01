@@ -10,17 +10,17 @@ Savings Manager is a comprehensive personal finance application built with Larav
 
 ### Core Features
 
-- **Income & Expense Tracking**: Full CRUD with detailed categorization
-- **Savings Goals**: Individual and joint goals with progress tracking
-- **3-Tier Budget System**: 50/30/20 allocation (Essentials/Lifestyle/Savings)
-- **Recurring Expenses**: Auto-generation of recurring expense entries
-- **Save-for-Later**: Category-based savings targets with progress tracking
-- **Budget Allocation**: Real-time tracking of spent vs allowance
+- **Income & Expense Tracking**: Full CRUD with detailed categorization and date restrictions
+- **Savings Goals**: Individual goals with progress tracking and monthly adjustments
+- **3-Tier Budget System**: Customizable allocation percentages (Essentials/Lifestyle/Savings)
+- **Save-for-Later**: Expenses marked as savings that directly add to savings goals
+- **Monthly Calculation**: One-click calculation to adjust all savings goals based on previous month's net savings
+- **Budget Allocation**: Real-time tracking of spent vs allowance per super category
 - **Positive Reinforcement**: Encouragement messages when staying under budget
 - **Financial Settings**: Seed capital, median monthly income, net worth tracking
-- **Joint Goals**: Member invitation system with contribution tracking
-- **Reporting**: Monthly, category, and savings goal reports (CSV/JSON export)
-- **Analytics Dashboard**: Interactive charts and visualizations
+- **Comprehensive Reporting**: Hierarchical reports (by item, category, super category) with PDF export
+- **Mobile-First UI**: Responsive mobile interface with emoji-enabled category buttons
+- **Analytics Dashboard**: Interactive charts showing income trends, expense trends, and savings progress
 - **Bilingual Support**: Full English/Greek translation
 
 ### Technical Stack
@@ -33,12 +33,14 @@ Savings Manager is a comprehensive personal finance application built with Larav
 
 ### Test Coverage
 
-- **Unit Tests**: 21 tests (Services, Business Logic)
-- **Feature Tests**: 21 tests (CRUD Operations, User Isolation)
-- **Smoke Tests**: 5 tests (Critical Paths)
-- **E2E Tests**: 5 test files (UI Workflows)
+- **Unit Tests**: 13 tests (Services, Business Logic)
+- **Feature Tests**: 35 tests (CRUD Operations, Authentication, Monthly Calculation, Save for Later, Date Restrictions, Reports)
+- **Smoke Tests**: 1 test (Critical Paths)
+- **E2E Tests**: 6 test files (UI Workflows with Playwright)
 
-**All tests passing** ✅
+**All tests passing** ✅ (56 tests, 124 assertions)
+
+See [TEST_RESULTS.md](TEST_RESULTS.md) for detailed test coverage.
 
 ### Installation
 
