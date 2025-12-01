@@ -1,0 +1,58 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Dashboard" [level=1] [ref=e5]
+      - paragraph [ref=e6]: December 2025
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]: Income
+        - generic [ref=e10]: €0.00
+        - generic [ref=e11]: This Month
+      - generic [ref=e12]:
+        - generic [ref=e13]: Expenses
+        - generic [ref=e14]: €0.00
+        - generic [ref=e15]: This Month
+      - generic [ref=e16]:
+        - generic [ref=e17]: Current Savings
+        - generic [ref=e18]: €0.00
+        - generic [ref=e19]: This Month
+      - generic [ref=e20]:
+        - generic [ref=e21]: Total Saved
+        - generic [ref=e22]: €0.00
+        - generic [ref=e23]: All Time
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: Projected Month End
+          - generic [ref=e28]: €0.00
+        - generic [ref=e29]: 📈
+      - generic [ref=e30]: Watch your spending - 31 days remaining left this month..
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]: Calculate Previous Month
+        - generic [ref=e36]: November 2025
+      - button "Calculate" [ref=e37] [cursor=pointer]
+    - heading "Income Trend" [level=3] [ref=e39]
+    - heading "Expenses Trend" [level=3] [ref=e43]
+    - heading "Savings Trend" [level=3] [ref=e48]
+  - navigation [ref=e51]:
+    - link "Dashboard" [ref=e52] [cursor=pointer]:
+      - /url: http://localhost:8000/admin/mobile
+      - img [ref=e53]
+      - text: Dashboard
+    - link "Expenses" [ref=e55] [cursor=pointer]:
+      - /url: http://localhost:8000/admin/mobile/expense
+      - img [ref=e56]
+      - text: Expenses
+    - link "Income" [ref=e58] [cursor=pointer]:
+      - /url: http://localhost:8000/admin/mobile/income
+      - img [ref=e59]
+      - text: Income
+    - link "Settings" [ref=e61] [cursor=pointer]:
+      - /url: http://localhost:8000/admin/mobile/settings
+      - img [ref=e62]
+      - text: Settings
+```

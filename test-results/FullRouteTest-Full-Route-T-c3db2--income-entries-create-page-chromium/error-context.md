@@ -1,7 +1,7 @@
 # Page snapshot
 
 ```yaml
-- generic [ref=e1]:
+- generic [active] [ref=e1]:
   - main [ref=e4]:
     - generic [ref=e6]:
       - generic [ref=e7]:
@@ -17,13 +17,13 @@
             - generic [ref=e26]:
               - text: Email address
               - superscript [ref=e27]: "*"
-            - textbox "Email address*" [active] [ref=e31]
+            - textbox "Email address*" [ref=e31]: test@makeasite.gr
           - generic [ref=e34]:
             - generic [ref=e38]:
               - text: Password
               - superscript [ref=e39]: "*"
             - generic [ref=e41]:
-              - textbox "Password*" [ref=e43]
+              - textbox "Password*" [ref=e43]: "12341234"
               - button "Show password" [ref=e46] [cursor=pointer]:
                 - img [ref=e47]
           - generic [ref=e55]:
@@ -32,5 +32,12 @@
         - button "Sign in" [ref=e63] [cursor=pointer]:
           - generic [ref=e64]: Sign in
   - generic:
-    - status
+    - status:
+      - generic [ref=e65]:
+        - img [ref=e66]
+        - generic [ref=e69]:
+          - heading "Too many login attempts" [level=3] [ref=e70]
+          - generic [ref=e71]: Please try again in 52 seconds.
+        - button [ref=e72] [cursor=pointer]:
+          - img [ref=e73]
 ```

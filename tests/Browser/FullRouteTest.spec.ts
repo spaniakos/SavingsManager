@@ -139,14 +139,7 @@ test.describe('Full Route Testing', () => {
         await expect(page.locator('body')).toBeVisible({ timeout: 10000 });
     });
 
-    test('should access recurring expenses list', async ({ page }) => {
-        await page.goto(`${BASE_URL}/admin/recurring-expenses`);
-        await expect(page).toHaveURL(/.*\/admin\/recurring-expenses/);
-
-        await page.waitForLoadState('networkidle');
-        const createButton = page.locator('text=Create').or(page.locator('text=New')).first();
-        await expect(createButton).toBeVisible({ timeout: 10000 });
-    });
+    // Recurring expenses feature has been removed
 
     test('should access reports page', async ({ page }) => {
         await page.goto(`${BASE_URL}/admin/reports`);
@@ -156,13 +149,7 @@ test.describe('Full Route Testing', () => {
         await expect(page.locator('body')).toBeVisible({ timeout: 10000 });
     });
 
-    test('should access data export page', async ({ page }) => {
-        await page.goto(`${BASE_URL}/admin/data-export`);
-        await expect(page).toHaveURL(/.*\/admin\/data-export/);
-
-        await page.waitForLoadState('networkidle');
-        await expect(page.locator('body')).toBeVisible({ timeout: 10000 });
-    });
+    // Data export page has been removed (reports now include export functionality)
 
     test('should access user profile settings page', async ({ page }) => {
         await page.goto(`${BASE_URL}/admin/user-profile-settings`);
