@@ -86,6 +86,9 @@ class ExpenseCategorySeeder extends Seeder
             ['name' => 'revma', 'super' => 'lifestyle'],
             ['name' => 'super', 'super' => 'lifestyle'],
             ['name' => 'loipa', 'super' => 'lifestyle'],
+            
+            // Savings (20%)
+            ['name' => 'savings', 'super' => 'savings'],
         ];
 
         foreach ($categories as $category) {

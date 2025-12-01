@@ -19,12 +19,14 @@ class ExpenseEntriesTable
                 return $query->where('user_id', Auth::id());
             })
             ->columns([
-                TextColumn::make('expenseCategory.expenseSuperCategory.getTranslatedName')
+                TextColumn::make('expenseCategory.expenseSuperCategory.name')
                     ->label(__('common.super_category'))
+                    ->formatStateUsing(fn ($record) => $record->expenseCategory?->expenseSuperCategory?->getTranslatedName() ?? '-')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('expenseCategory.getTranslatedName')
+                TextColumn::make('expenseCategory.name')
                     ->label(__('common.category'))
+                    ->formatStateUsing(fn ($record) => $record->expenseCategory?->getTranslatedName() ?? '-')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('amount')

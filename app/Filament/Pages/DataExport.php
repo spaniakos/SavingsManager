@@ -9,7 +9,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
@@ -31,11 +31,8 @@ class DataExport extends Page implements HasForms
 
     public ?array $data = [];
 
-    protected ReportService $reportService;
-
     public function mount(): void
     {
-        $this->reportService = app(ReportService::class);
         $this->form->fill([
             'export_type' => 'all',
             'start_date' => now()->startOfYear()->format('Y-m-d'),
@@ -43,10 +40,10 @@ class DataExport extends Page implements HasForms
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('export_type')
                     ->label(__('common.export_type'))
                     ->options([
@@ -99,7 +96,8 @@ class DataExport extends Page implements HasForms
             }
         }
         
-        $csv = $this->reportService->exportToCsv($csvData);
+        $reportService = app(ReportService::class);
+        $csv = $reportService->exportToCsv($csvData);
         $filename = 'export_' . $data['export_type'] . '_' . now()->format('Y-m-d_His') . '.csv';
 
         return response()->streamDownload(function () use ($csv) {

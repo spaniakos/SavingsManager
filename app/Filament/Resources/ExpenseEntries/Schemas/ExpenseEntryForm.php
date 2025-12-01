@@ -8,6 +8,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +59,10 @@ class ExpenseEntryForm
                     ->required()
                     ->default(now())
                     ->displayFormat('d/m/Y'),
+                Toggle::make('is_save_for_later')
+                    ->label(__('common.save_for_later'))
+                    ->helperText(__('common.save_for_later_expense_help'))
+                    ->default(false),
                 Textarea::make('notes')
                     ->label(__('common.notes'))
                     ->rows(3)

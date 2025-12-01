@@ -2,6 +2,10 @@
 
 return [
     'app_name' => 'Διαχειριστής Αποταμίευσης',
+    'app_description' => 'Το Προσωπικό Σας Σύστημα Διαχείρισης Αποταμιεύσεων',
+    'get_started' => 'Ξεκινήστε',
+    'login' => 'Σύνδεση',
+    'register' => 'Εγγραφή',
     'dashboard' => 'Πίνακας Ελέγχου',
     'income' => 'Έσοδα',
     'expenses' => 'Έξοδα',
@@ -177,12 +181,14 @@ return [
     'save_for_later_target' => 'Στόχος Αποταμίευσης',
     'save_for_later_frequency' => 'Συχνότητα Αποταμίευσης',
     'save_for_later_amount' => 'Ποσό ανά Περίοδο',
+    'save_for_later_expense_help' => 'Σημειώστε αυτό το έξοδο ως "αποταμίευση για μετά" για να το παρακολουθήσετε ξεχωριστά από τα κανονικά έξοδα',
     'save_progress' => 'Πρόοδος Αποταμίευσης',
     'remaining_to_save' => 'Απομένει να Αποταμιευτεί',
     
     // Budget Allocation
     'budget_allocation' => 'Κατανομή Προϋπολογισμού',
     'allocation_percentage' => 'Ποσοστό Κατανομής',
+    'allocation_percentage_help' => 'Ποσοστό του μέσου μηνιαίου εισοδήματος που διατίθεται σε αυτή την υπερ-κατηγορία (π.χ., 50 για 50%)',
     'allowance' => 'Προϋπόλογισμός',
     'spent' => 'Ξοδεύτηκε',
     'remaining_allowance' => 'Απομένων Προϋπόλογισμός',

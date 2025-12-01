@@ -21,8 +21,9 @@ class IncomeCategoriesTable
                 return $query->forUser($userId);
             })
             ->columns([
-                TextColumn::make('getTranslatedName')
+                TextColumn::make('name')
                     ->label(__('common.name'))
+                    ->formatStateUsing(fn ($record) => $record->getTranslatedName())
                     ->searchable(query: function ($query, $search) {
                         return $query->where('name', 'like', "%{$search}%");
                     })

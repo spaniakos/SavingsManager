@@ -12,13 +12,6 @@ class MoMSavingsChart extends ChartWidget
     
     protected int | string | array $columnSpan = 'full';
     
-    protected ChartDataService $chartDataService;
-    
-    public function mount(): void
-    {
-        $this->chartDataService = app(ChartDataService::class);
-    }
-    
     public function getHeading(): string
     {
         return __('common.mom_comparison');
@@ -26,8 +19,9 @@ class MoMSavingsChart extends ChartWidget
 
     protected function getData(): array
     {
-        $data = $this->chartDataService->getMoMSavingsComparison(6, Auth::id());
-        return $this->chartDataService->formatForMoMChart($data);
+        $chartDataService = app(ChartDataService::class);
+        $data = $chartDataService->getMoMSavingsComparison(6, Auth::id());
+        return $chartDataService->formatForMoMChart($data);
     }
 
     protected function getType(): string

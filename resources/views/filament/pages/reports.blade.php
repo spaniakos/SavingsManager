@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     <div class="space-y-6">
-        <form wire:submit.prevent="generate">
+        <form wire:submit.prevent="generateReport">
             {{ $this->form }}
 
             <x-filament::button type="submit" class="mt-4">

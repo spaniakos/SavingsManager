@@ -33,10 +33,8 @@ class EditExpenseSuperCategory extends EditRecord
     
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        if ($this->record->is_system) {
-            // Prevent editing system categories
-            $this->form->disabled();
-        }
+        // Allow editing allocation_percentage even for system categories
+        // Only the name field is disabled for system categories (handled in form schema)
         return $data;
     }
 }

@@ -62,7 +62,7 @@ class SavingsGoalsTable
                 TextColumn::make('members.name')
                     ->label(__('common.members'))
                     ->badge()
-                    ->visible(fn ($record) => $record->is_joint),
+                    ->visible(fn ($record) => $record && $record->is_joint),
                 TextColumn::make('created_at')
                     ->label(__('common.created_at'))
                     ->dateTime('d/m/Y H:i')

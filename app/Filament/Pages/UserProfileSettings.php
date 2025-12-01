@@ -3,11 +3,11 @@
 namespace App\Filament\Pages;
 
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use BackedEnum;
 use Filament\Pages\Page;
@@ -44,12 +44,12 @@ class UserProfileSettings extends Page implements HasForms
         ]);
     }
     
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make(__('common.financial_settings'))
-                    ->schema([
+                    ->components([
                         TextInput::make('seed_capital')
                             ->label(__('common.seed_capital'))
                             ->numeric()
@@ -69,7 +69,7 @@ class UserProfileSettings extends Page implements HasForms
                     ])
                     ->columns(2),
                 Section::make(__('common.language_settings'))
-                    ->schema([
+                    ->components([
                         \Filament\Forms\Components\Select::make('language')
                             ->label(__('common.language'))
                             ->options([
@@ -92,6 +92,10 @@ class UserProfileSettings extends Page implements HasForms
     {
         $data = $this->form->getState();
         $user = Auth::user();
+        
+        // Remove language from data as it's handled separately
+        $language = $data['language'] ?? null;
+        unset($data['language']);
         
         $user->update($data);
         

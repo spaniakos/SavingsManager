@@ -19,8 +19,9 @@ class IncomeEntriesTable
                 return $query->where('user_id', Auth::id());
             })
             ->columns([
-                TextColumn::make('incomeCategory.getTranslatedName')
+                TextColumn::make('incomeCategory.name')
                     ->label(__('common.category'))
+                    ->formatStateUsing(fn ($record) => $record->incomeCategory?->getTranslatedName() ?? '-')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('amount')

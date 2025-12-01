@@ -2,6 +2,10 @@
 
 return [
     'app_name' => 'Savings Manager',
+    'app_description' => 'Your Personal Savings Management System',
+    'get_started' => 'Get Started',
+    'login' => 'Login',
+    'register' => 'Register',
     'dashboard' => 'Dashboard',
     'income' => 'Income',
     'expenses' => 'Expenses',
@@ -177,12 +181,14 @@ return [
     'save_for_later_target' => 'Save Target',
     'save_for_later_frequency' => 'Save Frequency',
     'save_for_later_amount' => 'Amount per Period',
+    'save_for_later_expense_help' => 'Mark this expense as "save for later" to track it separately from regular expenses',
     'save_progress' => 'Save Progress',
     'remaining_to_save' => 'Remaining to Save',
     
     // Budget Allocation
     'budget_allocation' => 'Budget Allocation',
     'allocation_percentage' => 'Allocation Percentage',
+    'allocation_percentage_help' => 'Percentage of median monthly income allocated to this super category (e.g., 50 for 50%)',
     'allowance' => 'Allowance',
     'spent' => 'Spent',
     'remaining_allowance' => 'Remaining Allowance',

@@ -12,13 +12,6 @@ class ExpensesByCategoryChart extends ChartWidget
     
     protected int | string | array $columnSpan = 'full';
     
-    protected ChartDataService $chartDataService;
-    
-    public function mount(): void
-    {
-        $this->chartDataService = app(ChartDataService::class);
-    }
-    
     public function getHeading(): string
     {
         return __('common.expenses_by_category');
@@ -26,8 +19,9 @@ class ExpensesByCategoryChart extends ChartWidget
 
     protected function getData(): array
     {
-        $data = $this->chartDataService->getExpensesByCategory(null, null, Auth::id());
-        return $this->chartDataService->formatForPieChart($data);
+        $chartDataService = app(ChartDataService::class);
+        $data = $chartDataService->getExpensesByCategory(null, null, Auth::id());
+        return $chartDataService->formatForPieChart($data);
     }
 
     protected function getType(): string

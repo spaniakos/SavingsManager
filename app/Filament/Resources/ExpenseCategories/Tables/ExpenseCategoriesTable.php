@@ -21,8 +21,9 @@ class ExpenseCategoriesTable
                 return $query->forUser($userId);
             })
             ->columns([
-                TextColumn::make('getTranslatedName')
+                TextColumn::make('name')
                     ->label(__('common.name'))
+                    ->formatStateUsing(fn ($record) => $record->getTranslatedName())
                     ->searchable(query: function ($query, $search) {
                         return $query->where('name', 'like', "%{$search}%");
                     })
@@ -34,8 +35,9 @@ class ExpenseCategoriesTable
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('expenseSuperCategory.getTranslatedName')
+                TextColumn::make('expenseSuperCategory.name')
                     ->label(__('common.super_category'))
+                    ->formatStateUsing(fn ($record) => $record->expenseSuperCategory?->getTranslatedName() ?? '-')
                     ->searchable(query: function ($query, $search) {
                         return $query->whereHas('expenseSuperCategory', function ($q) use ($search) {
                             $q->where('name', 'like', "%{$search}%");

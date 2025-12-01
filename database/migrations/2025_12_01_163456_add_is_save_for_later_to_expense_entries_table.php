@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('expense_super_categories', function (Blueprint $table) {
-            $table->decimal('allocation_percentage', 5, 2)->nullable()->after('name');
+        Schema::table('expense_entries', function (Blueprint $table) {
+            $table->boolean('is_save_for_later')->default(false)->after('notes');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('expense_super_categories', function (Blueprint $table) {
-            $table->dropColumn('allocation_percentage');
+        Schema::table('expense_entries', function (Blueprint $table) {
+            $table->dropColumn('is_save_for_later');
         });
     }
 };

@@ -9,7 +9,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
@@ -31,11 +31,8 @@ class Reports extends Page implements HasForms
 
     public ?array $data = [];
 
-    protected ReportService $reportService;
-
     public function mount(): void
     {
-        $this->reportService = app(ReportService::class);
         $this->form->fill([
             'report_type' => 'monthly',
             'month' => now()->format('Y-m'),
@@ -44,10 +41,10 @@ class Reports extends Page implements HasForms
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('report_type')
                     ->label(__('common.report_type'))
                     ->options([
@@ -94,7 +91,8 @@ class Reports extends Page implements HasForms
                         return;
                     }
 
-                    $csv = $this->reportService->exportToCsv($this->reportData);
+                    $reportService = app(ReportService::class);
+                    $csv = $reportService->exportToCsv($this->reportData);
                     $filename = 'report_' . now()->format('Y-m-d_His') . '.csv';
 
                     return response()->streamDownload(function () use ($csv) {
@@ -125,10 +123,12 @@ class Reports extends Page implements HasForms
         $user = Auth::user();
         $report = null;
 
+        $reportService = app(ReportService::class);
+        
         switch ($data['report_type']) {
             case 'monthly':
                 $month = Carbon::createFromFormat('Y-m', $data['month']);
-                $report = $this->reportService->generateMonthlyReport($user, $month);
+                $report = $reportService->generateMonthlyReport($user, $month);
                 // Flatten summary for easier access in view
                 if (isset($report['summary'])) {
                     $report['total_income'] = $report['summary']['total_income'];
@@ -139,7 +139,7 @@ class Reports extends Page implements HasForms
             case 'category':
                 $startDate = Carbon::parse($data['start_date']);
                 $endDate = Carbon::parse($data['end_date']);
-                $report = $this->reportService->generateCategoryExpenseReport($user, $startDate, $endDate);
+                $report = $reportService->generateCategoryExpenseReport($user, $startDate, $endDate);
                 // Flatten expenses_by_super_category for view
                 if (isset($report['expenses_by_super_category'])) {
                     $expensesByCategory = [];
@@ -153,7 +153,7 @@ class Reports extends Page implements HasForms
                 $report['total_expenses'] = $report['total_expenses'] ?? 0;
                 break;
             case 'savings':
-                $report = $this->reportService->generateSavingsGoalReport($user);
+                $report = $reportService->generateSavingsGoalReport($user);
                 break;
         }
 

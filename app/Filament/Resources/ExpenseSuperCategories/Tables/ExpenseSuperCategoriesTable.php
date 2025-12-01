@@ -21,7 +21,8 @@ class ExpenseSuperCategoriesTable
                 return $query->forUser($userId);
             })
             ->columns([
-                TextColumn::make('getTranslatedName')
+                TextColumn::make('name')
+                    ->formatStateUsing(fn ($record) => $record->getTranslatedName())
                     ->label(__('common.name'))
                     ->searchable(query: function ($query, $search) {
                         return $query->where('name', 'like', "%{$search}%");

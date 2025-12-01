@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->decimal('seed_capital', 10, 2)->default(0);
+            $table->decimal('median_monthly_income', 10, 2)->nullable();
+            $table->date('income_last_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -12,13 +12,6 @@ class IncomeTrendsChart extends ChartWidget
     
     protected int | string | array $columnSpan = 'full';
     
-    protected ChartDataService $chartDataService;
-    
-    public function mount(): void
-    {
-        $this->chartDataService = app(ChartDataService::class);
-    }
-    
     public function getHeading(): string
     {
         return __('common.income_trends');
@@ -26,8 +19,9 @@ class IncomeTrendsChart extends ChartWidget
 
     protected function getData(): array
     {
-        $data = $this->chartDataService->getIncomeTrends(null, null, Auth::id());
-        return $this->chartDataService->formatForBarChart($data);
+        $chartDataService = app(ChartDataService::class);
+        $data = $chartDataService->getIncomeTrends(null, null, Auth::id());
+        return $chartDataService->formatForBarChart($data);
     }
 
     protected function getType(): string

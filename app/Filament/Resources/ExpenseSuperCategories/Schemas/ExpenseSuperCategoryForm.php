@@ -19,6 +19,15 @@ class ExpenseSuperCategoryForm
                     ->helperText(__('categories.translation_key_help'))
                     ->disabled(fn ($record) => $record && $record->is_system)
                     ->dehydrated(),
+                TextInput::make('allocation_percentage')
+                    ->label(__('common.allocation_percentage'))
+                    ->numeric()
+                    ->suffix('%')
+                    ->minValue(0)
+                    ->maxValue(100)
+                    ->step(0.01)
+                    ->helperText(__('common.allocation_percentage_help'))
+                    ->required(),
                 Textarea::make('translation_help')
                     ->label(__('categories.translation_info'))
                     ->helperText(__('categories.translation_instructions'))

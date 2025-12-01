@@ -24,8 +24,8 @@ class ChartDataService
         $startDate = $startDate ?? Carbon::now()->startOfMonth();
         $endDate = $endDate ?? Carbon::now()->endOfMonth();
         
-        return ExpenseEntry::where('user_id', $userId)
-            ->whereBetween('date', [$startDate, $endDate])
+        return ExpenseEntry::where('expense_entries.user_id', $userId)
+            ->whereBetween('expense_entries.date', [$startDate, $endDate])
             ->join('expense_categories', 'expense_entries.expense_category_id', '=', 'expense_categories.id')
             ->select(
                 'expense_categories.name as category_name',
@@ -158,8 +158,8 @@ class ChartDataService
         $startDate = $startDate ?? Carbon::now()->startOfMonth();
         $endDate = $endDate ?? Carbon::now()->endOfMonth();
         
-        return IncomeEntry::where('user_id', $userId)
-            ->whereBetween('date', [$startDate, $endDate])
+        return IncomeEntry::where('income_entries.user_id', $userId)
+            ->whereBetween('income_entries.date', [$startDate, $endDate])
             ->join('income_categories', 'income_entries.income_category_id', '=', 'income_categories.id')
             ->select(
                 'income_categories.name as category_name',

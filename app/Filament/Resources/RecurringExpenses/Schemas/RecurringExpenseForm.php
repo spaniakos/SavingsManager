@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\RecurringExpenses\Schemas;
 
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseSuperCategory;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
@@ -17,10 +18,43 @@ class RecurringExpenseForm
     {
         return $schema
             ->components([
+                Select::make('expense_super_category_id')
+                    ->label(__('common.super_category'))
+                    ->options(function () {
+                        $userId = Auth::id();
+                        return ExpenseSuperCategory::forUser($userId)
+                            ->get()
+                            ->mapWithKeys(function ($superCategory) {
+                                return [$superCategory->id => $superCategory->getTranslatedName()];
+                            });
+                    })
+                    ->searchable()
+                    ->reactive()
+                    ->dehydrated(false) // Don't save this field
+                    ->afterStateUpdated(fn (callable $set) => $set('expense_category_id', null)),
                 Select::make('expense_category_id')
                     ->label(__('common.category'))
-                    ->relationship('expenseCategory', 'name', fn ($query) => $query->forUser(Auth::id()))
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->getTranslatedName())
+                    ->options(function (callable $get) {
+                        $superCategoryId = $get('expense_super_category_id');
+                        if (!$superCategoryId) {
+                            // If no super category selected, show all categories
+                            $userId = Auth::id();
+                            return ExpenseCategory::forUser($userId)
+                                ->with('expenseSuperCategory')
+                                ->get()
+                                ->mapWithKeys(function ($category) {
+                                    $superName = $category->expenseSuperCategory?->getTranslatedName() ?? '';
+                                    return [$category->id => ($superName ? $superName . ' - ' : '') . $category->getTranslatedName()];
+                                });
+                        }
+                        $userId = Auth::id();
+                        return ExpenseCategory::forUser($userId)
+                            ->where('expense_super_category_id', $superCategoryId)
+                            ->get()
+                            ->mapWithKeys(function ($category) {
+                                return [$category->id => $category->getTranslatedName()];
+                            });
+                    })
                     ->searchable()
                     ->required(),
                 TextInput::make('amount')

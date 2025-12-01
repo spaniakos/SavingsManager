@@ -21,8 +21,9 @@ class RecurringExpensesTable
                 return $query->where('user_id', Auth::id());
             })
             ->columns([
-                TextColumn::make('expenseCategory.getTranslatedName')
+                TextColumn::make('expenseCategory.name')
                     ->label(__('common.category'))
+                    ->formatStateUsing(fn ($record) => $record->expenseCategory?->getTranslatedName() ?? '-')
                     ->sortable(),
                 TextColumn::make('amount')
                     ->label(__('common.amount'))

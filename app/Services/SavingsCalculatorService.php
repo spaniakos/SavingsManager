@@ -111,6 +111,8 @@ class SavingsCalculatorService
             ->sum('amount');
         
         // Calculate total expenses for current month
+        // Note: save_for_later expenses count as expenses (reduce savings calculation)
+        // but they also add to savings goals separately
         $totalExpenses = ExpenseEntry::whereIn('user_id', $userIds)
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
             ->sum('amount');
@@ -140,6 +142,8 @@ class SavingsCalculatorService
             ->sum('amount');
         
         // Calculate expenses only up to today (not future expenses)
+        // Note: save_for_later expenses count as expenses (reduce savings calculation)
+        // but they also add to savings goals separately
         $totalExpenses = ExpenseEntry::whereIn('user_id', $userIds)
             ->whereBetween('date', [$startOfMonth, $now])
             ->sum('amount');

@@ -15,6 +15,7 @@ class ExpenseEntry extends Model
         'amount',
         'date',
         'notes',
+        'is_save_for_later',
     ];
 
     protected function casts(): array
@@ -22,6 +23,7 @@ class ExpenseEntry extends Model
         return [
             'amount' => 'decimal:2',
             'date' => 'date',
+            'is_save_for_later' => 'boolean',
         ];
     }
 

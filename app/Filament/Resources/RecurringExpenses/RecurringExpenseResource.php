@@ -20,6 +20,11 @@ class RecurringExpenseResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Disable recurring expenses - manual entries only
+    }
+    
     public static function getNavigationGroup(): ?string
     {
         return __('common.expenses');

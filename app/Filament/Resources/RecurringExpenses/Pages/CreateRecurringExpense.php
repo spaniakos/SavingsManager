@@ -13,6 +13,8 @@ class CreateRecurringExpense extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['user_id'] = Auth::id();
+        // Remove expense_super_category_id as it's not a database field
+        unset($data['expense_super_category_id']);
         return $data;
     }
 }
