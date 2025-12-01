@@ -67,11 +67,12 @@ class ComprehensiveReportsTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/reports', [
+        $response = $this->get('/admin/mobile/reports?' . http_build_query([
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' => $endDate->format('Y-m-d'),
             'breakdown_type' => 'per_category',
-        ]);
+            'generate' => '1',
+        ]));
 
         $response->assertStatus(200);
         $response->assertViewIs('mobile.reports');
@@ -104,13 +105,6 @@ class ComprehensiveReportsTest extends TestCase
         ]);
 
         $this->actingAs($user);
-
-        // First generate the report
-        $this->post('/admin/mobile/reports', [
-            'start_date' => $startDate->format('Y-m-d'),
-            'end_date' => $endDate->format('Y-m-d'),
-            'breakdown_type' => 'per_category',
-        ]);
 
         // Then export to PDF
         $response = $this->get('/admin/mobile/reports/export-pdf?' . http_build_query([
@@ -145,11 +139,12 @@ class ComprehensiveReportsTest extends TestCase
         $this->actingAs($user);
 
         // Test per_super_category breakdown (level 0)
-        $response = $this->post('/admin/mobile/reports', [
+        $response = $this->get('/admin/mobile/reports?' . http_build_query([
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' => $endDate->format('Y-m-d'),
             'breakdown_type' => 'per_super_category',
-        ]);
+            'generate' => '1',
+        ]));
 
         $response->assertStatus(200);
         $response->assertViewHas('reportData');
