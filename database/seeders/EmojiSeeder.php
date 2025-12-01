@@ -19,84 +19,95 @@ class EmojiSeeder extends Seeder
     ];
 
     /**
-     * Default emojis for expense categories
+     * Default emojis for expense categories - clean structure
      */
     private array $expenseCategoryEmojis = [
-        // Essentials
-        'rent' => '🏠',
-        'utilities_common' => '💡',
-        'electricity_deh' => '⚡',
-        'water' => '💧',
-        'home_insurance' => '🛡️',
-        'maintenance' => '🔧',
-        'home_office' => '💻',
-        'fuel' => '⛽',
-        'car_maintenance' => '🔧',
-        'car_insurance' => '🛡️',
-        'tolls' => '🛣️',
-        'public_transport' => '🚌',
-        'parking' => '🅿️',
-        'car' => '🚗',
-        'motorcycle' => '🏍️',
-        'mobile_transport' => '📱',
-        'supermarket' => '🛒',
-        'restaurants' => '🍽️',
-        'coffee' => '☕',
-        'potatoes' => '🥔',
-        'groceries' => '🛒',
-        'landline' => '📞',
-        'mobile_phone' => '📱',
-        'internet' => '🌐',
-        'spotify' => '🎵',
-        'netflix' => '📺',
-        'disney_plus' => '🎬',
-        'log' => '🪵',
-        'stathero' => '📊',
-        'medical_visits' => '🏥',
-        'medications' => '💊',
-        'dental_care' => '🦷',
-        'health_insurance' => '🏥',
-        'self_insured' => '🛡️',
-        'life_insurance' => '🛡️',
-        'home_insurance_insurance' => '🏠',
-        'car_insurance_insurance' => '🚗',
-        'insurance' => '🛡️',
-        'tax' => '📋',
+        // -----------------------------
+        // ESSENTIALS — monthly survival
+        // -----------------------------
+        'rent'               => '🏠',
+        'utilities_common'   => '💡',
+        'electricity_deh'    => '⚡',
+        'water'              => '💧',
+        'internet'           => '🌐',
+        'mobile_phone'       => '📱',
+        'landline'           => '📞',
+        'supermarket'        => '🛒',
+        'groceries'          => '🛒',
+        'medical_visits'     => '🏥',
+        'medications'        => '💊',
+        'dental_care'        => '🦷',
+        'health_insurance'   => '🏥',
+        'life_insurance'     => '🛡️',
+        'home_insurance'     => '🛡️',
+        'car_insurance'      => '🛡️',
+        'self_insured'       => '🛡️',
+        'tax'                => '📋',
         
-        // Lifestyle
-        'seminars' => '🎓',
-        'tuition' => '📚',
+        // -----------------------------
+        // TRANSPORTATION
+        // -----------------------------
+        'fuel'               => '⛽',
+        'public_transport'   => '🚌',
+        'car'                => '🚗',
+        'motorcycle'         => '🏍️',
+        'parking'            => '🅿️',
+        'tolls'              => '🛣️',
+        'car_maintenance'    => '🔧',
+        'mobile_transport'   => '📱',
+        
+        // -----------------------------
+        // HOME & MAINTENANCE
+        // -----------------------------
+        'maintenance'        => '🔧',
+        'home_office'        => '💻',
+        
+        // -----------------------------
+        // FOOD & LIFESTYLE
+        // -----------------------------
+        'restaurants'        => '🍽️',
+        'coffee'             => '☕',
+        'clothing'           => '👕',
+        'cosmetics'          => '💄',
+        'hair_salon'         => '💇',
+        'gifts'              => '🎁',
+        'donations'          => '❤️',
+        
+        // -----------------------------
+        // ENTERTAINMENT & SUBSCRIPTIONS
+        // -----------------------------
+        'spotify'            => '🎵',
+        'netflix'            => '📺',
+        'disney_plus'        => '🎬',
+        'events'             => '🎉',
+        'travel'             => '✈️',
+        
+        // -----------------------------
+        // EDUCATION / SELF-IMPROVEMENT
+        // -----------------------------
+        'seminars'           => '🎓',
+        'tuition'            => '📚',
         'educational_materials' => '📖',
-        'gym' => '💪',
-        'travel' => '✈️',
-        'events' => '🎉',
-        'gymnastirio' => '🏋️',
-        'taksidia' => '✈️',
-        'clothing' => '👕',
-        'cosmetics' => '💄',
-        'hair_salon' => '💇',
-        'gifts' => '🎁',
-        'dwra' => '🎁',
-        'personal_life' => '👤',
-        'work_materials' => '💼',
-        'server' => '🖥️',
-        'domains' => '🌐',
-        'ai_services' => '🤖',
-        'ylika_douleias' => '📦',
-        'ai' => '🤖',
-        'aproblepta' => '❓',
-        'unexpected' => '⚠️',
-        'donations' => '❤️',
-        'other_expenses' => '📝',
-        'eksodoi' => '💸',
-        'erini' => '👤',
-        'spanos' => '👤',
-        'revma' => '🌊',
-        'super' => '🛒',
-        'loipa' => '📋',
+        'gym'                => '💪',
         
-        // Savings
-        'savings' => '💰',
+        // -----------------------------
+        // WORK / BUSINESS EXPENSES
+        // -----------------------------
+        'work_materials'     => '💼',
+        'server'             => '🖥️',
+        'domains'            => '🌐',
+        'ai_services'        => '🤖',
+        
+        // -----------------------------
+        // MISC / EDGE CASES
+        // -----------------------------
+        'unexpected'         => '⚠️',
+        'other_expenses'     => '📝',
+        
+        // -----------------------------
+        // SAVINGS
+        // -----------------------------
+        'savings'            => '💰',
     ];
 
     /**

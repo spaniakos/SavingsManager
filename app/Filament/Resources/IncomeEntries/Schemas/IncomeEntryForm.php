@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\IncomeEntries\Schemas;
 
 use App\Models\IncomeCategory;
+use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -38,7 +39,11 @@ class IncomeEntryForm
                     ->label(__('common.date'))
                     ->required()
                     ->default(now())
-                    ->displayFormat('d/m/Y'),
+                    ->displayFormat('d/m/Y')
+                    ->minDate(now()->startOfMonth())
+                    ->maxDate(now()->endOfMonth())
+                    ->helperText(__('common.date_current_month_only'))
+                    ->disabled(fn ($record) => $record && Carbon::parse($record->date)->startOfMonth()->lt(Carbon::now()->startOfMonth())),
                 Textarea::make('notes')
                     ->label(__('common.notes'))
                     ->rows(3)

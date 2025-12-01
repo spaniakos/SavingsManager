@@ -33,7 +33,7 @@ class MobileSavingsGoalsAdminController extends Controller
             'current_amount' => 'nullable|numeric',
             'initial_checkpoint' => 'nullable|numeric|min:0',
             'start_date' => 'required|date',
-            'target_date' => 'required|date|after:start_date',
+            'target_date' => 'required|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
         ]);
         
@@ -80,7 +80,7 @@ class MobileSavingsGoalsAdminController extends Controller
             'current_amount' => 'nullable|numeric',
             'initial_checkpoint' => 'nullable|numeric|min:0',
             'start_date' => 'required|date',
-            'target_date' => 'required|date|after:start_date',
+            'target_date' => 'required|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
         ]);
         

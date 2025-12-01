@@ -28,9 +28,10 @@
     
     $currentSavings = $currentIncome - $currentExpenses;
     
-    // Projected savings using simplified formula: current income + max(0, (median income - current income))
+    // Projected savings: income + max(0, (median income - income)) - expenses
     $medianIncome = $user->median_monthly_income ?? 0;
-    $projectedSavings = $currentIncome + max(0, ($medianIncome - $currentIncome));
+    $projectedIncome = $currentIncome + max(0, ($medianIncome - $currentIncome));
+    $projectedSavings = $projectedIncome - $currentExpenses;
     
     // Days remaining in month (rounded)
     $daysRemaining = round($now->diffInDays($endOfMonth) + 1);
@@ -262,6 +263,52 @@
     </div>
     @endif
     
+    <!-- Active Goals -->
+    @if($activeGoals->count() > 0)
+    <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
+        <h3 class="text-lg font-semibold mb-4">{{ __('common.active_goals') }}</h3>
+        <div class="space-y-3">
+            @foreach($activeGoals as $goal)
+                @php
+                    try {
+                        if ($goal->current_amount === null) {
+                            $goal->current_amount = 0;
+                            $goal->save();
+                        }
+                        $progress = $calculator->getProgressData($goal);
+                    } catch (\Exception $e) {
+                        $progress = [
+                            'overall_progress' => $goal->target_amount > 0 ? round(($goal->current_amount ?? 0) / $goal->target_amount * 100, 0) : 0,
+                            'months_remaining' => 0,
+                            'monthly_saving_needed' => 0,
+                        ];
+                    }
+                @endphp
+                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <div class="font-semibold text-gray-800">{{ $goal->name }}</div>
+                            <div class="text-xs text-gray-600">€{{ number_format($goal->current_amount ?? 0, 2) }} / €{{ number_format($goal->target_amount, 2) }}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold text-amber-600">{{ number_format($progress['overall_progress'], 0) }}%</div>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="bg-gradient-to-r from-amber-400 to-amber-600 h-2 rounded-full" style="width: {{ min(100, $progress['overall_progress']) }}%"></div>
+                    </div>
+                    @if($progress['months_remaining'] > 0)
+                        <div class="text-xs text-gray-600">
+                            {{ __('common.monthly_needed') }}: €{{ number_format($progress['monthly_saving_needed'], 2) }} | 
+                            {{ __('common.months_left') }}: {{ $progress['months_remaining'] }}
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+    
     <!-- Expenses by Category Chart -->
     @if($expensesBySuperCategory->count() > 0)
     <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
@@ -286,7 +333,7 @@
             <h3 class="text-lg font-semibold">{{ __('common.savings_trend') }}</h3>
             @if($savingsMultiplier !== null)
                 <div class="text-sm text-blue-600 font-semibold">
-                    {{ __('common.saved') }} <{{ $savingsMultiplier }}X> {{ __('common.this_month') }}
+                    {{ __('common.saved') }} {{ $savingsMultiplier }}x {{ __('common.this_month') }}
                 </div>
             @endif
         </div>
@@ -294,40 +341,6 @@
             <canvas id="savingsTrendChart"></canvas>
         </div>
     </div>
-    
-    <!-- Active Goals -->
-    @if($activeGoals->count() > 0)
-    <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
-        <h3 class="text-lg font-semibold mb-4">{{ __('common.active_goals') }}</h3>
-        <div class="space-y-3">
-            @foreach($activeGoals as $goal)
-                @php
-                    $progress = $calculator->getProgressData($goal);
-                @endphp
-                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <div class="flex justify-between items-start mb-2">
-                        <div>
-                            <div class="font-semibold text-gray-800">{{ $goal->name }}</div>
-                            <div class="text-xs text-gray-600">€{{ number_format($goal->current_amount, 2) }} / €{{ number_format($goal->target_amount, 2) }}</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-lg font-bold text-amber-600">{{ number_format($progress['overall_progress'], 0) }}%</div>
-                        </div>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                        <div class="bg-gradient-to-r from-amber-400 to-amber-600 h-2 rounded-full" style="width: {{ min(100, $progress['overall_progress']) }}%"></div>
-                    </div>
-                    @if($progress['months_remaining'] > 0)
-                        <div class="text-xs text-gray-600">
-                            {{ __('common.monthly_needed') }}: €{{ number_format($progress['monthly_saving_needed'], 2) }} | 
-                            {{ __('common.months_left') }}: {{ $progress['months_remaining'] }}
-                        </div>
-                    @endif
-                </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>

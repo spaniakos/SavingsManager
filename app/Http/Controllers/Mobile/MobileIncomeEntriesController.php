@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\IncomeEntry;
 use App\Models\IncomeCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -72,11 +73,22 @@ class MobileIncomeEntriesController extends Controller
     {
         $entry = IncomeEntry::where('user_id', Auth::id())->findOrFail($id);
         
+        // Check if entry is from a past month (month has ended)
+        $entryMonth = Carbon::parse($entry->date)->startOfMonth();
+        $currentMonth = Carbon::now()->startOfMonth();
+        
+        if ($entryMonth->lt($currentMonth)) {
+            return redirect()->route('mobile.income-entries.index')
+                ->with('error', __('common.cannot_edit_past_month_entry'));
+        }
+        
         $validated = $request->validate([
             'income_category_id' => 'required|exists:income_categories,id',
             'amount' => 'required|numeric|min:0.01',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:' . Carbon::now()->startOfMonth()->format('Y-m-d'),
             'notes' => 'nullable|string|max:255',
+        ], [
+            'date.after_or_equal' => __('common.cannot_create_past_month_entry'),
         ]);
         
         $entry->update($validated);
@@ -88,6 +100,16 @@ class MobileIncomeEntriesController extends Controller
     public function destroy($id)
     {
         $entry = IncomeEntry::where('user_id', Auth::id())->findOrFail($id);
+        
+        // Check if entry is from a past month (month has ended)
+        $entryMonth = Carbon::parse($entry->date)->startOfMonth();
+        $currentMonth = Carbon::now()->startOfMonth();
+        
+        if ($entryMonth->lt($currentMonth)) {
+            return redirect()->route('mobile.income-entries.index')
+                ->with('error', __('common.cannot_delete_past_month_entry'));
+        }
+        
         $entry->delete();
         
         return redirect()->route('mobile.income-entries.index')

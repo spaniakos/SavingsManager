@@ -7,6 +7,16 @@
         {{ $category->emoji ?? '💰' }} {{ $category->getTranslatedName() }}
     </h1>
     
+    @if($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
     <form method="POST" action="{{ route('mobile.income.store', $category->id) }}" class="space-y-4">
         @csrf
         
@@ -20,7 +30,10 @@
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('common.date') }}</label>
             <input type="date" name="date" value="{{ date('Y-m-d') }}" required
+                   min="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}"
+                   max="{{ \Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}"
                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+            <p class="text-xs text-gray-500 mt-1">{{ __('common.date_current_month_only') }}</p>
         </div>
         
         <div>

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ExpenseEntries\Pages;
 
 use App\Filament\Resources\ExpenseEntries\ExpenseEntryResource;
 use App\Models\ExpenseEntry;
+use Carbon\Carbon;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +14,18 @@ class CreateExpenseEntry extends CreateRecord
     
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        // Validate date is in current month
+        $entryDate = Carbon::parse($data['date']);
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthEnd = Carbon::now()->endOfMonth();
+        
+        if ($entryDate->lt($currentMonthStart) || $entryDate->gt($currentMonthEnd)) {
+            throw new \Illuminate\Validation\ValidationException(
+                validator([], []),
+                ['date' => [__('common.cannot_create_past_month_entry')]]
+            );
+        }
+        
         $data['user_id'] = Auth::id();
         // Remove expense_super_category_id as it's not a database field
         unset($data['expense_super_category_id']);

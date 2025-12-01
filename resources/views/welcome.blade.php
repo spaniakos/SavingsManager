@@ -135,8 +135,12 @@
     </head>
 <body>
     <nav>
-        <a href="/admin/login">{{ __('common.login') }}</a>
-        <a href="/admin/register">{{ __('common.register') }}</a>
+        @auth
+            <a href="/admin/mobile">{{ __('common.dashboard') }}</a>
+        @else
+            <a href="{{ url('/admin/login') }}">{{ __('common.login') }}</a>
+            <a href="{{ url('/admin/register') }}">{{ __('common.register') }}</a>
+        @endauth
     </nav>
     <div class="container">
         <div class="logo">
@@ -164,9 +168,15 @@
                     </ul>
                 </div>
 
-        <a href="/admin/login" class="cta-button">
-            {{ __('common.get_started') }} →
-        </a>
+        @auth
+            <a href="/admin/mobile" class="cta-button">
+                {{ __('common.dashboard') }} →
+            </a>
+        @else
+            <a href="{{ url('/admin/login') }}" class="cta-button">
+                {{ __('common.get_started') }} →
+            </a>
+        @endauth
 
         <div class="tech-stack">
             <p>

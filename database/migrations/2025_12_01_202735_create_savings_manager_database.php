@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('income_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Translation key
+            $table->string('emoji', 10)->nullable();
             $table->boolean('is_system')->default(false);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
@@ -26,6 +27,7 @@ return new class extends Migration
         Schema::create('expense_super_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Translation key
+            $table->string('emoji', 10)->nullable();
             $table->decimal('allocation_percentage', 5, 2)->default(0);
             $table->boolean('is_system')->default(false);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
@@ -38,6 +40,7 @@ return new class extends Migration
         Schema::create('expense_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Translation key
+            $table->string('emoji', 10)->nullable();
             $table->foreignId('expense_super_category_id')->constrained()->onDelete('restrict');
             $table->boolean('is_system')->default(false);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
@@ -72,6 +75,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 2);
             $table->date('date');
             $table->text('notes')->nullable();
+            $table->boolean('is_save_for_later')->default(false);
             $table->timestamps();
             
             $table->index(['user_id', 'date']);
@@ -88,14 +92,14 @@ return new class extends Migration
             $table->decimal('initial_checkpoint', 10, 2)->default(0);
             $table->date('start_date');
             $table->date('target_date')->nullable();
-            $table->boolean('is_joint')->default(false);
+            $table->timestamp('last_monthly_calculation_at')->nullable();
             $table->timestamps();
             
-            $table->index(['user_id', 'is_joint']);
+            $table->index(['user_id']);
             $table->index('target_date');
         });
 
-        // Savings Goal Members (with invitation fields)
+        // Savings Goal Members (kept for future use, but not used in single-user mode)
         Schema::create('savings_goal_members', function (Blueprint $table) {
             $table->id();
             $table->foreignId('savings_goal_id')->constrained()->onDelete('cascade');
@@ -111,7 +115,7 @@ return new class extends Migration
             $table->index(['savings_goal_id', 'status']);
         });
 
-        // Savings Contributions
+        // Savings Contributions (kept for future use)
         Schema::create('savings_contributions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('savings_goal_id')->constrained()->onDelete('cascade');
@@ -125,7 +129,7 @@ return new class extends Migration
             $table->index('user_id');
         });
 
-        // Recurring Expenses
+        // Recurring Expenses (kept for future use, but not actively used)
         Schema::create('recurring_expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -175,4 +179,3 @@ return new class extends Migration
         Schema::dropIfExists('income_categories');
     }
 };
-

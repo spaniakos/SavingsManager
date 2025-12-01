@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ExpenseEntries\Pages;
 use App\Filament\Resources\ExpenseEntries\ExpenseEntryResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Carbon\Carbon;
 
 class EditExpenseEntry extends EditRecord
 {
@@ -17,12 +18,59 @@ class EditExpenseEntry extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->requiresConfirmation()
+                ->disabled(fn () => $this->isPastMonthEntry())
+                ->tooltip(fn () => $this->isPastMonthEntry() ? __('common.cannot_delete_past_month_entry') : null),
         ];
+    }
+    
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        // Prevent editing past month entries
+        if ($this->isPastMonthEntry()) {
+            throw new \Illuminate\Validation\ValidationException(
+                validator([], []),
+                ['date' => [__('common.cannot_edit_past_month_entry')]]
+            );
+        }
+        
+        // Validate date is in current month
+        $entryDate = Carbon::parse($data['date']);
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthEnd = Carbon::now()->endOfMonth();
+        
+        if ($entryDate->lt($currentMonthStart) || $entryDate->gt($currentMonthEnd)) {
+            throw new \Illuminate\Validation\ValidationException(
+                validator([], []),
+                ['date' => [__('common.cannot_create_past_month_entry')]]
+            );
+        }
+        
+        // Remove expense_super_category_id as it's not a database field
+        unset($data['expense_super_category_id']);
+        return $data;
+    }
+    
+    protected function isPastMonthEntry(): bool
+    {
+        if (!$this->record || !$this->record->date) {
+            return false;
+        }
+        
+        $entryMonth = Carbon::parse($this->record->date)->startOfMonth();
+        $currentMonth = Carbon::now()->startOfMonth();
+        
+        return $entryMonth->lt($currentMonth);
     }
     
     protected function mutateFormDataBeforeFill(array $data): array
     {
+        // Disable form if entry is from past month
+        if ($this->isPastMonthEntry()) {
+            $this->form->disabled();
+        }
+        
         // Pre-populate expense_super_category_id from the category
         if (isset($data['expense_category_id']) && $this->record->expenseCategory) {
             $data['expense_super_category_id'] = $this->record->expenseCategory->expense_super_category_id;
@@ -33,13 +81,6 @@ class EditExpenseEntry extends EditRecord
         $this->previousWasSavingsCategory = $this->record->expenseCategory 
             && $this->record->expenseCategory->expenseSuperCategory 
             && $this->record->expenseCategory->expenseSuperCategory->name === 'savings';
-        return $data;
-    }
-    
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        // Remove expense_super_category_id as it's not a database field
-        unset($data['expense_super_category_id']);
         return $data;
     }
     

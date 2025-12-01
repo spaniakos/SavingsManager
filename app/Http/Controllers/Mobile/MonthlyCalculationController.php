@@ -9,6 +9,7 @@ use App\Models\SavingsGoal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MonthlyCalculationController extends Controller
 {
@@ -55,22 +56,27 @@ class MonthlyCalculationController extends Controller
         
         $netSavings = $previousMonthIncome - $previousMonthExpenses;
         
-        // Get goals that were active during the previous month
-        $goalsToUpdate = $user->savingsGoals()
-            ->where(function($q) use ($previousMonthStart, $previousMonthEnd) {
-                $q->where('start_date', '<=', $previousMonthEnd)
-                  ->where(function($q2) use ($previousMonthEnd) {
-                      $q2->whereNull('target_date')
-                         ->orWhere('target_date', '>=', $previousMonthStart);
-                  });
-            })
-            ->get();
+        // Get ALL goals (not just active ones) - we want to update all goals with the net savings
+        $goalsToUpdate = $user->savingsGoals()->get();
         
-        // Directly modify all goals that were active during previous month
+        if ($goalsToUpdate->isEmpty()) {
+            return redirect()->route('mobile.dashboard')
+                ->with('error', __('common.no_savings_goals'));
+        }
+        
+        // Directly modify all goals' current_amount
         $calculationDate = $now;
-        foreach ($goalsToUpdate as $goal) {
-            $goal->increment('current_amount', $netSavings);
-            $goal->update(['last_monthly_calculation_at' => $calculationDate]);
+        DB::beginTransaction();
+        try {
+            foreach ($goalsToUpdate as $goal) {
+                $goal->increment('current_amount', $netSavings);
+                $goal->update(['last_monthly_calculation_at' => $calculationDate]);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('mobile.dashboard')
+                ->with('error', 'Error calculating monthly savings: ' . $e->getMessage());
         }
         
         return redirect()->route('mobile.dashboard')

@@ -49,14 +49,23 @@
                             <div class="text-sm text-gray-600 mt-1">{{ $entry->notes }}</div>
                         @endif
                     </div>
-                    <div class="flex gap-2">
-                        <a href="{{ route('mobile.income-entries.edit', $entry->id) }}" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">{{ __('common.edit') }}</a>
-                        <form method="POST" action="{{ route('mobile.income-entries.destroy', $entry->id) }}" onsubmit="return confirm('{{ __('common.confirm_delete') }}')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm">{{ __('common.delete') }}</button>
-                        </form>
-                    </div>
+                    @php
+                        $entryMonth = \Carbon\Carbon::parse($entry->date)->startOfMonth();
+                        $currentMonth = \Carbon\Carbon::now()->startOfMonth();
+                        $isPastMonth = $entryMonth->lt($currentMonth);
+                    @endphp
+                    @if(!$isPastMonth)
+                        <div class="flex gap-2">
+                            <a href="{{ route('mobile.income-entries.edit', $entry->id) }}" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">{{ __('common.edit') }}</a>
+                            <form method="POST" action="{{ route('mobile.income-entries.destroy', $entry->id) }}" onsubmit="return confirm('{{ __('common.confirm_delete') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm">{{ __('common.delete') }}</button>
+                            </form>
+                        </div>
+                    @else
+                        <span class="text-xs text-gray-400 italic">{{ __('common.past_month_locked') }}</span>
+                    @endif
                 </div>
             </div>
         @empty

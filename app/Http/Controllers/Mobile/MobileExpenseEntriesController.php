@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ExpenseEntry;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseSuperCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -85,12 +86,23 @@ class MobileExpenseEntriesController extends Controller
     {
         $entry = ExpenseEntry::where('user_id', Auth::id())->findOrFail($id);
         
+        // Check if entry is from a past month (month has ended)
+        $entryMonth = Carbon::parse($entry->date)->startOfMonth();
+        $currentMonth = Carbon::now()->startOfMonth();
+        
+        if ($entryMonth->lt($currentMonth)) {
+            return redirect()->route('mobile.expense-entries.index')
+                ->with('error', __('common.cannot_edit_past_month_entry'));
+        }
+        
         $validated = $request->validate([
             'expense_category_id' => 'required|exists:expense_categories,id',
             'amount' => 'required|numeric|min:0.01',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:' . Carbon::now()->startOfMonth()->format('Y-m-d'),
             'notes' => 'nullable|string|max:255',
             'is_save_for_later' => 'boolean',
+        ], [
+            'date.after_or_equal' => __('common.cannot_create_past_month_entry'),
         ]);
         
         $oldSaveForLater = $entry->is_save_for_later;
@@ -126,6 +138,15 @@ class MobileExpenseEntriesController extends Controller
         $entry = ExpenseEntry::where('user_id', Auth::id())
             ->with(['expenseCategory.expenseSuperCategory'])
             ->findOrFail($id);
+        
+        // Check if entry is from a past month (month has ended)
+        $entryMonth = Carbon::parse($entry->date)->startOfMonth();
+        $currentMonth = Carbon::now()->startOfMonth();
+        
+        if ($entryMonth->lt($currentMonth)) {
+            return redirect()->route('mobile.expense-entries.index')
+                ->with('error', __('common.cannot_delete_past_month_entry'));
+        }
         
         // Remove from savings goals if it was save for later or Savings category
         $isSavingsCategory = $entry->expenseCategory 

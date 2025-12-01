@@ -46,13 +46,33 @@
             <label class="block text-sm font-semibold text-gray-700 mb-2">
                 {{ __('common.date') }}
             </label>
-            <input 
-                type="date" 
-                name="date" 
-                value="{{ old('date', $entry->date->format('Y-m-d')) }}"
-                required
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"
-            >
+            @php
+                $entryMonth = \Carbon\Carbon::parse($entry->date)->startOfMonth();
+                $currentMonth = \Carbon\Carbon::now()->startOfMonth();
+                $isPastMonth = $entryMonth->lt($currentMonth);
+            @endphp
+            @if($isPastMonth)
+                <input 
+                    type="date" 
+                    name="date" 
+                    value="{{ old('date', $entry->date->format('Y-m-d')) }}"
+                    required
+                    disabled
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
+                >
+                <p class="text-xs text-red-600 mt-1">{{ __('common.cannot_edit_past_month_entry') }}</p>
+            @else
+                <input 
+                    type="date" 
+                    name="date" 
+                    value="{{ old('date', $entry->date->format('Y-m-d')) }}"
+                    required
+                    min="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}"
+                    max="{{ \Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"
+                >
+                <p class="text-xs text-gray-500 mt-1">{{ __('common.date_current_month_only') }}</p>
+            @endif
         </div>
         
         <!-- Notes -->
@@ -67,19 +87,62 @@
             >{{ old('notes', $entry->notes) }}</textarea>
         </div>
         
-        <!-- Save for Later -->
-        <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
-            <label class="flex items-center">
-                <input 
-                    type="checkbox" 
-                    name="is_save_for_later" 
-                    value="1"
-                    {{ old('is_save_for_later', $entry->is_save_for_later) ? 'checked' : '' }}
-                    class="mr-2"
-                >
-                <span class="text-sm font-semibold text-gray-700">{{ __('common.save_for_later') }}</span>
+        <!-- Save for Later Toggle -->
+        <div class="bg-gradient-to-br {{ old('is_save_for_later', $entry->is_save_for_later) ? 'from-purple-100 to-indigo-100 border-purple-400' : 'from-purple-50 to-indigo-50 border-purple-200' }} p-4 rounded-xl border-2">
+            <label for="is_save_for_later" class="flex items-center justify-between cursor-pointer">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0">
+                        <input 
+                            type="checkbox" 
+                            name="is_save_for_later" 
+                            id="is_save_for_later"
+                            value="1"
+                            {{ old('is_save_for_later', $entry->is_save_for_later) ? 'checked' : '' }}
+                            class="w-6 h-6 text-purple-600 border-gray-300 rounded focus:ring-purple-500 focus:ring-2"
+                            onchange="toggleSaveForLater(this)"
+                        >
+                        @if(old('is_save_for_later', $entry->is_save_for_later))
+                            <div id="save-for-later-icon" class="text-2xl mt-1">💰</div>
+                        @else
+                            <div id="save-for-later-icon" class="hidden text-2xl mt-1">💰</div>
+                        @endif
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-purple-900">{{ __('common.save_for_later') }}</div>
+                        <div class="text-xs text-purple-700 mt-1">{{ __('common.save_for_later_expense_help') }}</div>
+                    </div>
+                </div>
+                @if(old('is_save_for_later', $entry->is_save_for_later))
+                    <div id="save-for-later-badge" class="px-3 py-1 bg-purple-600 text-white text-xs font-semibold rounded-full">
+                        {{ __('common.saved') }}
+                    </div>
+                @else
+                    <div id="save-for-later-badge" class="hidden px-3 py-1 bg-purple-600 text-white text-xs font-semibold rounded-full">
+                        {{ __('common.saved') }}
+                    </div>
+                @endif
             </label>
         </div>
+        
+        <script>
+            function toggleSaveForLater(checkbox) {
+                const icon = document.getElementById('save-for-later-icon');
+                const badge = document.getElementById('save-for-later-badge');
+                const container = checkbox.closest('.bg-gradient-to-br');
+                
+                if (checkbox.checked) {
+                    icon.classList.remove('hidden');
+                    badge.classList.remove('hidden');
+                    container.classList.remove('from-purple-50', 'to-indigo-50', 'border-purple-200');
+                    container.classList.add('from-purple-100', 'to-indigo-100', 'border-purple-400');
+                } else {
+                    icon.classList.add('hidden');
+                    badge.classList.add('hidden');
+                    container.classList.remove('from-purple-100', 'to-indigo-100', 'border-purple-400');
+                    container.classList.add('from-purple-50', 'to-indigo-50', 'border-purple-200');
+                }
+            }
+        </script>
         
         <button type="submit" class="w-full p-4 bg-amber-600 text-white rounded-xl font-semibold">
             {{ __('common.save') }}

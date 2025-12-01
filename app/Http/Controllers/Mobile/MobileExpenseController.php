@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseEntry;
 use App\Models\ExpenseSuperCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,9 +53,11 @@ class MobileExpenseController extends Controller
         
         $validated = $request->validate([
             'amount' => 'required|numeric|min:0.01',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:' . Carbon::now()->startOfMonth()->format('Y-m-d'),
             'notes' => 'nullable|string|max:255',
             'is_save_for_later' => 'boolean',
+        ], [
+            'date.after_or_equal' => __('common.cannot_create_past_month_entry'),
         ]);
         
         $expense = ExpenseEntry::create([

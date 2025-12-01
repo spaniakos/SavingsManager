@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ExpenseEntries\Schemas;
 
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseSuperCategory;
+use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -58,7 +59,10 @@ class ExpenseEntryForm
                     ->label(__('common.date'))
                     ->required()
                     ->default(now())
-                    ->displayFormat('d/m/Y'),
+                    ->displayFormat('d/m/Y')
+                    ->minDate(now()->startOfMonth())
+                    ->maxDate(now()->endOfMonth())
+                    ->helperText(__('common.date_current_month_only')),
                 Toggle::make('is_save_for_later')
                     ->label(__('common.save_for_later'))
                     ->helperText(__('common.save_for_later_expense_help'))

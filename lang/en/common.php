@@ -281,5 +281,12 @@ return [
     // Progress Bars
     'savings_goals_progress' => 'Savings Goals Progress',
     'total_savings' => 'Total Savings',
+    
+    // Validation Messages
+    'cannot_delete_past_month_entry' => 'Cannot delete entries from past months. Once a month has ended, entries cannot be deleted.',
+    'cannot_edit_past_month_entry' => 'Cannot edit entries from past months. Once a month has ended, entries cannot be modified.',
+    'cannot_create_past_month_entry' => 'Cannot create entries for past months. You can only create entries for the current month.',
+    'date_current_month_only' => 'Only dates from the current month are allowed.',
+    'past_month_locked' => 'Past month (locked)',
 ];
 

@@ -20,11 +20,7 @@ class DatabaseSeeder extends Seeder
             IncomeCategorySeeder::class,
             ExpenseCategorySeeder::class,
             EmojiSeeder::class,
-        ]);
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            UserSeeder::class,
         ]);
     }
 }
