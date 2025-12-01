@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\IncomeCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class IncomeCategoryFactory extends Factory
 {
+    protected $model = IncomeCategory::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,7 +20,9 @@ class IncomeCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->unique()->word(),
+            'is_system' => false,
+            'user_id' => null,
         ];
     }
 }

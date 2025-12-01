@@ -68,6 +68,22 @@ class UserProfileSettings extends Page implements HasForms
                             ->helperText(__('common.income_last_verified_at_help')),
                     ])
                     ->columns(2),
+                Section::make(__('common.language_settings'))
+                    ->schema([
+                        \Filament\Forms\Components\Select::make('language')
+                            ->label(__('common.language'))
+                            ->options([
+                                'en' => 'English',
+                                'el' => 'Ελληνικά',
+                            ])
+                            ->default(app()->getLocale())
+                            ->afterStateUpdated(function ($state) {
+                                if (in_array($state, ['en', 'el'])) {
+                                    \Illuminate\Support\Facades\Cookie::queue('locale', $state, 60 * 24 * 365);
+                                    app()->setLocale($state);
+                                }
+                            }),
+                    ]),
             ])
             ->statePath('data');
     }

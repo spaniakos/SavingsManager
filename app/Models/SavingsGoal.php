@@ -43,6 +43,7 @@ class SavingsGoal extends Model
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'savings_goal_members')
+                    ->withPivot('invited_by', 'status', 'invited_at', 'accepted_at', 'role')
                     ->withTimestamps();
     }
 

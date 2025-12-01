@@ -2,18 +2,16 @@
 
 namespace Tests\Feature\Smoke;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CriticalPathsTest extends TestCase
 {
     /**
-     * A basic feature test example.
+     * Test admin login page is accessible.
      */
     public function test_example(): void
     {
-        $response = $this->get('/');
+        $response = $this->get('/admin/login');
 
         $response->assertStatus(200);
     }
