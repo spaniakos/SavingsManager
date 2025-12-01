@@ -152,9 +152,9 @@ None currently - Project is production-ready! ✅
 - [x] Savings goal progress reports (ReportService)
 - [x] CSV export functionality (ReportService)
 - [x] PDF library installed (dompdf)
-- [ ] Reports page UI configuration
-- [ ] PDF export integration
-- [ ] Report templates
+- [x] Reports page UI configuration
+- [x] PDF export integration
+- [x] Report templates (monthly, category, savings)
 - [ ] Tests for report generation
 
 ### Mobile Optimization
