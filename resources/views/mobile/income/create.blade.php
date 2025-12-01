@@ -30,10 +30,14 @@
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('common.date') }}</label>
             <input type="date" name="date" value="{{ date('Y-m-d') }}" required
-                   min="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}"
-                   max="{{ \Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}"
+                   min="{{ $minDate->format('Y-m-d') }}"
+                   max="{{ $maxDate->format('Y-m-d') }}"
                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-            <p class="text-xs text-gray-500 mt-1">{{ __('common.date_current_month_only') }}</p>
+            @if($previousMonthCalculated)
+                <p class="text-xs text-gray-500 mt-1">{{ __('common.date_current_month_only') }}</p>
+            @else
+                <p class="text-xs text-gray-500 mt-1">{{ __('common.date_current_or_previous_month') }}</p>
+            @endif
         </div>
         
         <div>

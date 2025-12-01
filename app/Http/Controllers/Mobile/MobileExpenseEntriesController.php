@@ -74,35 +74,50 @@ class MobileExpenseEntriesController extends Controller
             ->with(['expenseCategory.expenseSuperCategory'])
             ->findOrFail($id);
         
+        // Check if previous month was calculated
+        $previousMonthCalculated = $this->isPreviousMonthCalculated();
+        $minDate = $previousMonthCalculated 
+            ? Carbon::now()->startOfMonth() 
+            : Carbon::now()->subMonth()->startOfMonth();
+        
         $categories = ExpenseCategory::where('user_id', Auth::id())
             ->orWhere('is_system', true)
             ->orderBy('name')
             ->get();
         
-        return view('mobile.expense-entries.edit', compact('entry', 'categories'));
+        return view('mobile.expense-entries.edit', compact('entry', 'categories', 'minDate', 'previousMonthCalculated'));
     }
     
     public function update(Request $request, $id)
     {
         $entry = ExpenseEntry::where('user_id', Auth::id())->findOrFail($id);
         
-        // Check if entry is from a past month (month has ended)
+        // Check if entry is from a month before previous month (more than 1 month ago)
         $entryMonth = Carbon::parse($entry->date)->startOfMonth();
-        $currentMonth = Carbon::now()->startOfMonth();
+        $previousMonth = Carbon::now()->subMonth()->startOfMonth();
         
-        if ($entryMonth->lt($currentMonth)) {
+        if ($entryMonth->lt($previousMonth)) {
             return redirect()->route('mobile.expense-entries.index')
                 ->with('error', __('common.cannot_edit_past_month_entry'));
         }
         
+        // Check if previous month was calculated (for date validation)
+        $previousMonthCalculated = $this->isPreviousMonthCalculated();
+        $minDate = $previousMonthCalculated 
+            ? Carbon::now()->startOfMonth() 
+            : Carbon::now()->subMonth()->startOfMonth();
+        
         $validated = $request->validate([
             'expense_category_id' => 'required|exists:expense_categories,id',
             'amount' => 'required|numeric|min:0.01',
-            'date' => 'required|date|after_or_equal:' . Carbon::now()->startOfMonth()->format('Y-m-d'),
+            'date' => 'required|date|after_or_equal:' . $minDate->format('Y-m-d') . '|before_or_equal:' . Carbon::now()->endOfMonth()->format('Y-m-d'),
             'notes' => 'nullable|string|max:255',
             'is_save_for_later' => 'boolean',
         ], [
-            'date.after_or_equal' => __('common.cannot_create_past_month_entry'),
+            'date.after_or_equal' => $previousMonthCalculated 
+                ? __('common.cannot_create_past_month_entry') 
+                : __('common.can_only_create_current_or_previous_month'),
+            'date.before_or_equal' => __('common.can_only_create_current_month'),
         ]);
         
         $oldSaveForLater = $entry->is_save_for_later;
@@ -194,5 +209,25 @@ class MobileExpenseEntriesController extends Controller
             $goal->decrement('current_amount', $amount);
             // Allow negative values - don't clamp to 0
         }
+    }
+    
+    protected function isPreviousMonthCalculated(): bool
+    {
+        $userId = Auth::id();
+        $previousMonth = Carbon::now()->subMonth();
+        $previousMonthEnd = $previousMonth->copy()->endOfMonth();
+        
+        $allGoals = \App\Models\SavingsGoal::where('user_id', $userId)->get();
+        
+        foreach ($allGoals as $goal) {
+            if ($goal->last_monthly_calculation_at) {
+                $lastCalc = Carbon::parse($goal->last_monthly_calculation_at);
+                if ($lastCalc->isAfter($previousMonthEnd)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 }

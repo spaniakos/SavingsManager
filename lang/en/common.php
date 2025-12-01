@@ -286,7 +286,9 @@ return [
     'cannot_delete_past_month_entry' => 'Cannot delete entries from past months. Once a month has ended, entries cannot be deleted.',
     'cannot_edit_past_month_entry' => 'Cannot edit entries from past months. Once a month has ended, entries cannot be modified.',
     'cannot_create_past_month_entry' => 'Cannot create entries for past months. You can only create entries for the current month.',
+    'can_only_create_current_or_previous_month' => 'You can only create entries for the current month or previous month (if not yet calculated).',
     'date_current_month_only' => 'Only dates from the current month are allowed.',
+    'date_current_or_previous_month' => 'You can select dates from the current month or previous month (if not yet calculated).',
     'past_month_locked' => 'Past month (locked)',
 ];
 

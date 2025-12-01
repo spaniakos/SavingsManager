@@ -69,8 +69,8 @@
                     </div>
                     @php
                         $entryMonth = \Carbon\Carbon::parse($entry->date)->startOfMonth();
-                        $currentMonth = \Carbon\Carbon::now()->startOfMonth();
-                        $isPastMonth = $entryMonth->lt($currentMonth);
+                        $previousMonth = \Carbon\Carbon::now()->subMonth()->startOfMonth();
+                        $isPastMonth = $entryMonth->lt($previousMonth); // More than 1 month ago
                     @endphp
                     @if(!$isPastMonth)
                         <div class="flex gap-2">

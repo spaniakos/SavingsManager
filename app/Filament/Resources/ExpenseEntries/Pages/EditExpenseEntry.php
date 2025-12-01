@@ -35,15 +35,22 @@ class EditExpenseEntry extends EditRecord
             );
         }
         
-        // Validate date is in current month
-        $entryDate = Carbon::parse($data['date']);
-        $currentMonthStart = Carbon::now()->startOfMonth();
-        $currentMonthEnd = Carbon::now()->endOfMonth();
+        // Check if previous month was calculated
+        $previousMonthCalculated = $this->isPreviousMonthCalculated();
+        $minDate = $previousMonthCalculated 
+            ? Carbon::now()->startOfMonth() 
+            : Carbon::now()->subMonth()->startOfMonth();
+        $maxDate = Carbon::now()->endOfMonth();
         
-        if ($entryDate->lt($currentMonthStart) || $entryDate->gt($currentMonthEnd)) {
+        // Validate date is in allowed range
+        $entryDate = Carbon::parse($data['date']);
+        
+        if ($entryDate->lt($minDate) || $entryDate->gt($maxDate)) {
             throw new \Illuminate\Validation\ValidationException(
                 validator([], []),
-                ['date' => [__('common.cannot_create_past_month_entry')]]
+                ['date' => [$previousMonthCalculated 
+                    ? __('common.cannot_create_past_month_entry') 
+                    : __('common.can_only_create_current_or_previous_month')]]
             );
         }
         
@@ -59,9 +66,30 @@ class EditExpenseEntry extends EditRecord
         }
         
         $entryMonth = Carbon::parse($this->record->date)->startOfMonth();
-        $currentMonth = Carbon::now()->startOfMonth();
+        $previousMonth = Carbon::now()->subMonth()->startOfMonth();
         
-        return $entryMonth->lt($currentMonth);
+        // Entry is from a month before previous month (more than 1 month ago)
+        return $entryMonth->lt($previousMonth);
+    }
+    
+    protected function isPreviousMonthCalculated(): bool
+    {
+        $userId = Auth::id();
+        $previousMonth = Carbon::now()->subMonth();
+        $previousMonthEnd = $previousMonth->copy()->endOfMonth();
+        
+        $allGoals = \App\Models\SavingsGoal::where('user_id', $userId)->get();
+        
+        foreach ($allGoals as $goal) {
+            if ($goal->last_monthly_calculation_at) {
+                $lastCalc = Carbon::parse($goal->last_monthly_calculation_at);
+                if ($lastCalc->isAfter($previousMonthEnd)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
     
     protected function mutateFormDataBeforeFill(array $data): array
