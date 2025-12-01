@@ -19,6 +19,7 @@ Savings Manager is a comprehensive financial tracking application that helps ind
 - **Income Tracking**: Record income entries with categories
 - **Expense Tracking**: Record expenses with categories and super categories
 - **Savings Goals**: Create individual or joint savings goals with progress tracking
+- **Joint Goals**: Member invitation system, contribution tracking, role-based permissions
 - **Bilingual Support**: Full English/Greek translation
 - **Custom Categories**: Users can create their own categories
 - **Analytics**: View expenses per category, income trends, and month-over-month comparisons
@@ -28,6 +29,7 @@ Savings Manager is a comprehensive financial tracking application that helps ind
 - **Budget Allocation**: Real-time tracking of spent vs allowance per super category
 - **Positive Reinforcement**: Encouragement messages when staying under budget
 - **Financial Settings**: Track seed capital, median monthly income, and net worth
+- **Reporting**: Monthly reports, category reports, savings goal reports (CSV export, PDF pending)
 - **Reports**: Generate monthly and category-wise reports
 
 ## Architecture
@@ -161,8 +163,8 @@ APP_LOCALE=el  # Greek
 - `id`, `user_id`, `name`, `target_amount`, `current_amount`, `initial_checkpoint`, `start_date`, `target_date`, `is_joint`, `timestamps`
 
 #### `savings_goal_members`
-- `id`, `savings_goal_id`, `user_id`, `timestamps`
-- Pivot table for joint goals
+- `id`, `savings_goal_id`, `user_id`, `invited_by`, `status` (pending/accepted/declined), `invited_at`, `accepted_at`, `role` (member/admin), `timestamps`
+- Pivot table for joint goals with invitation system
 
 #### `savings_contributions`
 - `id`, `savings_goal_id`, `user_id`, `amount`, `date`, `notes`, `timestamps`
@@ -298,6 +300,63 @@ Located at `app/Services/BudgetAllocationService.php`, handles budget allocation
 ### PositiveReinforcementService
 
 Located at `app/Services/PositiveReinforcementService.php`, generates encouragement messages for users.
+
+### JointGoalService
+
+Located at `app/Services/JointGoalService.php`, handles joint goal member management and permissions.
+
+#### Methods
+
+- `inviteMember(SavingsGoal $goal, string $email, int $invitedBy, string $role = 'member'): bool`
+  - Invites a user to a joint goal by email
+  - Sets invitation status to 'pending'
+  - Returns true on success, false if user not found or already a member
+
+- `acceptInvitation(SavingsGoal $goal, int $userId): bool`
+  - Accepts a pending invitation
+  - Updates status to 'accepted' and sets accepted_at timestamp
+
+- `declineInvitation(SavingsGoal $goal, int $userId): bool`
+  - Declines a pending invitation
+  - Updates status to 'declined'
+
+- `canEditGoal(SavingsGoal $goal, int $userId): bool`
+  - Checks if user can edit the goal (owner or admin member)
+
+- `canAddContributions(SavingsGoal $goal, int $userId): bool`
+  - Checks if user can add contributions (owner or accepted member)
+
+- `canInviteMembers(SavingsGoal $goal, int $userId): bool`
+  - Checks if user can invite members (owner or admin member)
+
+- `getMemberContributions(SavingsGoal $goal): array`
+  - Returns summary of contributions per member
+  - Includes total contributed and contribution count
+
+### ReportService
+
+Located at `app/Services/ReportService.php`, handles report generation and export functionality.
+
+#### Methods
+
+- `generateMonthlyReport(User $user, Carbon $month): array`
+  - Generates comprehensive monthly report
+  - Includes income, expenses, savings, category breakdowns
+  - Returns structured array with all report data
+
+- `generateCategoryExpenseReport(User $user, Carbon $startDate, Carbon $endDate, ?int $categoryId = null): array`
+  - Generates category-wise expense report
+  - Can filter by specific category or show all
+  - Groups by super category and category
+
+- `generateSavingsGoalReport(User $user, ?Carbon $month = null): array`
+  - Generates savings goal progress report
+  - Includes all goals with progress percentages
+  - Shows monthly saving needed and months remaining
+
+- `exportToCsv(array $data, string $filename = 'report.csv'): string`
+  - Exports data to CSV format
+  - Returns CSV content as string
 
 #### Methods
 

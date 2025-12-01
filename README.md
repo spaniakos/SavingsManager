@@ -18,6 +18,7 @@ It’s more than a tool — it’s a roadmap for the life we’re building.
 - **Income Management**: Track income entries with categories
 - **Expense Management**: Track expenses with categories and super categories
 - **Savings Goals**: Create individual or joint savings goals with progress tracking
+- **Joint Goals**: Member invitation system, contribution tracking, role-based permissions
 - **Progress Tracking**: Dual progress bars showing monthly and overall goal progress
 - **3-Tier Budget System**: Fixed super categories with 50/30/20 allocation (Essentials/Lifestyle/Savings)
 - **Recurring Expenses**: Create and auto-generate recurring expense entries
@@ -33,6 +34,7 @@ It’s more than a tool — it’s a roadmap for the life we’re building.
   - Month-over-month savings comparison (bar chart)
   - Budget allocation tracking (50/30/20)
   - Save-for-later progress
+- **Reporting**: Monthly reports, category reports, savings goal reports (CSV export available, PDF pending)
 - **Mobile Responsive**: Works seamlessly on mobile and desktop browsers
 
 ## Requirements
