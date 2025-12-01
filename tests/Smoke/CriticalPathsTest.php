@@ -88,7 +88,6 @@ class CriticalPathsTest extends TestCase
             'initial_checkpoint' => 2000.00,
             'start_date' => now(),
             'target_date' => now()->addMonths(12),
-            'is_joint' => false,
         ]);
 
         $this->assertNotNull($goal);

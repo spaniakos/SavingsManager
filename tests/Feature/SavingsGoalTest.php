@@ -25,7 +25,6 @@ class SavingsGoalTest extends TestCase
             'initial_checkpoint' => 2000.00,
             'start_date' => now(),
             'target_date' => now()->addMonths(12),
-            'is_joint' => false,
         ]);
 
         $this->assertDatabaseHas('savings_goals', [
@@ -50,7 +49,6 @@ class SavingsGoalTest extends TestCase
             'initial_checkpoint' => 1000.00,
             'start_date' => now(),
             'target_date' => now()->addMonths(6),
-            'is_joint' => false,
         ]);
 
         SavingsGoal::create([
@@ -61,7 +59,6 @@ class SavingsGoalTest extends TestCase
             'initial_checkpoint' => 2000.00,
             'start_date' => now(),
             'target_date' => now()->addMonths(8),
-            'is_joint' => false,
         ]);
 
         $this->actingAs($user1);
@@ -84,7 +81,6 @@ class SavingsGoalTest extends TestCase
             'initial_checkpoint' => 2000.00,
             'start_date' => now(),
             'target_date' => now()->addMonths(12),
-            'is_joint' => false,
         ]);
 
         $goal->update(['current_amount' => 3000.00]);
@@ -108,7 +104,6 @@ class SavingsGoalTest extends TestCase
             'initial_checkpoint' => 2000.00,
             'start_date' => now(),
             'target_date' => now()->addMonths(12),
-            'is_joint' => false,
         ]);
 
         $goal->delete();

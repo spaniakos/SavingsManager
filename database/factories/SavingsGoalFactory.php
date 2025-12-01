@@ -29,7 +29,6 @@ class SavingsGoalFactory extends Factory
             'initial_checkpoint' => 0,
             'start_date' => Carbon::now()->subMonths(1),
             'target_date' => Carbon::now()->addMonths(12),
-            'is_joint' => false,
         ];
     }
 }
