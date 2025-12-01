@@ -104,7 +104,7 @@ class SavingsCalculatorService
         $startOfMonth = $now->copy()->startOfMonth();
         $endOfMonth = $now->copy()->endOfMonth();
         
-        // Get user IDs for the goal (owner + members if joint)
+        // Get user IDs for the goal (single user account)
         $userIds = $this->getGoalUserIds($goal, $userId);
         
         // Calculate total income for current month

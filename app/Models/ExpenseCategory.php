@@ -58,11 +58,6 @@ class ExpenseCategory extends Model
         });
     }
 
-    public function recurringExpenses(): HasMany
-    {
-        return $this->hasMany(RecurringExpense::class);
-    }
-
     /**
      * Get save-for-later progress (total saved vs target)
      */
