@@ -1,5 +1,12 @@
 # Savings Manager
 
+[![Tests](https://github.com/USERNAME/REPO/actions/workflows/test.yml/badge.svg)](https://github.com/USERNAME/REPO/actions)
+![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?logo=laravel&logoColor=white)
+![PHP Version](https://img.shields.io/badge/PHP-8.4-blue)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Code Style: Laravel Pint](https://img.shields.io/badge/Code_Style-Laravel_Pint-orange)
+[![codecov](https://codecov.io/gh/USERNAME/REPO/branch/main/graph/badge.svg)](https://codecov.io/gh/USERNAME/REPO)
+
 A comprehensive personal savings management application built with Laravel 12 and Filament 4. Track income, expenses, and savings goals with full bilingual support (English/Greek) and a mobile-first responsive interface.
 
 ## 🚀 Why This Program Was Created
