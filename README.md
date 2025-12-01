@@ -19,12 +19,20 @@ It’s more than a tool — it’s a roadmap for the life we’re building.
 - **Expense Management**: Track expenses with categories and super categories
 - **Savings Goals**: Create individual or joint savings goals with progress tracking
 - **Progress Tracking**: Dual progress bars showing monthly and overall goal progress
+- **3-Tier Budget System**: Fixed super categories with 50/30/20 allocation (Essentials/Lifestyle/Savings)
+- **Recurring Expenses**: Create and auto-generate recurring expense entries
+- **Save-for-Later**: Set savings targets on categories with progress tracking
+- **Budget Allocation**: Real-time tracking of spent vs allowance per super category
+- **Positive Reinforcement**: Encouragement messages when staying under budget
+- **Financial Settings**: Track seed capital, median monthly income, and net worth
 - **Bilingual Support**: Full English/Greek translation support
 - **Custom Categories**: Users can create their own income and expense categories
 - **Analytics Dashboard**: Interactive charts showing:
   - Expenses by category (pie chart)
   - Income trends over time (line chart)
   - Month-over-month savings comparison (bar chart)
+  - Budget allocation tracking (50/30/20)
+  - Save-for-later progress
 - **Mobile Responsive**: Works seamlessly on mobile and desktop browsers
 
 ## Requirements

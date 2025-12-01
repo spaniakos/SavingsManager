@@ -51,8 +51,13 @@ class ExpenseSuperCategoryResource extends Resource
     {
         return [
             'index' => ListExpenseSuperCategories::route('/'),
-            'create' => CreateExpenseSuperCategory::route('/create'),
+            // 'create' => CreateExpenseSuperCategory::route('/create'), // Disabled - super categories are fixed
             'edit' => EditExpenseSuperCategory::route('/{record}/edit'),
         ];
+    }
+    
+    public static function canCreate(): bool
+    {
+        return false; // Super categories are fixed (essentials, lifestyle, savings)
     }
 }

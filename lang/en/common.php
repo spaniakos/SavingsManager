@@ -17,6 +17,8 @@ return [
     'cancel' => 'Cancel',
     'back' => 'Back',
     'search' => 'Search',
+    'yes' => 'Yes',
+    'no' => 'No',
     'filter' => 'Filter',
     'export' => 'Export',
     'import' => 'Import',
@@ -89,5 +91,62 @@ return [
     'income_categories' => 'Income Categories',
     'expense_categories' => 'Expense Categories',
     'expense_super_categories' => 'Expense Super Categories',
+    
+    // Financial Settings
+    'seed_capital' => 'Seed Capital',
+    'median_monthly_income' => 'Median Monthly Income',
+    'income_last_verified_at' => 'Income Last Verified',
+    'verify_income' => 'Verify Income',
+    'net_worth' => 'Net Worth',
+    
+    // Recurring Expenses
+    'recurring_expenses' => 'Recurring Expenses',
+    'recurring_expense' => 'Recurring Expense',
+    'frequency' => 'Frequency',
+    'week' => 'Week',
+    'month' => 'Month',
+    'quarter' => 'Quarter',
+    'year' => 'Year',
+    'start_date' => 'Start Date',
+    'end_date' => 'End Date',
+    'is_active' => 'Is Active',
+    'last_generated_at' => 'Last Generated',
+    'next_due_date' => 'Next Due Date',
+    'generate_expenses' => 'Generate Expenses',
+    'recurring_expense_generated' => 'Recurring expense: :name',
+    
+    // Save for Later
+    'save_for_later' => 'Save for Later',
+    'save_for_later_target' => 'Save Target',
+    'save_for_later_frequency' => 'Save Frequency',
+    'save_for_later_amount' => 'Amount per Period',
+    'save_progress' => 'Save Progress',
+    'remaining_to_save' => 'Remaining to Save',
+    
+    // Budget Allocation
+    'budget_allocation' => 'Budget Allocation',
+    'allocation_percentage' => 'Allocation Percentage',
+    'allowance' => 'Allowance',
+    'spent' => 'Spent',
+    'remaining_allowance' => 'Remaining Allowance',
+    'over_budget' => 'Over Budget',
+    'under_budget' => 'Under Budget',
+    
+    // Positive Reinforcement
+    'encouragement_days_remaining' => 'Good job! Month is due in :days days and you still have :amount allowance to spend!',
+    'encouragement_excellent' => 'Nice! You have only spent :spent from :allowance this month in :category!',
+    'encouragement_good' => 'Good progress! You\'ve spent :spent from :allowance in :category, with :remaining remaining.',
+    'encouragement_ok' => 'You still have :remaining remaining in :category this month.',
+    
+    // Savings Goal Checkpoint
+    'initial_checkpoint' => 'Initial Checkpoint',
+    'initial_checkpoint_help' => 'The amount already saved when this goal was created',
+    'expenses_generated' => ':count expense(s) generated successfully',
+    'positive_reinforcement' => 'Positive Reinforcement',
+    'no_save_for_later_categories' => 'No categories with save-for-later targets found.',
+    'seed_capital_help' => 'Your initial starting balance or capital',
+    'median_monthly_income_help' => 'Your typical monthly income for budget calculations',
+    'income_last_verified_at_help' => 'When you last verified your monthly income',
+    'financial_settings' => 'Financial Settings',
 ];
 

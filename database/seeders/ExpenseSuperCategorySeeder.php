@@ -9,25 +9,19 @@ class ExpenseSuperCategorySeeder extends Seeder
 {
     public function run(): void
     {
+        // Only create 3 fixed super categories with allocation percentages
         $superCategories = [
-            'housing',
-            'transportation',
-            'food',
-            'utilities',
-            'health',
-            'insurance',
-            'education',
-            'entertainment',
-            'personal',
-            'work_business',
-            'other',
+            ['name' => 'essentials', 'allocation_percentage' => 50.00],
+            ['name' => 'lifestyle', 'allocation_percentage' => 30.00],
+            ['name' => 'savings', 'allocation_percentage' => 20.00],
         ];
 
         foreach ($superCategories as $superCategory) {
             ExpenseSuperCategory::create([
-                'name' => $superCategory,
+                'name' => $superCategory['name'],
                 'is_system' => true,
                 'user_id' => null,
+                'allocation_percentage' => $superCategory['allocation_percentage'],
             ]);
         }
     }

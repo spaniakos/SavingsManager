@@ -17,17 +17,9 @@ return [
         'other_income' => 'Other Income',
     ],
     'expense_super' => [
-        'housing' => 'Housing',
-        'transportation' => 'Transportation',
-        'food' => 'Food',
-        'utilities' => 'Utilities',
-        'health' => 'Health',
-        'insurance' => 'Insurance',
-        'education' => 'Education',
-        'entertainment' => 'Entertainment',
-        'personal' => 'Personal',
-        'work_business' => 'Work/Business',
-        'other' => 'Other',
+        'essentials' => 'Essentials',
+        'lifestyle' => 'Lifestyle',
+        'savings' => 'Savings',
     ],
     'expense' => [
         // Housing
@@ -74,7 +66,7 @@ return [
         'health_insurance' => 'Health Insurance',
         
         // Insurance
-        'efka' => 'EFKA',
+        'self_insured' => 'Self Insured',
         'life_insurance' => 'Life Insurance',
         'home_insurance_insurance' => 'Home Insurance',
         'car_insurance_insurance' => 'Car Insurance',

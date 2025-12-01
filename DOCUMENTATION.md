@@ -22,6 +22,12 @@ Savings Manager is a comprehensive financial tracking application that helps ind
 - **Bilingual Support**: Full English/Greek translation
 - **Custom Categories**: Users can create their own categories
 - **Analytics**: View expenses per category, income trends, and month-over-month comparisons
+- **3-Tier Budget System**: Fixed super categories with 50/30/20 allocation (Essentials/Lifestyle/Savings)
+- **Recurring Expenses**: Create and auto-generate recurring expense entries
+- **Save-for-Later**: Set savings targets on categories with progress tracking
+- **Budget Allocation**: Real-time tracking of spent vs allowance per super category
+- **Positive Reinforcement**: Encouragement messages when staying under budget
+- **Financial Settings**: Track seed capital, median monthly income, and net worth
 - **Reports**: Generate monthly and category-wise reports
 
 ## Architecture
@@ -46,18 +52,27 @@ app/
 │   │   ├── SavingsGoals/
 │   │   ├── IncomeCategories/
 │   │   ├── ExpenseCategories/
-│   │   └── ExpenseSuperCategories/
+│   │   ├── ExpenseSuperCategories/
+│   │   └── RecurringExpenses/
 │   ├── Pages/              # Custom pages
-│   │   └── Dashboard.php
+│   │   ├── Dashboard.php
+│   │   └── UserProfileSettings.php
 │   └── Widgets/            # Dashboard widgets
 │       ├── SavingsGoalProgressWidget.php
 │       ├── ExpensesByCategoryChart.php
 │       ├── IncomeTrendsChart.php
-│       └── MoMSavingsChart.php
+│       ├── MoMSavingsChart.php
+│       ├── BudgetAllocationWidget.php
+│       └── SaveForLaterProgressWidget.php
 ├── Models/                 # Eloquent models
+│   ├── RecurringExpense.php
+│   └── CategoryAllocationGoal.php
 └── Services/               # Business logic
     ├── SavingsCalculatorService.php
-    └── ChartDataService.php
+    ├── ChartDataService.php
+    ├── RecurringExpenseService.php
+    ├── BudgetAllocationService.php
+    └── PositiveReinforcementService.php
 
 database/
 ├── migrations/            # Database migrations
@@ -123,6 +138,7 @@ APP_LOCALE=el  # Greek
 
 #### `users`
 - Standard Laravel users table
+- Extended with: `seed_capital`, `median_monthly_income`, `income_last_verified_at`
 - Extended with relationships to all financial data
 
 #### `income_categories`
@@ -132,16 +148,17 @@ APP_LOCALE=el  # Greek
 - `id`, `user_id`, `income_category_id`, `amount`, `date`, `notes`, `timestamps`
 
 #### `expense_super_categories`
-- `id`, `name` (translation key), `is_system`, `user_id`, `timestamps`
+- `id`, `name` (translation key), `allocation_percentage`, `is_system`, `user_id`, `timestamps`
+- Fixed 3 categories: essentials (50%), lifestyle (30%), savings (20%)
 
 #### `expense_categories`
-- `id`, `name` (translation key), `expense_super_category_id`, `is_system`, `user_id`, `timestamps`
+- `id`, `name` (translation key), `expense_super_category_id`, `is_system`, `user_id`, `save_for_later_target`, `save_for_later_frequency`, `save_for_later_amount`, `timestamps`
 
 #### `expense_entries`
 - `id`, `user_id`, `expense_category_id`, `amount`, `date`, `notes`, `timestamps`
 
 #### `savings_goals`
-- `id`, `user_id`, `name`, `target_amount`, `current_amount`, `start_date`, `target_date`, `is_joint`, `timestamps`
+- `id`, `user_id`, `name`, `target_amount`, `current_amount`, `initial_checkpoint`, `start_date`, `target_date`, `is_joint`, `timestamps`
 
 #### `savings_goal_members`
 - `id`, `savings_goal_id`, `user_id`, `timestamps`
@@ -149,6 +166,12 @@ APP_LOCALE=el  # Greek
 
 #### `savings_contributions`
 - `id`, `savings_goal_id`, `user_id`, `amount`, `date`, `notes`, `timestamps`
+
+#### `recurring_expenses`
+- `id`, `user_id`, `expense_category_id`, `amount`, `frequency` (week/month/quarter/year), `start_date`, `end_date` (nullable), `last_generated_at` (nullable), `notes`, `is_active`, `timestamps`
+
+#### `category_allocation_goals`
+- `id`, `user_id`, `expense_super_category_id`, `target_percentage`, `period_start`, `period_end`, `notes`, `timestamps`
 
 ### Relationships
 
@@ -227,6 +250,71 @@ Located at `app/Services/ChartDataService.php`, this service aggregates data for
   - Formats month-over-month data for charts
   - Returns Chart.js compatible format
 
+### RecurringExpenseService
+
+Located at `app/Services/RecurringExpenseService.php`, handles recurring expense generation and management.
+
+#### Methods
+
+- `generateExpensesForMonth(int $userId, ?Carbon $month): array`
+  - Generates expense entries for all active recurring expenses in a given month
+  - Prevents duplicate generation for the same period
+  - Returns array of created ExpenseEntry models
+
+- `getUpcomingRecurringExpenses(int $userId, int $daysAhead = 30): array`
+  - Lists upcoming recurring expenses within specified days
+  - Returns array with recurring expense, next due date, and amount
+  - Sorted by next due date
+
+- `calculateNextDueDate(RecurringExpense $recurring, ?Carbon $fromDate): ?Carbon`
+  - Calculates the next due date for a recurring expense
+  - Handles weekly, monthly, quarterly, and yearly frequencies
+  - Respects start_date and end_date constraints
+  - Returns null if past end date
+
+### BudgetAllocationService
+
+Located at `app/Services/BudgetAllocationService.php`, handles budget allocation calculations based on 50/30/20 rule.
+
+#### Methods
+
+- `calculateSuperCategoryAllowance(User $user, ExpenseSuperCategory $superCategory, ?float $monthlyIncome): float`
+  - Calculates allowance for a super category based on allocation percentage
+  - Uses user's median_monthly_income if not provided
+  - Formula: `monthly_income * (allocation_percentage / 100)`
+
+- `getSpentInSuperCategory(User $user, ExpenseSuperCategory $superCategory, Carbon $startDate, Carbon $endDate): float`
+  - Gets total spent in a super category for a given period
+  - Aggregates all expense entries in categories belonging to the super category
+
+- `getRemainingAllowance(User $user, ExpenseSuperCategory $superCategory, Carbon $startDate, Carbon $endDate): float`
+  - Calculates remaining allowance (allowance - spent)
+  - Returns 0 if over budget
+
+- `getAllocationStatus(User $user, Carbon $startDate, Carbon $endDate): array`
+  - Gets allocation status for all 3 super categories
+  - Returns array with allowance, spent, remaining, spent percentage, and over_budget flag
+
+### PositiveReinforcementService
+
+Located at `app/Services/PositiveReinforcementService.php`, generates encouragement messages for users.
+
+#### Methods
+
+- `getEncouragementMessages(User $user, ?Carbon $periodStart, ?Carbon $periodEnd): array`
+  - Generates positive reinforcement messages based on budget status
+  - Returns array of message objects with type and message text
+  - Only shows messages when user is under budget
+
+- `getSuperCategoryMessage(User $user, ExpenseSuperCategory $superCategory, Carbon $startDate, Carbon $endDate): ?array`
+  - Gets category-specific encouragement message
+  - Different messages based on spent percentage (<50%, <80%, or remaining >0)
+  - Returns null if over budget
+
+- `getDaysRemainingInMonth(): int`
+  - Helper method to get days remaining in current month
+  - Used for "X days remaining" messages
+
 ## Widgets
 
 The application includes several Filament widgets for dashboard visualization.
@@ -240,9 +328,36 @@ Located at `app/Filament/Widgets/SavingsGoalProgressWidget.php`, displays dual p
 - Monthly progress bar (current month savings vs monthly target)
 - Shows monthly saving needed, months remaining
 - Displays projected savings message
+- Shows seed capital and net worth
 - Game-like XP bar styling
 
 **View:** `resources/views/filament/widgets/savings-goal-progress-widget.blade.php`
+
+### BudgetAllocationWidget
+
+Located at `app/Filament/Widgets/BudgetAllocationWidget.php`, displays 50/30/20 budget allocation tracking.
+
+**Features:**
+- Shows all 3 super categories (Essentials, Lifestyle, Savings)
+- Displays allocation percentage, allowance, spent, and remaining
+- Progress bars with color coding (green/yellow/red)
+- Positive reinforcement messages integration
+- Days remaining in month display
+
+**View:** `resources/views/filament/widgets/budget-allocation-widget.blade.php`
+
+### SaveForLaterProgressWidget
+
+Located at `app/Filament/Widgets/SaveForLaterProgressWidget.php`, displays save-for-later progress for categories.
+
+**Features:**
+- Lists all categories with save-for-later targets
+- Shows target amount, frequency, and amount per period
+- Progress bars per category
+- Displays remaining amount to save
+- Empty state message when no categories configured
+
+**View:** `resources/views/filament/widgets/save-for-later-progress-widget.blade.php`
 
 ### ExpensesByCategoryChart
 
@@ -292,6 +407,15 @@ All resources are accessible through the Filament admin panel at `/admin`.
 - **Income Categories**: `/admin/income-categories`
 - **Expense Categories**: `/admin/expense-categories`
 - **Expense Super Categories**: `/admin/expense-super-categories`
+
+#### Recurring Expenses
+- **List**: `/admin/recurring-expenses`
+- **Create**: `/admin/recurring-expenses/create`
+- **Edit**: `/admin/recurring-expenses/{id}/edit`
+- **Generate Expenses**: Action button on list page
+
+#### User Settings
+- **Financial Settings**: `/admin/user-profile-settings`
 
 #### Dashboard
 - **Dashboard**: `/admin` (default Filament dashboard with widgets)

@@ -6,6 +6,7 @@ use App\Models\ExpenseSuperCategory;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,6 +43,29 @@ class ExpenseCategoryForm
                     ->dehydrated(false)
                     ->visible(fn ($record) => !$record || !$record->is_system)
                     ->columnSpanFull(),
+                Section::make(__('common.save_for_later'))
+                    ->schema([
+                        TextInput::make('save_for_later_target')
+                            ->label(__('common.save_for_later_target'))
+                            ->numeric()
+                            ->prefix('€')
+                            ->step(0.01),
+                        Select::make('save_for_later_frequency')
+                            ->label(__('common.save_for_later_frequency'))
+                            ->options([
+                                'week' => __('common.week'),
+                                'month' => __('common.month'),
+                                'quarter' => __('common.quarter'),
+                                'year' => __('common.year'),
+                            ]),
+                        TextInput::make('save_for_later_amount')
+                            ->label(__('common.save_for_later_amount'))
+                            ->numeric()
+                            ->prefix('€')
+                            ->step(0.01),
+                    ])
+                    ->collapsible()
+                    ->collapsed(),
             ]);
     }
 }

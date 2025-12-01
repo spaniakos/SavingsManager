@@ -17,17 +17,9 @@ return [
         'other_income' => 'Λοιπά Έσοδα',
     ],
     'expense_super' => [
-        'housing' => 'Στέγαση',
-        'transportation' => 'Μεταφορές',
-        'food' => 'Τρόφιμα',
-        'utilities' => 'Λογαριασμοί',
-        'health' => 'Υγεία',
-        'insurance' => 'Ασφάλειες',
-        'education' => 'Εκπαίδευση',
-        'entertainment' => 'Ψυχαγωγία',
-        'personal' => 'Προσωπικά',
-        'work_business' => 'Επαγγελματικά',
-        'other' => 'Λοιπά',
+        'essentials' => 'Αναγκαία',
+        'lifestyle' => 'Τρόπος Ζωής',
+        'savings' => 'Οικονομίες',
     ],
     'expense' => [
         // Housing
@@ -74,7 +66,7 @@ return [
         'health_insurance' => 'Ασφάλεια Υγείας',
         
         // Insurance
-        'efka' => 'ΕΦΚΑ',
+        'self_insured' => 'Αυτοασφάλιση',
         'life_insurance' => 'Ασφάλεια Ζωής',
         'home_insurance_insurance' => 'Ασφάλεια Κατοικίας',
         'car_insurance_insurance' => 'Ασφάλεια Αυτοκινήτου',

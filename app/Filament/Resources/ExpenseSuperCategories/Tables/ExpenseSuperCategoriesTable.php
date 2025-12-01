@@ -34,6 +34,10 @@ class ExpenseSuperCategoriesTable
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
+                TextColumn::make('allocation_percentage')
+                    ->label(__('common.allocation_percentage'))
+                    ->formatStateUsing(fn ($state) => $state ? number_format($state, 2) . '%' : '-')
+                    ->sortable(),
                 IconColumn::make('is_system')
                     ->label(__('categories.system_category'))
                     ->boolean()

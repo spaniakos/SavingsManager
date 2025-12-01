@@ -6,6 +6,7 @@ use App\Models\SavingsGoal;
 use App\Services\SavingsCalculatorService;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Number;
 
 class SavingsGoalProgressWidget extends Widget
 {
@@ -34,6 +35,18 @@ class SavingsGoalProgressWidget extends Widget
     public function getProgressData(SavingsGoal $goal): array
     {
         return $this->calculator->getProgressData($goal, Auth::id());
+    }
+    
+    public function getNetWorth()
+    {
+        $user = Auth::user();
+        return $user->net_worth;
+    }
+    
+    public function getSeedCapital()
+    {
+        $user = Auth::user();
+        return $user->seed_capital ?? 0;
     }
     
     protected static ?int $sort = 1;

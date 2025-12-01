@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MoMSavingsChart extends ChartWidget
 {
-    protected static ?string $heading = null;
+    protected ?string $heading = null;
     
     protected int | string | array $columnSpan = 'full';
     

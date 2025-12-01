@@ -12,6 +12,7 @@ class ExpenseSuperCategory extends Model
         'name', // Translation key
         'is_system',
         'user_id',
+        'allocation_percentage',
     ];
     
     public function getTranslatedName(): string
@@ -23,6 +24,7 @@ class ExpenseSuperCategory extends Model
     {
         return [
             'is_system' => 'boolean',
+            'allocation_percentage' => 'decimal:2',
         ];
     }
 
@@ -42,5 +44,13 @@ class ExpenseSuperCategory extends Model
             $q->where('is_system', true)
               ->orWhere('user_id', $userId);
         });
+    }
+
+    /**
+     * Check if this is a fixed super category (all are fixed now)
+     */
+    public function isFixed(): bool
+    {
+        return $this->is_system && in_array($this->name, ['essentials', 'lifestyle', 'savings']);
     }
 }

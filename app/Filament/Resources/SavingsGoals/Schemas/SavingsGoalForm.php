@@ -33,6 +33,13 @@ class SavingsGoalForm
                     ->default(0)
                     ->prefix('€')
                     ->step(0.01),
+                TextInput::make('initial_checkpoint')
+                    ->label(__('common.initial_checkpoint'))
+                    ->numeric()
+                    ->default(0)
+                    ->prefix('€')
+                    ->step(0.01)
+                    ->helperText(__('common.initial_checkpoint_help')),
                 DatePicker::make('start_date')
                     ->label(__('common.start_date'))
                     ->required()

@@ -14,6 +14,7 @@ class SavingsGoal extends Model
         'name',
         'target_amount',
         'current_amount',
+        'initial_checkpoint',
         'start_date',
         'target_date',
         'is_joint',
@@ -24,6 +25,7 @@ class SavingsGoal extends Model
         return [
             'target_amount' => 'decimal:2',
             'current_amount' => 'decimal:2',
+            'initial_checkpoint' => 'decimal:2',
             'start_date' => 'date',
             'target_date' => 'date',
             'is_joint' => 'boolean',

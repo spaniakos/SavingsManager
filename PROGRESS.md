@@ -4,8 +4,8 @@
 
 **Project**: Savings Manager  
 **Framework**: Laravel 12 + Filament 4  
-**Status**: Core Features Complete, Advanced Features Pending  
-**Progress**: ~70% Complete
+**Status**: Core Features Complete, Advanced Features Mostly Complete  
+**Progress**: ~85% Complete
 
 ## What's Working
 
@@ -29,6 +29,17 @@
 - **Dashboard**: Custom dashboard with expense charts, income trends, and MoM comparison
 - **Progress Tracking**: Dual progress bars (monthly + overall) for savings goals
 - **Analytics**: Charts for expenses by category, income trends, and month-over-month savings
+
+✅ **Advanced Features Complete**
+- **3-Tier Budget System**: Fixed super categories (Essentials 50%, Lifestyle 30%, Savings 20%)
+- **Financial Settings**: Seed capital, median monthly income, income verification
+- **Recurring Expenses**: Create and auto-generate recurring expense entries
+- **Save-for-Later**: Set savings targets on categories with progress tracking
+- **Budget Allocation Widget**: Real-time budget tracking with 50/30/20 allocation
+- **Save-for-Later Widget**: Progress tracking for category savings goals
+- **Positive Reinforcement**: Encouragement messages when staying under budget
+- **Net Worth**: Automatic calculation (seed capital + current savings)
+- **Savings Goal Checkpoint**: Track initial checkpoint when goal is created
 
 ## What's Next (Priority Order)
 

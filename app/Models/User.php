@@ -23,6 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'seed_capital',
+        'median_monthly_income',
+        'income_last_verified_at',
     ];
 
     /**
@@ -45,6 +48,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'seed_capital' => 'decimal:2',
+            'median_monthly_income' => 'decimal:2',
+            'income_last_verified_at' => 'date',
         ];
     }
 
@@ -87,5 +93,50 @@ class User extends Authenticatable
     public function savingsContributions(): HasMany
     {
         return $this->hasMany(SavingsContribution::class);
+    }
+
+    public function recurringExpenses(): HasMany
+    {
+        return $this->hasMany(RecurringExpense::class);
+    }
+
+    public function categoryAllocationGoals(): HasMany
+    {
+        return $this->hasMany(CategoryAllocationGoal::class);
+    }
+
+    /**
+     * Get net worth (seed capital + current savings from all goals)
+     */
+    public function getNetWorthAttribute(): float
+    {
+        $seedCapital = $this->seed_capital ?? 0;
+        $currentSavings = $this->savingsGoals()->sum('current_amount');
+        return (float) ($seedCapital + $currentSavings);
+    }
+
+    /**
+     * Get monthly income allocation for a super category
+     */
+    public function getMonthlyIncomeAllocation($superCategory): float
+    {
+        $monthlyIncome = $this->median_monthly_income ?? 0;
+        $percentage = $superCategory->allocation_percentage ?? 0;
+        return (float) ($monthlyIncome * ($percentage / 100));
+    }
+
+    /**
+     * Get remaining allowance for a super category in a period
+     */
+    public function getRemainingAllowance($superCategory, $startDate, $endDate): float
+    {
+        $allocation = $this->getMonthlyIncomeAllocation($superCategory);
+        $spent = $this->expenseEntries()
+            ->whereHas('expenseCategory', function ($query) use ($superCategory) {
+                $query->where('expense_super_category_id', $superCategory->id);
+            })
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('amount');
+        return (float) max(0, $allocation - $spent);
     }
 }

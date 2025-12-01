@@ -4,6 +4,25 @@
             {{ __('common.savings_goals') }}
         </x-slot>
         
+        @if($this->getSeedCapital() > 0 || $this->getNetWorth() > 0)
+            <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('common.seed_capital') }}</p>
+                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                            €{{ number_format($this->getSeedCapital(), 2) }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('common.net_worth') }}</p>
+                        <p class="text-lg font-semibold text-blue-600 dark:text-blue-400">
+                            €{{ number_format($this->getNetWorth(), 2) }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
+        
         <div class="space-y-6">
             @forelse($this->goals as $goal)
                 @php
