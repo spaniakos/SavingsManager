@@ -65,7 +65,10 @@ class MobileExpenseEntriesController extends Controller
             ->orderBy('name')
             ->get();
         
-        return view('mobile.expense-entries.index', compact('entries', 'categories', 'superCategories'));
+        // Check if previous month was calculated
+        $previousMonthCalculated = $this->isPreviousMonthCalculated();
+        
+        return view('mobile.expense-entries.index', compact('entries', 'categories', 'superCategories', 'previousMonthCalculated'));
     }
     
     public function edit($id)

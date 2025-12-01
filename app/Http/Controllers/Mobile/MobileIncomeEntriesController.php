@@ -52,7 +52,10 @@ class MobileIncomeEntriesController extends Controller
             ->orderBy('name')
             ->get();
         
-        return view('mobile.income-entries.index', compact('entries', 'categories'));
+        // Check if previous month was calculated
+        $previousMonthCalculated = $this->isPreviousMonthCalculated();
+        
+        return view('mobile.income-entries.index', compact('entries', 'categories', 'previousMonthCalculated'));
     }
     
     public function edit($id)

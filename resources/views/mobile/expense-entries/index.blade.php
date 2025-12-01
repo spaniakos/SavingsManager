@@ -69,10 +69,17 @@
                     </div>
                     @php
                         $entryMonth = \Carbon\Carbon::parse($entry->date)->startOfMonth();
+                        $currentMonth = \Carbon\Carbon::now()->startOfMonth();
                         $previousMonth = \Carbon\Carbon::now()->subMonth()->startOfMonth();
+                        
+                        // Hide buttons if:
+                        // 1. Entry is from more than 1 month ago, OR
+                        // 2. Entry is from previous month AND calculation has been run
                         $isPastMonth = $entryMonth->lt($previousMonth); // More than 1 month ago
+                        $isPreviousMonth = $entryMonth->eq($previousMonth); // Previous month
+                        $shouldHideButtons = $isPastMonth || ($isPreviousMonth && $previousMonthCalculated);
                     @endphp
-                    @if(!$isPastMonth)
+                    @if(!$shouldHideButtons)
                         <div class="flex gap-2">
                             <a href="{{ route('mobile.expense-entries.edit', $entry->id) }}" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">{{ __('common.edit') }}</a>
                             <form method="POST" action="{{ route('mobile.expense-entries.destroy', $entry->id) }}" onsubmit="return confirm('{{ __('common.confirm_delete') }}')">
