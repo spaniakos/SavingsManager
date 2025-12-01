@@ -12,6 +12,29 @@ use Illuminate\Support\Facades\DB;
 class ReportService
 {
     /**
+     * Calculate total saved money (seed_capital + savings goals + save_for_later)
+     */
+    public function calculateTotalSaved(User $user): float
+    {
+        $seedCapital = $user->seed_capital ?? 0;
+        
+        // Sum of all savings goals current amounts
+        $savingsGoalsTotal = SavingsGoal::where('user_id', $user->id)
+            ->orWhereHas('members', function ($query) use ($user) {
+                $query->where('users.id', $user->id)
+                    ->where('savings_goal_members.status', 'accepted');
+            })
+            ->sum('current_amount');
+        
+        // Sum of all save_for_later expense amounts
+        $saveForLaterTotal = ExpenseEntry::where('user_id', $user->id)
+            ->where('is_save_for_later', true)
+            ->sum('amount');
+        
+        return round($seedCapital + $savingsGoalsTotal + $saveForLaterTotal, 2);
+    }
+
+    /**
      * Generate monthly report for a user
      */
     public function generateMonthlyReport(User $user, Carbon $month): array
@@ -29,6 +52,7 @@ class ReportService
 
         $savings = $income - $expenses;
         $savingsRate = $income > 0 ? ($savings / $income) * 100 : 0;
+        $totalSaved = $this->calculateTotalSaved($user);
 
         $incomeByCategory = IncomeEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate])
@@ -61,6 +85,7 @@ class ReportService
                 'total_expenses' => $expenses,
                 'net_savings' => $savings,
                 'savings_rate' => round($savingsRate, 2),
+                'total_saved' => $totalSaved,
             ],
             'income_by_category' => $incomeByCategory,
             'expenses_by_category' => $expensesByCategory,
@@ -101,6 +126,8 @@ class ReportService
                 ];
             });
 
+        $totalSaved = $this->calculateTotalSaved($user);
+        
         return [
             'period' => [
                 'start' => $startDate->format('Y-m-d'),
@@ -108,6 +135,7 @@ class ReportService
             ],
             'expenses_by_super_category' => $expenses,
             'total_expenses' => $expenses->sum('total'),
+            'total_saved' => $totalSaved,
         ];
     }
 
@@ -127,6 +155,8 @@ class ReportService
 
         $calculator = app(SavingsCalculatorService::class);
 
+        $totalSaved = $this->calculateTotalSaved($user);
+        
         return [
             'month' => $month->format('F Y'),
             'goals' => $goals->map(function ($goal) use ($calculator) {
@@ -146,6 +176,7 @@ class ReportService
             'total_progress' => $goals->sum('target_amount') > 0 
                 ? ($goals->sum('current_amount') / $goals->sum('target_amount')) * 100 
                 : 0,
+            'total_saved' => $totalSaved,
         ];
     }
 

@@ -20,6 +20,11 @@ class IncomeCategoryForm
                     ->helperText(__('categories.translation_key_help'))
                     ->disabled(fn ($record) => $record && $record->is_system)
                     ->dehydrated(),
+                TextInput::make('emoji')
+                    ->label(__('common.emoji'))
+                    ->maxLength(10)
+                    ->helperText(__('common.emoji_help'))
+                    ->placeholder('💼'),
                 Textarea::make('translation_help')
                     ->label(__('categories.translation_info'))
                     ->helperText(__('categories.translation_instructions'))

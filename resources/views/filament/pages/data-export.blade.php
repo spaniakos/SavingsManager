@@ -1,5 +1,7 @@
 <x-filament-panels::page>
-    <div class="space-y-6">
+    @include('mobile.components.responsive-nav')
+    
+    <div class="space-y-6 mt-6">
         <form wire:submit.prevent="exportToCsv">
             {{ $this->form }}
 

@@ -23,6 +23,11 @@ class ExpenseCategoryForm
                     ->helperText(__('categories.translation_key_help'))
                     ->disabled(fn ($record) => $record && $record->is_system)
                     ->dehydrated(),
+                TextInput::make('emoji')
+                    ->label(__('common.emoji'))
+                    ->maxLength(10)
+                    ->helperText(__('common.emoji_help'))
+                    ->placeholder('🛒'),
                 Select::make('expense_super_category_id')
                     ->label(__('common.super_category'))
                     ->options(function () {

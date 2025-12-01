@@ -16,4 +16,5 @@ class ListIncomeCategories extends ListRecords
             CreateAction::make(),
         ];
     }
+    
 }

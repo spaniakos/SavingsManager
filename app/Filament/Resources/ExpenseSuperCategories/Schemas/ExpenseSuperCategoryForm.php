@@ -19,6 +19,11 @@ class ExpenseSuperCategoryForm
                     ->helperText(__('categories.translation_key_help'))
                     ->disabled(fn ($record) => $record && $record->is_system)
                     ->dehydrated(),
+                TextInput::make('emoji')
+                    ->label(__('common.emoji'))
+                    ->maxLength(10)
+                    ->helperText(__('common.emoji_help'))
+                    ->placeholder('🏠'),
                 TextInput::make('allocation_percentage')
                     ->label(__('common.allocation_percentage'))
                     ->numeric()

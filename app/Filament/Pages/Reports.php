@@ -134,6 +134,7 @@ class Reports extends Page implements HasForms
                     $report['total_income'] = $report['summary']['total_income'];
                     $report['total_expenses'] = $report['summary']['total_expenses'];
                     $report['net_savings'] = $report['summary']['net_savings'];
+                    $report['total_saved'] = $report['summary']['total_saved'] ?? 0;
                 }
                 break;
             case 'category':

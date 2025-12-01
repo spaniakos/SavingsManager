@@ -67,3 +67,17 @@ After fixes:
 - Verify all tables are created correctly
 - Verify foreign key constraints work
 - Verify enum columns work with MySQL
+
+### To-dos
+
+- [ ] Add total saved money calculation to reports (seed_capital + savings goals + save_for_later)
+- [ ] Create migration to add emoji column to expense_super_categories, expense_categories, income_categories
+- [ ] Create seeder to set default emojis based on category names
+- [ ] Update ExpenseSuperCategory, ExpenseCategory, IncomeCategory models to include emoji field
+- [ ] Add emoji input fields to category forms in admin panel
+- [ ] Create DetectMobile middleware for auto-redirecting mobile users
+- [ ] Add mobile routes (/admin/mobile, /admin/mobile/expense, etc.)
+- [ ] Create mobile controllers for dashboard, expense, income, settings
+- [ ] Create mobile Blade views with bottom navigation and category buttons
+- [ ] Create mobile-optimized layout with bottom navigation component
+- [ ] Add missing translations for mobile UI and emoji-related labels

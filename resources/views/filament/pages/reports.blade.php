@@ -1,5 +1,7 @@
 <x-filament-panels::page>
-    <div class="space-y-6">
+    @include('mobile.components.responsive-nav')
+    
+    <div class="space-y-6 mt-6">
         <form wire:submit.prevent="generateReport">
             {{ $this->form }}
 
@@ -18,7 +20,7 @@
                     @if(isset($this->reportData['month']))
                         <!-- Monthly Report -->
                         <div class="space-y-4">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                                     <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_income') }}</p>
                                     <p class="text-2xl font-bold text-gray-900 dark:text-white">
@@ -35,6 +37,12 @@
                                     <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.net_savings') }}</p>
                                     <p class="text-2xl font-bold {{ ($this->reportData['net_savings'] ?? 0) >= 0 ? 'text-green-600' : 'text-red-600' }} dark:text-white">
                                         {{ number_format($this->reportData['net_savings'] ?? 0, 2) }} €
+                                    </p>
+                                </div>
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_saved') }}</p>
+                                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+                                        {{ number_format($this->reportData['total_saved'] ?? 0, 2) }} €
                                     </p>
                                 </div>
                             </div>
@@ -90,23 +98,31 @@
                     @elseif(isset($this->reportData['goals']))
                         <!-- Savings Report -->
                         <div class="space-y-4">
-                            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_target') }}</p>
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                                    {{ number_format($this->reportData['total_target'] ?? 0, 2) }} €
-                                </p>
-                            </div>
-                            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_current') }}</p>
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                                    {{ number_format($this->reportData['total_current'] ?? 0, 2) }} €
-                                </p>
-                            </div>
-                            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_progress') }}</p>
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                                    {{ number_format($this->reportData['total_progress'] ?? 0, 1) }}%
-                                </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_target') }}</p>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                        {{ number_format($this->reportData['total_target'] ?? 0, 2) }} €
+                                    </p>
+                                </div>
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_current') }}</p>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                        {{ number_format($this->reportData['total_current'] ?? 0, 2) }} €
+                                    </p>
+                                </div>
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_progress') }}</p>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                        {{ number_format($this->reportData['total_progress'] ?? 0, 1) }}%
+                                    </p>
+                                </div>
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_saved') }}</p>
+                                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+                                        {{ number_format($this->reportData['total_saved'] ?? 0, 2) }} €
+                                    </p>
+                                </div>
                             </div>
 
                             @foreach($this->reportData['goals'] as $goal)
@@ -124,11 +140,19 @@
                     @elseif(isset($this->reportData['expenses_by_category']))
                         <!-- Category Report -->
                         <div class="space-y-4">
-                            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_expenses') }}</p>
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                                    {{ number_format($this->reportData['total_expenses'] ?? 0, 2) }} €
-                                </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_expenses') }}</p>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                        {{ number_format($this->reportData['total_expenses'] ?? 0, 2) }} €
+                                    </p>
+                                </div>
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('common.total_saved') }}</p>
+                                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+                                        {{ number_format($this->reportData['total_saved'] ?? 0, 2) }} €
+                                    </p>
+                                </div>
                             </div>
 
                             <div class="mt-6">

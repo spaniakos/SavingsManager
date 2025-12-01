@@ -112,6 +112,7 @@ return [
         'revma' => 'Revma',
         'super' => 'Super',
         'loipa' => 'Loipa',
+        'savings' => 'Savings',
     ],
     
     // Category Management

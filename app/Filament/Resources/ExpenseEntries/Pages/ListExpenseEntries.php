@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\ExpenseEntries\Pages;
 
 use App\Filament\Resources\ExpenseEntries\ExpenseEntryResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListExpenseEntries extends ListRecords
@@ -13,7 +12,8 @@ class ListExpenseEntries extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            \Filament\Actions\CreateAction::make(),
         ];
     }
+    
 }

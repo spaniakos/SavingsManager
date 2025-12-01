@@ -12,6 +12,7 @@ class ExpenseSuperCategory extends Model
     use HasFactory;
     protected $fillable = [
         'name', // Translation key
+        'emoji',
         'is_system',
         'user_id',
         'allocation_percentage',

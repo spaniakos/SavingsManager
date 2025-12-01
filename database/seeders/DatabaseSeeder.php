@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             ExpenseSuperCategorySeeder::class,
             IncomeCategorySeeder::class,
             ExpenseCategorySeeder::class,
+            EmojiSeeder::class,
         ]);
 
         User::factory()->create([

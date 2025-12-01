@@ -1,5 +1,7 @@
 <x-filament-panels::page>
-    <form wire:submit="save">
+    @include('mobile.components.responsive-nav')
+    
+    <form wire:submit="save" class="mt-6">
         {{ $this->form }}
         
         <div class="flex justify-end gap-4 mt-6">

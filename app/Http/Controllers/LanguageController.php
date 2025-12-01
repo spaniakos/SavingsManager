@@ -13,7 +13,7 @@ class LanguageController extends Controller
         $locale = $request->input('locale', 'en');
         
         if (in_array($locale, ['en', 'el'])) {
-            Cookie::queue('locale', $locale, 60 * 24 * 365); // 1 year
+            session(['locale' => $locale]);
             app()->setLocale($locale);
         }
         
