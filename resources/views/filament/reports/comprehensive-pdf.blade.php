@@ -9,6 +9,12 @@
             font-size: 12px;
             margin: 20px;
         }
+        .emoji-img {
+            width: 14px;
+            height: 14px;
+            vertical-align: middle;
+            display: inline-block;
+        }
         h1 {
             font-size: 24px;
             margin-bottom: 10px;
@@ -127,7 +133,12 @@
                 <div style="background-color: #f2f2f2; padding: 10px; border-bottom: 2px solid #333;">
                     <table style="width: 100%; border: none;">
                         <tr>
-                            <td style="border: none; font-weight: bold; font-size: 14px;">{{ $category['name'] }}</td>
+                            <td style="border: none; font-weight: bold; font-size: 14px;">
+                                @php
+                                    $emojiImg = !empty($category['emoji']) ? \App\Helpers\EmojiHelper::emojiToImageTag($category['emoji'], 14) : '';
+                                @endphp
+                                {!! $emojiImg !!} {{ $category['name'] }}
+                            </td>
                             <td style="border: none; text-align: right; font-weight: bold; font-size: 14px;">
                                 €{{ number_format($category['total'], 2) }}
                             </td>
@@ -184,7 +195,12 @@
                 <div style="background-color: #f2f2f2; padding: 10px; border-bottom: 2px solid #333;">
                     <table style="width: 100%; border: none;">
                         <tr>
-                            <td style="border: none; font-weight: bold; font-size: 14px;">{{ $superCategory['name'] }}</td>
+                            <td style="border: none; font-weight: bold; font-size: 14px;">
+                                @php
+                                    $emojiImg = !empty($superCategory['emoji']) ? \App\Helpers\EmojiHelper::emojiToImageTag($superCategory['emoji'], 14) : '';
+                                @endphp
+                                {!! $emojiImg !!} {{ $superCategory['name'] }}
+                            </td>
                             <td style="border: none; text-align: right; font-weight: bold; font-size: 14px;">
                                 €{{ number_format($superCategory['total'], 2) }}
                             </td>
@@ -208,7 +224,10 @@
                                 <table style="width: 100%; border: none;">
                                     <tr>
                                         <td style="border: none; padding: 8px 8px 8px 20px; font-weight: bold; font-size: 12px;">
-                                            {{ $category['name'] }}
+                                            @php
+                                                $emojiImg = !empty($category['emoji']) ? \App\Helpers\EmojiHelper::emojiToImageTag($category['emoji'], 12) : '';
+                                            @endphp
+                                            {!! $emojiImg !!} {{ $category['name'] }}
                                         </td>
                                         <td style="border: none; padding: 8px; text-align: right; font-weight: bold; font-size: 12px;">
                                             €{{ number_format($category['total'], 2) }}

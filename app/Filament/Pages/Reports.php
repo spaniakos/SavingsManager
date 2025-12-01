@@ -148,6 +148,10 @@ class Reports extends Page implements HasForms
                 'breakdownType' => $data['breakdown_type'] ?? 'super_category',
                 'user' => Auth::user(),
             ]);
+            
+            // Configure PDF options to enable remote images (for emoji support)
+            $pdf->setOption('isRemoteEnabled', true);
+            $pdf->setOption('isHtml5ParserEnabled', true);
 
             $filename = 'report_' . Carbon::parse($data['start_date'])->format('Y-m-d') . '_to_' . Carbon::parse($data['end_date'])->format('Y-m-d') . '.pdf';
 

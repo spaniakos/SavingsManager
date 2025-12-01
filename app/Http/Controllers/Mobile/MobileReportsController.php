@@ -55,6 +55,10 @@ class MobileReportsController extends Controller
                 'breakdownType' => $breakdownType,
                 'user' => $user,
             ]);
+            
+            // Configure PDF options to enable remote images (for emoji support)
+            $pdf->setOption('isRemoteEnabled', true);
+            $pdf->setOption('isHtml5ParserEnabled', true);
 
             $filename = 'report_' . $startDate->format('Y-m-d') . '_to_' . $endDate->format('Y-m-d') . '.pdf';
 
