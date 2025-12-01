@@ -28,17 +28,9 @@
     
     $currentSavings = $currentIncome - $currentExpenses;
     
-    // Projected income (including future dates this month)
-    $projectedIncome = IncomeEntry::where('user_id', $user->id)
-        ->whereBetween('date', [$startOfMonth, $endOfMonth])
-        ->sum('amount');
-    
-    // Expenses up to today only (for projection)
-    $expensesToDate = ExpenseEntry::where('user_id', $user->id)
-        ->whereBetween('date', [$startOfMonth, $now])
-        ->sum('amount');
-    
-    $projectedSavings = $projectedIncome - $expensesToDate;
+    // Projected savings using simplified formula: current income + max(0, (median income - current income))
+    $medianIncome = $user->median_monthly_income ?? 0;
+    $projectedSavings = $currentIncome + max(0, ($medianIncome - $currentIncome));
     
     // Days remaining in month (rounded)
     $daysRemaining = round($now->diffInDays($endOfMonth) + 1);
@@ -59,9 +51,28 @@
         ->whereBetween('expense_entries.date', [$startOfMonth, $endOfMonth])
         ->join('expense_categories', 'expense_entries.expense_category_id', '=', 'expense_categories.id')
         ->join('expense_super_categories', 'expense_categories.expense_super_category_id', '=', 'expense_super_categories.id')
-        ->selectRaw('expense_super_categories.name, expense_super_categories.emoji, SUM(expense_entries.amount) as total')
-        ->groupBy('expense_super_categories.id', 'expense_super_categories.name', 'expense_super_categories.emoji')
+        ->selectRaw('expense_super_categories.id, expense_super_categories.name, expense_super_categories.emoji, expense_super_categories.allocation_percentage, SUM(expense_entries.amount) as total')
+        ->groupBy('expense_super_categories.id', 'expense_super_categories.name', 'expense_super_categories.emoji', 'expense_super_categories.allocation_percentage')
         ->get();
+    
+    // Calculate progress for each super category
+    $medianIncome = $user->median_monthly_income ?? 0;
+    $superCategoryProgress = $expensesBySuperCategory->map(function($item) use ($medianIncome) {
+        $allowance = $medianIncome * ($item->allocation_percentage / 100);
+        $percentage = $allowance > 0 ? min(100, round(($item->total / $allowance) * 100, 1)) : 0;
+        return [
+            'name' => $item->name,
+            'emoji' => $item->emoji,
+            'current' => $item->total,
+            'allowance' => $allowance,
+            'percentage' => $percentage
+        ];
+    });
+    
+    // Calculate savings goals progress
+    $totalSavingsCurrent = $activeGoals->sum('current_amount');
+    $totalSavingsTarget = $activeGoals->sum('target_amount');
+    $savingsProgressPercentage = $totalSavingsTarget > 0 ? min(100, round(($totalSavingsCurrent / $totalSavingsTarget) * 100, 1)) : 0;
     
     // Income trend (last 6 months)
     $incomeTrend = [];
@@ -163,6 +174,89 @@
         </div>
     </div>
     
+    <!-- Monthly Calculation Button -->
+    @php
+        $previousMonth = $now->copy()->subMonth();
+        $previousMonthStart = $previousMonth->copy()->startOfMonth();
+        $previousMonthEnd = $previousMonth->copy()->endOfMonth();
+        
+        // Check if previous month has been calculated
+        $previousMonthCalculated = false;
+        foreach ($activeGoals as $goal) {
+            if ($goal->last_monthly_calculation_at) {
+                $lastCalc = Carbon::parse($goal->last_monthly_calculation_at);
+                if ($lastCalc->year === $previousMonth->year 
+                    && $lastCalc->month === $previousMonth->month) {
+                    $previousMonthCalculated = true;
+                    break;
+                }
+            }
+        }
+    @endphp
+    @if(!$previousMonthCalculated)
+    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-5 rounded-xl border-2 border-indigo-300">
+        <form method="POST" action="{{ route('mobile.monthly-calculation.calculate') }}" onsubmit="return confirm('{{ __('common.confirm_monthly_calculation', ['month' => $previousMonth->format('F Y')]) }}')">
+            @csrf
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-sm font-semibold text-indigo-900">{{ __('common.calculate_previous_month') }}</div>
+                    <div class="text-xs text-indigo-700 mt-1">{{ $previousMonth->format('F Y') }}</div>
+                </div>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold text-sm">
+                    {{ __('common.calculate') }}
+                </button>
+            </div>
+        </form>
+    </div>
+    @endif
+    
+    <!-- Super Category Progress Bars -->
+    @if($superCategoryProgress->count() > 0)
+    <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
+        <h3 class="text-lg font-semibold mb-4">{{ __('common.expenses_by_category') }}</h3>
+        <div class="space-y-4">
+            @foreach($superCategoryProgress as $progress)
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-2">
+                        @if($progress['emoji'])
+                            <span class="text-lg">{{ $progress['emoji'] }}</span>
+                        @endif
+                        <span class="text-sm font-semibold">{{ __("categories.expense_super.{$progress['name']}") }}</span>
+                    </div>
+                    <div class="text-xs text-gray-600">
+                        €{{ number_format($progress['current'], 2) }} / €{{ number_format($progress['allowance'], 2) }} ({{ $progress['percentage'] }}%)
+                    </div>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div class="h-3 rounded-full {{ $progress['percentage'] > 100 ? 'bg-red-500' : ($progress['percentage'] > 80 ? 'bg-yellow-500' : 'bg-green-500') }}" 
+                         style="width: {{ min(100, $progress['percentage']) }}%"></div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+    
+    <!-- Savings Goals Progress Bar -->
+    @if($activeGoals->count() > 0 && $totalSavingsTarget > 0)
+    <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
+        <h3 class="text-lg font-semibold mb-4">{{ __('common.savings_goals_progress') }}</h3>
+        <div>
+            <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-semibold">{{ __('common.total_savings') }}</span>
+                <div class="text-xs text-gray-600">
+                    €{{ number_format($totalSavingsCurrent, 2) }} / €{{ number_format($totalSavingsTarget, 2) }} ({{ $savingsProgressPercentage }}%)
+                </div>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="h-3 rounded-full bg-gradient-to-r from-amber-400 to-amber-600" 
+                     style="width: {{ min(100, $savingsProgressPercentage) }}%"></div>
+            </div>
+        </div>
+    </div>
+    @endif
+    
     <!-- Expenses by Category Chart -->
     @if($expensesBySuperCategory->count() > 0)
     <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
@@ -235,11 +329,19 @@
 <script>
 // Expenses by Category Chart
 @if($expensesBySuperCategory->count() > 0)
+@php
+    $expensesTotal = $expensesBySuperCategory->sum('total');
+    $expensesLabels = $expensesBySuperCategory->map(function($item) use ($expensesTotal) {
+        $percentage = $expensesTotal > 0 ? round(($item->total / $expensesTotal) * 100, 1) : 0;
+        $emoji = $item->emoji ? $item->emoji . ' ' : '';
+        return $emoji . __("categories.expense_super.{$item->name}") . ': €' . number_format($item->total, 2) . ' (' . $percentage . '%)';
+    })->toArray();
+@endphp
 const expensesCtx = document.getElementById('expensesChart').getContext('2d');
 new Chart(expensesCtx, {
     type: 'doughnut',
     data: {
-        labels: {!! json_encode($expensesBySuperCategory->pluck('name')->toArray()) !!},
+        labels: {!! json_encode($expensesLabels) !!},
         datasets: [{
             data: {!! json_encode($expensesBySuperCategory->pluck('total')->toArray()) !!},
             backgroundColor: [
@@ -255,8 +357,20 @@ new Chart(expensesCtx, {
                 position: 'bottom',
                 labels: {
                     boxWidth: 12,
-                    padding: 10,
-                    font: { size: 11 }
+                    padding: 8,
+                    font: { size: 10 },
+                    usePointStyle: true
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const label = context.label || '';
+                        const value = context.parsed || 0;
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                        return label + ': €' + value.toFixed(2) + ' (' + percentage + '%)';
+                    }
                 }
             }
         }
