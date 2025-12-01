@@ -125,6 +125,17 @@
             border-color: #4b5563;
         }
         
+        /* Reports page dark mode support */
+        body.dark .bg-gray-100 {
+            background: #374151;
+        }
+        body.dark .bg-gray-200 {
+            background: #4b5563;
+        }
+        body.dark .border-gray-200 {
+            border-color: #4b5563;
+        }
+        
         /* Chart containers - responsive height */
         .chart-container {
             position: relative;

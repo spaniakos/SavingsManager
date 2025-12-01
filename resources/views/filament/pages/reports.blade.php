@@ -73,16 +73,16 @@
                         <div class="space-y-4">
                             @foreach($this->reportData['income']['hierarchical'] as $category)
                                 <!-- Category Card -->
-                                <div class="border-2 border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
+                                <div class="border-2 border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                                     <!-- Category Header -->
-                                    <div class="bg-gray-200 dark:bg-gray-700 p-3 border-b-2 border-gray-300 dark:border-gray-600">
+                                    <div class="bg-gray-100 dark:bg-gray-700 p-3 border-b-2 border-gray-200 dark:border-gray-600">
                                         <div class="flex justify-between items-center">
                                             <div class="flex items-center gap-2">
                                                 @if($category['emoji']) <span class="text-lg">{{ $category['emoji'] }}</span> @endif
-                                                <span class="font-bold text-lg dark:text-white">{{ $category['name'] }}</span>
+                                                <span class="font-bold text-lg text-gray-900 dark:text-white">{{ $category['name'] }}</span>
                                             </div>
                                             <div class="text-right">
-                                                <div class="font-bold text-lg dark:text-white">€{{ number_format($category['total'], 2) }}</div>
+                                                <div class="font-bold text-lg text-gray-900 dark:text-white">€{{ number_format($category['total'], 2) }}</div>
                                                 <div class="text-sm text-gray-600 dark:text-gray-400">
                                                     {{ $totalIncome > 0 ? number_format(($category['total'] / $totalIncome) * 100, 1) : 0 }}% | 
                                                     {{ $category['count'] }} {{ __('common.items') }}
@@ -107,11 +107,11 @@
                                                         <tbody>
                                                             @foreach($category['items'] as $item)
                                                                 <tr class="border-b border-gray-200 dark:border-gray-700">
-                                                                    <td class="px-2 py-1 dark:text-white">
-                                                                        <span class="ml-4 dark:text-gray-400">└─</span>
+                                                                    <td class="px-2 py-1 text-gray-900 dark:text-white">
+                                                                        <span class="ml-4 text-gray-500 dark:text-gray-400">└─</span>
                                                                         {{ $item['date'] }}
                                                                     </td>
-                                                                    <td class="px-2 py-1 text-right font-semibold dark:text-white">
+                                                                    <td class="px-2 py-1 text-right font-semibold text-gray-900 dark:text-white">
                                                                         €{{ number_format($item['amount'], 2) }}
                                                                     </td>
                                                                     <td class="px-2 py-1 text-gray-600 dark:text-gray-400">{{ $item['notes'] ?? '-' }}</td>
@@ -144,14 +144,14 @@
                         @foreach($this->reportData['expenses']['hierarchical'] as $superCategory)
                             <div class="mb-6">
                                 <!-- Super Category Header -->
-                                <div class="bg-gray-200 dark:bg-gray-700 p-3 rounded-t-lg border-b-2 border-gray-300 dark:border-gray-600">
+                                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-t-lg border-b-2 border-gray-200 dark:border-gray-600">
                                     <div class="flex justify-between items-center">
                                         <div class="flex items-center gap-2">
                                             @if($superCategory['emoji']) <span class="text-lg">{{ $superCategory['emoji'] }}</span> @endif
-                                            <span class="font-bold text-lg dark:text-white">{{ $superCategory['name'] }}</span>
+                                            <span class="font-bold text-lg text-gray-900 dark:text-white">{{ $superCategory['name'] }}</span>
                                         </div>
                                         <div class="text-right">
-                                            <div class="font-bold text-lg dark:text-white">€{{ number_format($superCategory['total'], 2) }}</div>
+                                            <div class="font-bold text-lg text-gray-900 dark:text-white">€{{ number_format($superCategory['total'], 2) }}</div>
                                             <div class="text-sm text-gray-600 dark:text-gray-400">
                                                 {{ $totalExpenses > 0 ? number_format(($superCategory['total'] / $totalExpenses) * 100, 1) : 0 }}% | 
                                                 {{ $superCategory['count'] }} {{ __('common.items') }}
@@ -166,15 +166,15 @@
                                         @foreach($superCategory['categories'] as $category)
                                             <div class="border-b border-gray-200 dark:border-gray-700 last:border-b-0">
                                                 <!-- Category Row -->
-                                                <div class="p-3 bg-gray-50 dark:bg-gray-800">
+                                                <div class="p-3 bg-white dark:bg-gray-800">
                                                     <div class="flex justify-between items-center">
                                                         <div class="flex items-center gap-2">
                                                             <span class="ml-4 dark:text-gray-400">└─</span>
                                                             @if($category['emoji']) <span>{{ $category['emoji'] }}</span> @endif
-                                                            <span class="font-semibold dark:text-white">{{ $category['name'] }}</span>
+                                                            <span class="font-semibold text-gray-900 dark:text-white">{{ $category['name'] }}</span>
                                                         </div>
                                                         <div class="text-right">
-                                                            <div class="font-semibold dark:text-white">€{{ number_format($category['total'], 2) }}</div>
+                                                            <div class="font-semibold text-gray-900 dark:text-white">€{{ number_format($category['total'], 2) }}</div>
                                                             <div class="text-xs text-gray-600 dark:text-gray-400">
                                                                 {{ $totalExpenses > 0 ? number_format(($category['total'] / $totalExpenses) * 100, 1) : 0 }}% | 
                                                                 {{ $category['count'] }} {{ __('common.items') }}
@@ -198,11 +198,11 @@
                                                                 <tbody>
                                                                     @foreach($category['items'] as $item)
                                                                         <tr class="border-b border-gray-200 dark:border-gray-700">
-                                                                            <td class="px-2 py-1 dark:text-white">
-                                                                                <span class="ml-4 dark:text-gray-400">└─</span>
+                                                                            <td class="px-2 py-1 text-gray-900 dark:text-white">
+                                                                                <span class="ml-4 text-gray-500 dark:text-gray-400">└─</span>
                                                                                 {{ $item['date'] }}
                                                                             </td>
-                                                                            <td class="px-2 py-1 text-right font-semibold dark:text-white">
+                                                                            <td class="px-2 py-1 text-right font-semibold text-gray-900 dark:text-white">
                                                                                 €{{ number_format($item['amount'], 2) }}
                                                                                 @if($item['is_save_for_later'])
                                                                                     <span class="ml-1 text-xs text-purple-600 dark:text-purple-400">({{ __('common.save_for_later') }})</span>
