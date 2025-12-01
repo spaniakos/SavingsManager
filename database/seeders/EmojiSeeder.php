@@ -34,76 +34,55 @@ class EmojiSeeder extends Seeder
         'landline'           => '📞',
         'supermarket'        => '🛒',
         'groceries'          => '🛒',
-        'medical_visits'     => '🏥',
-        'medications'        => '💊',
-        'dental_care'        => '🦷',
-        'health_insurance'   => '🏥',
-        'life_insurance'     => '🛡️',
-        'home_insurance'     => '🛡️',
-        'car_insurance'      => '🛡️',
-        'self_insured'       => '🛡️',
-        'tax'                => '📋',
-        
-        // -----------------------------
-        // TRANSPORTATION
-        // -----------------------------
         'fuel'               => '⛽',
         'public_transport'   => '🚌',
         'car'                => '🚗',
         'motorcycle'         => '🏍️',
+        'car_maintenance'    => '🔧',
+        'car_insurance'      => '🛡️',
+        'self_insured'       => '🛡️',
         'parking'            => '🅿️',
         'tolls'              => '🛣️',
-        'car_maintenance'    => '🔧',
-        'mobile_transport'   => '📱',
+        'medical_visits'     => '🏥',
+        'medications'        => '💊',
+        'dental_care'        => '🦷',
+        'vet'                => '🐾',
+        'pet_food'           => '🐕',
+        'work_materials'     => '💼',
+        'server'             => '🖥️',
+        'domains'            => '🌐',
+        'ai_services'        => '🤖',
+        'seminars'           => '🎓',
+        'tuition'            => '📚',
+        'educational_materials' => '📖',
+        'loan_payments'      => '💳',
+        'credit_card_payments' => '💳',
         
         // -----------------------------
-        // HOME & MAINTENANCE
-        // -----------------------------
-        'maintenance'        => '🔧',
-        'home_office'        => '💻',
-        
-        // -----------------------------
-        // FOOD & LIFESTYLE
+        // LIFESTYLE
         // -----------------------------
         'restaurants'        => '🍽️',
         'coffee'             => '☕',
         'drinks'             => '🥤',
         'beers'              => '🍺',
-        'tech'               => '💻',
+        'subscriptions'      => '📱',
+        'gaming'             => '🎮',
+        'e_games'            => '🕹️',
+        'delivery'           => '🚚',
+        'gym'                => '💪',
+        'travel'             => '✈️',
+        'events'             => '🎉',
         'clothing'           => '👕',
         'cosmetics'          => '💄',
         'hair_salon'         => '💇',
         'gifts'              => '🎁',
+        'tech'               => '💻',
+        'life_insurance'     => '🛡️',
+        'home_insurance'     => '🛡️',
+        'private_health_insurance' => '🏥',
+        'childcare'          => '👶',
+        'school'             => '🏫',
         'donations'          => '❤️',
-        
-        // -----------------------------
-        // ENTERTAINMENT & SUBSCRIPTIONS
-        // -----------------------------
-        'spotify'            => '🎵',
-        'netflix'            => '📺',
-        'disney_plus'        => '🎬',
-        'events'             => '🎉',
-        'travel'             => '✈️',
-        
-        // -----------------------------
-        // EDUCATION / SELF-IMPROVEMENT
-        // -----------------------------
-        'seminars'           => '🎓',
-        'tuition'            => '📚',
-        'educational_materials' => '📖',
-        'gym'                => '💪',
-        
-        // -----------------------------
-        // WORK / BUSINESS EXPENSES
-        // -----------------------------
-        'work_materials'     => '💼',
-        'server'             => '🖥️',
-        'domains'            => '🌐',
-        'ai_services'        => '🤖',
-        
-        // -----------------------------
-        // MISC / EDGE CASES
-        // -----------------------------
         'unexpected'         => '⚠️',
         'other_expenses'     => '📝',
         

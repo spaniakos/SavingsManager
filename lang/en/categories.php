@@ -33,81 +33,82 @@ return [
         
         // Transportation
         'fuel' => 'Fuel',
-        'car_maintenance' => 'Car Maintenance',
-        'car_insurance' => 'Car Insurance',
-        'tolls' => 'Tolls',
         'public_transport' => 'Public Transport',
-        'parking' => 'Parking',
         'car' => 'Car',
         'motorcycle' => 'Motorcycle',
-        'mobile_transport' => 'Mobile (Transport)',
+        'car_maintenance' => 'Car Maintenance',
+        'car_insurance' => 'Car Insurance',
+        'self_insured' => 'Self Insured',
+        'parking' => 'Parking',
+        'tolls' => 'Tolls',
         
         // Food
         'supermarket' => 'Supermarket',
-        'restaurants' => 'Restaurants',
-        'coffee' => 'Coffee',
-        'drinks' => 'Drinks',
-        'beers' => 'Beers',
-        'potatoes' => 'Potatoes',
         'groceries' => 'Groceries',
         
         // Utilities
         'landline' => 'Landline',
         'mobile_phone' => 'Mobile Phone',
         'internet' => 'Internet',
-        'spotify' => 'Spotify',
-        'netflix' => 'Netflix',
-        'disney_plus' => 'Disney+',
-        'log' => 'Log',
-        'stathero' => 'Stathero',
         
         // Health
         'medical_visits' => 'Medical Visits',
         'medications' => 'Medications',
         'dental_care' => 'Dental Care',
-        'health_insurance' => 'Health Insurance',
         
-        // Insurance
-        'self_insured' => 'Self Insured',
-        'life_insurance' => 'Life Insurance',
-        'home_insurance_insurance' => 'Home Insurance',
-        'car_insurance_insurance' => 'Car Insurance',
-        'insurance' => 'Insurance',
-        'tax' => 'Tax',
-        
-        // Education
-        'seminars' => 'Seminars',
-        'tuition' => 'Tuition',
-        'educational_materials' => 'Educational Materials',
-        
-        // Entertainment
-        'gym' => 'Gym',
-        'travel' => 'Travel',
-        'events' => 'Events',
-        'gymnastirio' => 'Gymnastirio',
-        'taksidia' => 'Taksidia',
-        
-        // Personal
-        'clothing' => 'Clothing',
-        'cosmetics' => 'Cosmetics',
-        'hair_salon' => 'Hair Salon',
-        'gifts' => 'Gifts',
-        'tech' => 'Tech',
-        'dwra' => 'Dwra',
-        'personal_life' => 'Personal Life',
+        // Pets
+        'vet' => 'Vet',
+        'pet_food' => 'Pet Food',
         
         // Work/Business
         'work_materials' => 'Work Materials',
         'server' => 'Server',
         'domains' => 'Domains',
         'ai_services' => 'AI Services',
-        'ylika_douleias' => 'Ylika douleias',
-        'ai' => 'AI',
-        'aproblepta' => 'Aproblepta',
         
-        // Other
-        'unexpected' => 'Unexpected',
+        // Education
+        'seminars' => 'Seminars',
+        'tuition' => 'Tuition',
+        'educational_materials' => 'Educational Materials',
+        
+        // Financial Obligations
+        'loan_payments' => 'Loan Payments',
+        'credit_card_payments' => 'Credit Card Payments',
+        
+        // Lifestyle - Food & Drinks
+        'restaurants' => 'Restaurants',
+        'coffee' => 'Coffee',
+        'drinks' => 'Drinks',
+        'beers' => 'Beers',
+        
+        // Lifestyle - Entertainment
+        'subscriptions' => 'Subscriptions',
+        'gaming' => 'Gaming',
+        'e_games' => 'E-Games',
+        'delivery' => 'Delivery',
+        'gym' => 'Gym',
+        'travel' => 'Travel',
+        'events' => 'Events',
+        
+        // Lifestyle - Personal
+        'clothing' => 'Clothing',
+        'cosmetics' => 'Cosmetics',
+        'hair_salon' => 'Hair Salon',
+        'gifts' => 'Gifts',
+        'tech' => 'Tech',
+        
+        // Lifestyle - Insurance (optional)
+        'life_insurance' => 'Life Insurance',
+        'home_insurance' => 'Home Insurance',
+        'private_health_insurance' => 'Private Health Insurance',
+        
+        // Lifestyle - Children (optional)
+        'childcare' => 'Childcare',
+        'school' => 'School',
+        
+        // Lifestyle - Soft categories
         'donations' => 'Donations',
+        'unexpected' => 'Unexpected',
         'other_expenses' => 'Other Expenses',
         'eksodoi' => 'Eksodoi',
         'erini' => 'Erini',

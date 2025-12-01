@@ -33,81 +33,82 @@ return [
         
         // Transportation
         'fuel' => 'Καύσιμα',
-        'car_maintenance' => 'Συντήρηση Αυτοκινήτου',
-        'car_insurance' => 'Ασφάλεια Αυτοκινήτου',
-        'tolls' => 'Διόδια',
         'public_transport' => 'Δημόσιες Συγκοινωνίες',
-        'parking' => 'Στάθμευση',
         'car' => 'Αυτοκίνητο',
         'motorcycle' => 'Μοτοσυκλέτα',
-        'mobile_transport' => 'Κινητό (Μεταφορές)',
+        'car_maintenance' => 'Συντήρηση Αυτοκινήτου',
+        'car_insurance' => 'Ασφάλεια Αυτοκινήτου',
+        'self_insured' => 'Αυτοασφάλιση',
+        'parking' => 'Στάθμευση',
+        'tolls' => 'Διόδια',
         
         // Food
         'supermarket' => 'Σούπερ Μάρκετ',
-        'restaurants' => 'Εστιατόρια',
-        'coffee' => 'Καφές',
-        'drinks' => 'Ποτά',
-        'beers' => 'Μπύρες',
-        'potatoes' => 'Πατάτες',
         'groceries' => 'Είδη Προμήθειας',
         
         // Utilities
         'landline' => 'Σταθερό Τηλέφωνο',
         'mobile_phone' => 'Κινητό',
         'internet' => 'Ίντερνετ',
-        'spotify' => 'Spotify',
-        'netflix' => 'Netflix',
-        'disney_plus' => 'Disney+',
-        'log' => 'Κούτσουρο',
-        'stathero' => 'Σταθερό',
         
         // Health
         'medical_visits' => 'Ιατρικές Επισκέψεις',
         'medications' => 'Φάρμακα',
         'dental_care' => 'Οδοντιατρική',
-        'health_insurance' => 'Ασφάλεια Υγείας',
         
-        // Insurance
-        'self_insured' => 'Αυτοασφάλιση',
-        'life_insurance' => 'Ασφάλεια Ζωής',
-        'home_insurance_insurance' => 'Ασφάλεια Κατοικίας',
-        'car_insurance_insurance' => 'Ασφάλεια Αυτοκινήτου',
-        'insurance' => 'Ασφάλεια',
-        'tax' => 'Φόρος',
-        
-        // Education
-        'seminars' => 'Σεμινάρια',
-        'tuition' => 'Δίδακτρα',
-        'educational_materials' => 'Εκπαιδευτικό Υλικό',
-        
-        // Entertainment
-        'gym' => 'Γυμναστήριο',
-        'travel' => 'Ταξίδια',
-        'events' => 'Εκδηλώσεις',
-        'gymnastirio' => 'Γυμναστήριο',
-        'taksidia' => 'Ταξίδια',
-        
-        // Personal
-        'clothing' => 'Ρουχισμός',
-        'cosmetics' => 'Καλλυντικά',
-        'hair_salon' => 'Κομμωτήριο',
-        'gifts' => 'Δώρα',
-        'tech' => 'Τεχνολογία',
-        'dwra' => 'Δώρα',
-        'personal_life' => 'Προσωπική Ζωή',
+        // Pets
+        'vet' => 'Κτηνίατρος',
+        'pet_food' => 'Τροφή Κατοικίδιων',
         
         // Work/Business
         'work_materials' => 'Υλικά Δουλειάς',
         'server' => 'Server',
         'domains' => 'Domains',
         'ai_services' => 'AI Υπηρεσίες',
-        'ylika_douleias' => 'Υλικά Δουλειάς',
-        'ai' => 'AI',
-        'aproblepta' => 'Απρόβλεπτα',
         
-        // Other
-        'unexpected' => 'Απρόβλεπτα',
+        // Education
+        'seminars' => 'Σεμινάρια',
+        'tuition' => 'Δίδακτρα',
+        'educational_materials' => 'Εκπαιδευτικό Υλικό',
+        
+        // Financial Obligations
+        'loan_payments' => 'Πληρωμές Δανείων',
+        'credit_card_payments' => 'Πληρωμές Πιστωτικών',
+        
+        // Lifestyle - Food & Drinks
+        'restaurants' => 'Εστιατόρια',
+        'coffee' => 'Καφές',
+        'drinks' => 'Ποτά',
+        'beers' => 'Μπύρες',
+        
+        // Lifestyle - Entertainment
+        'subscriptions' => 'Συνδρομές',
+        'gaming' => 'Παιχνίδια',
+        'e_games' => 'Ηλεκτρονικά Παιχνίδια',
+        'delivery' => 'Παράδοση',
+        'gym' => 'Γυμναστήριο',
+        'travel' => 'Ταξίδια',
+        'events' => 'Εκδηλώσεις',
+        
+        // Lifestyle - Personal
+        'clothing' => 'Ρουχισμός',
+        'cosmetics' => 'Καλλυντικά',
+        'hair_salon' => 'Κομμωτήριο',
+        'gifts' => 'Δώρα',
+        'tech' => 'Τεχνολογία',
+        
+        // Lifestyle - Insurance (optional)
+        'life_insurance' => 'Ασφάλεια Ζωής',
+        'home_insurance' => 'Ασφάλεια Κατοικίας',
+        'private_health_insurance' => 'Ιδιωτική Ασφάλεια Υγείας',
+        
+        // Lifestyle - Children (optional)
+        'childcare' => 'Παιδική Φροντίδα',
+        'school' => 'Σχολείο',
+        
+        // Lifestyle - Soft categories
         'donations' => 'Δωρεές',
+        'unexpected' => 'Απρόβλεπτα',
         'other_expenses' => 'Λοιπά Έξοδα',
         'eksodoi' => 'Έξοδα',
         'erini' => 'Ερήνη',
