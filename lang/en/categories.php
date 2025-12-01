@@ -46,6 +46,8 @@ return [
         'supermarket' => 'Supermarket',
         'restaurants' => 'Restaurants',
         'coffee' => 'Coffee',
+        'drinks' => 'Drinks',
+        'beers' => 'Beers',
         'potatoes' => 'Potatoes',
         'groceries' => 'Groceries',
         
@@ -90,6 +92,7 @@ return [
         'cosmetics' => 'Cosmetics',
         'hair_salon' => 'Hair Salon',
         'gifts' => 'Gifts',
+        'tech' => 'Tech',
         'dwra' => 'Dwra',
         'personal_life' => 'Personal Life',
         

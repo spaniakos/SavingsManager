@@ -67,6 +67,9 @@ class EmojiSeeder extends Seeder
         // -----------------------------
         'restaurants'        => '🍽️',
         'coffee'             => '☕',
+        'drinks'             => '🥤',
+        'beers'              => '🍺',
+        'tech'               => '💻',
         'clothing'           => '👕',
         'cosmetics'          => '💄',
         'hair_salon'         => '💇',

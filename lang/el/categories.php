@@ -46,6 +46,8 @@ return [
         'supermarket' => 'Σούπερ Μάρκετ',
         'restaurants' => 'Εστιατόρια',
         'coffee' => 'Καφές',
+        'drinks' => 'Ποτά',
+        'beers' => 'Μπύρες',
         'potatoes' => 'Πατάτες',
         'groceries' => 'Είδη Προμήθειας',
         
@@ -90,6 +92,7 @@ return [
         'cosmetics' => 'Καλλυντικά',
         'hair_salon' => 'Κομμωτήριο',
         'gifts' => 'Δώρα',
+        'tech' => 'Τεχνολογία',
         'dwra' => 'Δώρα',
         'personal_life' => 'Προσωπική Ζωή',
         

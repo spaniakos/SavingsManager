@@ -54,6 +54,9 @@ class ExpenseCategorySeeder extends Seeder
             // Lifestyle (30%)
             ['name' => 'restaurants', 'super' => 'lifestyle'],
             ['name' => 'coffee', 'super' => 'lifestyle'],
+            ['name' => 'drinks', 'super' => 'lifestyle'],
+            ['name' => 'beers', 'super' => 'lifestyle'],
+            ['name' => 'tech', 'super' => 'lifestyle'],
             ['name' => 'spotify', 'super' => 'lifestyle'],
             ['name' => 'netflix', 'super' => 'lifestyle'],
             ['name' => 'disney_plus', 'super' => 'lifestyle'],
