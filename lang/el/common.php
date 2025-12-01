@@ -291,5 +291,26 @@ return [
     'date_current_month_only' => 'Επιτρέπονται μόνο ημερομηνίες από τον τρέχοντα μήνα.',
     'date_current_or_previous_month' => 'Μπορείτε να επιλέξετε ημερομηνίες από τον τρέχοντα μήνα ή τον προηγούμενο μήνα (αν δεν έχει υπολογιστεί ακόμα).',
     'past_month_locked' => 'Προηγούμενος μήνας (κλειδωμένο)',
+    
+    // Reports
+    'income_analysis' => 'Ανάλυση Εσόδων',
+    'expenses_analysis' => 'Ανάλυση Εξόδων',
+    'breakdown_type' => 'Τύπος Ανάλυσης',
+    'per_item' => 'Ανά Αντικείμενο',
+    'per_category' => 'Ανά Κατηγορία',
+    'per_super_category' => 'Ανά Υπερ-Κατηγορία',
+    'income_by_item' => 'Έσοδα ανά Αντικείμενο',
+    'expenses_by_item' => 'Έξοδα ανά Αντικείμενο',
+    'expenses_by_super_category' => 'Έξοδα ανά Υπερ-Κατηγορία',
+    'goal_progression' => 'Πρόοδος Στόχων',
+    'savings_rate' => 'Ποσοστό Αποταμίευσης',
+    'count' => 'Πλήθος',
+    'percentage' => 'Ποσοστό',
+    'from' => 'Από',
+    'to' => 'Έως',
+    'summary' => 'Σύνοψη',
+    'user' => 'Χρήστης',
+    'refresh' => 'Ανανέωση',
+    'items' => 'αντικείμενα',
 ];
 

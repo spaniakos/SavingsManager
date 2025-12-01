@@ -34,10 +34,9 @@ class Reports extends Page implements HasForms
     public function mount(): void
     {
         $this->form->fill([
-            'report_type' => 'monthly',
-            'month' => now()->format('Y-m'),
             'start_date' => now()->startOfMonth()->format('Y-m-d'),
             'end_date' => now()->endOfMonth()->format('Y-m-d'),
+            'breakdown_type' => 'super_category',
         ]);
     }
 
@@ -45,32 +44,25 @@ class Reports extends Page implements HasForms
     {
         return $schema
             ->components([
-                Select::make('report_type')
-                    ->label(__('common.report_type'))
+                DatePicker::make('start_date')
+                    ->label(__('common.from'))
+                    ->displayFormat('d/m/Y')
+                    ->required()
+                    ->default(now()->startOfMonth()),
+                DatePicker::make('end_date')
+                    ->label(__('common.to'))
+                    ->displayFormat('d/m/Y')
+                    ->required()
+                    ->default(now()->endOfMonth()),
+                Select::make('breakdown_type')
+                    ->label(__('common.breakdown_type'))
                     ->options([
-                        'monthly' => __('common.monthly_report'),
-                        'category' => __('common.category_report'),
-                        'savings' => __('common.savings_report'),
+                        'item' => __('common.per_item'),
+                        'category' => __('common.per_category'),
+                        'super_category' => __('common.per_super_category'),
                     ])
                     ->required()
-                    ->reactive()
-                    ->afterStateUpdated(fn (callable $set) => $set('month', now()->format('Y-m'))),
-                DatePicker::make('month')
-                    ->label(__('common.month'))
-                    ->displayFormat('F Y')
-                    ->format('Y-m')
-                    ->visible(fn (callable $get) => $get('report_type') === 'monthly')
-                    ->required(fn (callable $get) => $get('report_type') === 'monthly'),
-                DatePicker::make('start_date')
-                    ->label(__('common.start_date'))
-                    ->displayFormat('d/m/Y')
-                    ->visible(fn (callable $get) => $get('report_type') === 'category')
-                    ->required(fn (callable $get) => $get('report_type') === 'category'),
-                DatePicker::make('end_date')
-                    ->label(__('common.end_date'))
-                    ->displayFormat('d/m/Y')
-                    ->visible(fn (callable $get) => $get('report_type') === 'category')
-                    ->required(fn (callable $get) => $get('report_type') === 'category'),
+                    ->default('super_category'),
             ])
             ->statePath('data');
     }
@@ -121,42 +113,15 @@ class Reports extends Page implements HasForms
     {
         $data = $this->form->getState();
         $user = Auth::user();
-        $report = null;
+        
+        $startDate = Carbon::parse($data['start_date']);
+        $endDate = Carbon::parse($data['end_date']);
+        $breakdownType = $data['breakdown_type'] ?? 'super_category';
 
         $reportService = app(ReportService::class);
         
-        switch ($data['report_type']) {
-            case 'monthly':
-                $month = Carbon::createFromFormat('Y-m', $data['month']);
-                $report = $reportService->generateMonthlyReport($user, $month);
-                // Flatten summary for easier access in view
-                if (isset($report['summary'])) {
-                    $report['total_income'] = $report['summary']['total_income'];
-                    $report['total_expenses'] = $report['summary']['total_expenses'];
-                    $report['net_savings'] = $report['summary']['net_savings'];
-                    $report['total_saved'] = $report['summary']['total_saved'] ?? 0;
-                }
-                break;
-            case 'category':
-                $startDate = Carbon::parse($data['start_date']);
-                $endDate = Carbon::parse($data['end_date']);
-                $report = $reportService->generateCategoryExpenseReport($user, $startDate, $endDate);
-                // Flatten expenses_by_super_category for view
-                if (isset($report['expenses_by_super_category'])) {
-                    $expensesByCategory = [];
-                    foreach ($report['expenses_by_super_category'] as $superCategory => $data) {
-                        foreach ($data['categories'] as $category) {
-                            $expensesByCategory[$category['name']] = $category['total'];
-                        }
-                    }
-                    $report['expenses_by_category'] = $expensesByCategory;
-                }
-                $report['total_expenses'] = $report['total_expenses'] ?? 0;
-                break;
-            case 'savings':
-                $report = $reportService->generateSavingsGoalReport($user);
-                break;
-        }
+        // Generate comprehensive report with all breakdowns
+        $report = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType);
 
         if ($report) {
             $this->reportData = $report;
@@ -174,23 +139,17 @@ class Reports extends Page implements HasForms
         }
 
         $data = $this->form->getState();
-        $reportType = $data['report_type'] ?? 'monthly';
         
-        $view = match($reportType) {
-            'monthly' => 'filament.reports.monthly-pdf',
-            'category' => 'filament.reports.category-pdf',
-            'savings' => 'filament.reports.savings-pdf',
-            default => 'filament.reports.monthly-pdf',
-        };
-
         try {
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($view, [
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('filament.reports.comprehensive-pdf', [
                 'reportData' => $this->reportData,
-                'reportType' => $reportType,
+                'startDate' => Carbon::parse($data['start_date'])->format('d/m/Y'),
+                'endDate' => Carbon::parse($data['end_date'])->format('d/m/Y'),
+                'breakdownType' => $data['breakdown_type'] ?? 'super_category',
                 'user' => Auth::user(),
             ]);
 
-            $filename = 'report_' . $reportType . '_' . now()->format('Y-m-d_His') . '.pdf';
+            $filename = 'report_' . Carbon::parse($data['start_date'])->format('Y-m-d') . '_to_' . Carbon::parse($data['end_date'])->format('Y-m-d') . '.pdf';
 
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->output();

@@ -291,5 +291,26 @@ return [
     'date_current_month_only' => 'Only dates from the current month are allowed.',
     'date_current_or_previous_month' => 'You can select dates from the current month or previous month (if not yet calculated).',
     'past_month_locked' => 'Past month (locked)',
+    
+    // Reports
+    'income_analysis' => 'Income Analysis',
+    'expenses_analysis' => 'Expenses Analysis',
+    'breakdown_type' => 'Breakdown Type',
+    'per_item' => 'Per Item',
+    'per_category' => 'Per Category',
+    'per_super_category' => 'Per Super Category',
+    'income_by_item' => 'Income by Item',
+    'expenses_by_item' => 'Expenses by Item',
+    'expenses_by_super_category' => 'Expenses by Super Category',
+    'goal_progression' => 'Goal Progression',
+    'savings_rate' => 'Savings Rate',
+    'count' => 'Count',
+    'percentage' => 'Percentage',
+    'from' => 'From',
+    'to' => 'To',
+    'summary' => 'Summary',
+    'user' => 'User',
+    'refresh' => 'Refresh',
+    'items' => 'items',
 ];
 

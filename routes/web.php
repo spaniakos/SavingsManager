@@ -139,6 +139,8 @@ Route::middleware(['auth'])->group(function () {
     // Reports
     Route::get('/admin/mobile/reports', [\App\Http\Controllers\Mobile\MobileReportsController::class, 'index'])
         ->name('mobile.reports.index');
+    Route::get('/admin/mobile/reports/export-pdf', [\App\Http\Controllers\Mobile\MobileReportsController::class, 'exportPdf'])
+        ->name('mobile.reports.export-pdf');
     
     // Monthly Calculation
     Route::post('/admin/mobile/monthly-calculation', [\App\Http\Controllers\Mobile\MonthlyCalculationController::class, 'calculate'])
