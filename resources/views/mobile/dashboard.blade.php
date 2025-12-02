@@ -149,17 +149,17 @@
     
     <!-- Quick Stats Cards -->
     <div class="grid grid-cols-2 gap-3">
-        <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border-2 border-green-200">
+        <a href="{{ route('mobile.income-entries.index') }}" class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border-2 border-green-200 hover:border-green-300 hover:shadow-md transition-all cursor-pointer block">
             <div class="text-xs text-green-700 mb-1">{{ __('common.income') }}</div>
             <div class="text-2xl font-bold text-green-800">€{{ number_format($currentIncome, 2) }}</div>
             <div class="text-xs text-green-600 mt-1">{{ __('common.this_month') }}</div>
-        </div>
+        </a>
         
-        <div class="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-xl border-2 border-red-200">
+        <a href="{{ route('mobile.expense-entries.index') }}" class="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-xl border-2 border-red-200 hover:border-red-300 hover:shadow-md transition-all cursor-pointer block">
             <div class="text-xs text-red-700 mb-1">{{ __('common.expenses') }}</div>
             <div class="text-2xl font-bold text-red-800">€{{ number_format($currentExpenses, 2) }}</div>
             <div class="text-xs text-red-600 mt-1">{{ __('common.this_month') }}</div>
-        </div>
+        </a>
         
         <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border-2 border-blue-200">
             <div class="text-xs text-blue-700 mb-1">{{ __('common.current_savings') }}</div>
