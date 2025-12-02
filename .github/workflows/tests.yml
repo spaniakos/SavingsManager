@@ -200,9 +200,6 @@ jobs:
       - name: Clear configuration cache
         run: php artisan config:clear
 
-      - name: Verify MySQL connection
-        run: php -r "try { new PDO('mysql:host=127.0.0.1;port=3306;dbname=testing', 'testuser', 'password'); echo 'MySQL is ready'; } catch (Exception \$e) { echo 'MySQL not ready: ' . \$e->getMessage(); exit(1); }"
-
       - name: Run database migrations
         run: php artisan migrate:fresh --force
         env:

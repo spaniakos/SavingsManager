@@ -1,6 +1,8 @@
 # Savings Manager
 
-[![Tests](https://github.com/spaniakos/SavingsManager/actions/workflows/test.yml/badge.svg)](https://github.com/USERNAME/REPO/actions)
+[![Tests](https://github.com/spaniakos/SavingsManager/actions/workflows/tests.yml/badge.svg)](https://github.com/spaniakos/SavingsManager/actions)
+[![Tests](https://github.com/spaniakos/SavingsManager/actions/workflows/ci.yml/badge.svg)](https://github.com/spaniakos/SavingsManager/actions)
+[![Tests](https://github.com/spaniakos/SavingsManager/actions/workflows/lint.yml/badge.svg)](https://github.com/spaniakos/SavingsManager/actions)
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?logo=laravel&logoColor=white)
 ![PHP Version](https://img.shields.io/badge/PHP-8.4-blue)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
