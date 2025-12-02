@@ -224,10 +224,10 @@
                 <li>Recurring expense management with auto-generation</li>
                 <li>Save-for-later functionality for future expenses</li>
                 <li>Comprehensive financial reports (Monthly, Category, Savings)</li>
-                <li>Data export in CSV and JSON formats</li>
                 <li>Bilingual support (English / Ελληνικά)</li>
                 <li>Positive reinforcement and milestone notifications</li>
                 <li>Net worth calculation and seed capital tracking</li>
+                <li>Expenses can be per person</li>
             </ul>
         </div>
         

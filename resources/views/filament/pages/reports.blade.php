@@ -113,6 +113,13 @@
                                                                     </td>
                                                                     <td class="px-2 py-1 text-right font-semibold text-gray-900 dark:text-white">
                                                                         €{{ number_format($item['amount'], 2) }}
+                                                                        @if($item['person'] ?? null)
+                                                                            <div class="flex justify-end mt-1">
+                                                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                                                                                    👥 {{ $item['person'] }}
+                                                                                </span>
+                                                                            </div>
+                                                                        @endif
                                                                     </td>
                                                                     <td class="px-2 py-1 text-gray-600 dark:text-gray-400">{{ $item['notes'] ?? '-' }}</td>
                                                                 </tr>
@@ -204,9 +211,23 @@
                                                                             </td>
                                                                             <td class="px-2 py-1 text-right font-semibold text-gray-900 dark:text-white">
                                                                                 €{{ number_format($item['amount'], 2) }}
-                                                                                @if($item['is_save_for_later'])
-                                                                                    <span class="ml-1 text-xs text-purple-600 dark:text-purple-400">({{ __('common.save_for_later') }})</span>
-                                                                                @endif
+                                                                                <div class="flex flex-wrap gap-1 justify-end mt-1">
+                                                                                    @if($item['is_save_for_later'] ?? false)
+                                                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+                                                                                            💰 {{ __('common.save_for_later') }}
+                                                                                        </span>
+                                                                                    @endif
+                                                                                    @if($item['is_personal'] ?? false)
+                                                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                                                                                            👤 {{ __('common.personal') }}
+                                                                                        </span>
+                                                                                    @endif
+                                                                                    @if($item['person'] ?? null)
+                                                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                                                                                            👥 {{ $item['person'] }}
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
                                                                             </td>
                                                                             <td class="px-2 py-1 text-gray-600 dark:text-gray-400">{{ $item['notes'] ?? '-' }}</td>
                                                                         </tr>
@@ -254,6 +275,46 @@
                                     </div>
                                 </div>
                             @endforeach
+                        </div>
+                    </x-filament::section>
+                @endif
+
+                <!-- Personal Expense Totals -->
+                @if(!empty($this->reportData['personal_expense_totals']))
+                    <x-filament::section>
+                        <x-slot name="heading">
+                            {{ __('common.personal_expense_summary') }}
+                        </x-slot>
+
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border-2 border-gray-200 dark:border-gray-700">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-lg text-gray-900 dark:text-white">
+                                        {{ __('common.total_spend') }}
+                                    </span>
+                                    <span class="text-2xl font-bold text-gray-900 dark:text-white">
+                                        €{{ number_format($this->reportData['personal_expense_totals']['total_spend'] ?? 0, 2) }}
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    {{ __('common.total_spend_description') }}
+                                </p>
+                            </div>
+
+                            @if(!empty($this->reportData['personal_expense_totals']['personal_by_person']))
+                                @foreach($this->reportData['personal_expense_totals']['personal_by_person'] as $personName => $total)
+                                    <div class="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-800/20 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-semibold text-lg text-blue-900 dark:text-blue-100">
+                                                {{ __('common.total_spend_personal', ['person' => $personName]) }}
+                                            </span>
+                                            <span class="text-2xl font-bold text-blue-900 dark:text-blue-100">
+                                                €{{ number_format($total, 2) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </x-filament::section>
                 @endif

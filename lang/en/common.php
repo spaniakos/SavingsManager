@@ -331,4 +331,9 @@ return [
     'personal_expense' => 'Personal Expense',
     'personal_expense_help' => 'Mark this expense as personal for reporting purposes',
     'personal' => 'Personal',
+    'breakdown_by_person' => 'Breakdown by Person',
+    'personal_expense_summary' => 'Personal Expense Summary',
+    'total_spend' => 'Total Spend',
+    'total_spend_description' => 'Expenses that are not marked as personal',
+    'total_spend_personal' => 'Total Spend :person Personal',
 ];

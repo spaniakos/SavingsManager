@@ -19,6 +19,7 @@ class MobileReportsController extends Controller
         $startDate = $request->get('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = $request->get('end_date', now()->endOfMonth()->format('Y-m-d'));
         $breakdownType = $request->get('breakdown_type', 'super_category');
+        $personId = $request->get('person_id') ? (int) $request->get('person_id') : null;
 
         // Generate report if dates are provided
         if ($request->has('generate')) {
@@ -26,7 +27,7 @@ class MobileReportsController extends Controller
             $endDate = Carbon::parse($endDate);
 
             $reportService = app(ReportService::class);
-            $reportData = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType);
+            $reportData = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType, $personId);
         }
 
         return view('mobile.reports', [
@@ -43,9 +44,10 @@ class MobileReportsController extends Controller
         $startDate = Carbon::parse($request->get('start_date'));
         $endDate = Carbon::parse($request->get('end_date'));
         $breakdownType = $request->get('breakdown_type', 'super_category');
+        $personId = $request->get('person_id') ? (int) $request->get('person_id') : null;
 
         $reportService = app(ReportService::class);
-        $reportData = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType);
+        $reportData = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType, $personId);
 
         try {
             $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('filament.reports.comprehensive-pdf', [

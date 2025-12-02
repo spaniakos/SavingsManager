@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Person;
 use App\Services\ReportService;
 use BackedEnum;
 use Carbon\Carbon;
@@ -37,6 +38,7 @@ class Reports extends Page implements HasForms
             'start_date' => now()->startOfMonth()->format('Y-m-d'),
             'end_date' => now()->endOfMonth()->format('Y-m-d'),
             'breakdown_type' => 'super_category',
+            'person_id' => null,
         ]);
     }
 
@@ -63,6 +65,28 @@ class Reports extends Page implements HasForms
                     ])
                     ->required()
                     ->default('super_category'),
+                Select::make('person_id')
+                    ->label(__('common.breakdown_by_person'))
+                    ->options(function () {
+                        $userId = Auth::id();
+                        if (! $userId) {
+                            return [];
+                        }
+
+                        $options = ['' => __('common.all_persons')];
+                        $persons = Person::where('user_id', $userId)
+                            ->orderBy('fullname')
+                            ->get();
+
+                        foreach ($persons as $person) {
+                            $options[$person->id] = $person->fullname;
+                        }
+
+                        return $options;
+                    })
+                    ->searchable()
+                    ->nullable()
+                    ->default(null),
             ])
             ->statePath('data');
     }
@@ -117,11 +141,12 @@ class Reports extends Page implements HasForms
         $startDate = Carbon::parse($data['start_date']);
         $endDate = Carbon::parse($data['end_date']);
         $breakdownType = $data['breakdown_type'] ?? 'super_category';
+        $personId = $data['person_id'] ?? null;
 
         $reportService = app(ReportService::class);
 
         // Generate comprehensive report with all breakdowns
-        $report = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType);
+        $report = $reportService->generateComprehensiveReport($user, $startDate, $endDate, $breakdownType, $personId);
 
         if ($report) {
             $this->reportData = $report;
@@ -146,6 +171,7 @@ class Reports extends Page implements HasForms
                 'startDate' => Carbon::parse($data['start_date'])->format('d/m/Y'),
                 'endDate' => Carbon::parse($data['end_date'])->format('d/m/Y'),
                 'breakdownType' => $data['breakdown_type'] ?? 'super_category',
+                'personId' => $data['person_id'] ?? null,
                 'user' => Auth::user(),
             ]);
 

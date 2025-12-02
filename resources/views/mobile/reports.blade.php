@@ -34,6 +34,18 @@
                 </select>
             </div>
             
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('common.breakdown_by_person') }}</label>
+                <select name="person_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <option value="">{{ __('common.all_persons') }}</option>
+                    @foreach(\App\Models\Person::where('user_id', auth()->id())->orderBy('fullname')->get() as $person)
+                        <option value="{{ $person->id }}" {{ request('person_id') == $person->id ? 'selected' : '' }}>
+                            {{ $person->fullname }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            
             <input type="hidden" name="generate" value="1">
             <button type="submit" class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold">
                 {{ __('common.generate_report') }}
@@ -93,11 +105,12 @@
                 <input type="hidden" name="start_date" value="{{ $startDate }}">
                 <input type="hidden" name="end_date" value="{{ $endDate }}">
                 <input type="hidden" name="breakdown_type" value="{{ $breakdownType }}">
+                <input type="hidden" name="person_id" value="{{ request('person_id') }}">
                 <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold">
                     📄 {{ __('common.export_pdf') }}
                 </button>
             </form>
-            <a href="{{ route('mobile.reports.index', ['start_date' => $startDate, 'end_date' => $endDate, 'breakdown_type' => $breakdownType, 'generate' => 1]) }}" 
+            <a href="{{ route('mobile.reports.index', ['start_date' => $startDate, 'end_date' => $endDate, 'breakdown_type' => $breakdownType, 'person_id' => request('person_id'), 'generate' => 1]) }}" 
                class="block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-center">
                 🔄 {{ __('common.refresh') }}
             </a>
@@ -143,8 +156,15 @@
                                                     <div class="flex-1">
                                                         <span class="text-gray-400">└─</span>
                                                         <span class="font-medium text-gray-800">{{ $item['date'] }}</span>
+                                                        @if($item['person'] ?? null)
+                                                            <div class="mt-1">
+                                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-600">
+                                                                    👥 {{ $item['person'] }}
+                                                                </span>
+                                                            </div>
+                                                        @endif
                                                         @if($item['notes'])
-                                                            <span class="text-gray-500 ml-1">- {{ $item['notes'] }}</span>
+                                                            <span class="text-gray-500 ml-1 text-xs block mt-1">- {{ $item['notes'] }}</span>
                                                         @endif
                                                     </div>
                                                     <span class="font-semibold ml-2 text-gray-800">€{{ number_format($item['amount'], 2) }}</span>
@@ -222,11 +242,25 @@
                                                                 <div class="flex-1">
                                                                     <span class="text-gray-400">└─</span>
                                                                     <span class="font-medium text-gray-800">{{ $item['date'] }}</span>
-                                                                    @if($item['is_save_for_later'])
-                                                                        <span class="ml-1 text-xs text-purple-600">({{ __('common.save_for_later') }})</span>
-                                                                    @endif
+                                                                    <div class="flex flex-wrap gap-1 mt-1">
+                                                                        @if($item['is_save_for_later'] ?? false)
+                                                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-purple-100 text-purple-600">
+                                                                                💰 {{ __('common.save_for_later') }}
+                                                                            </span>
+                                                                        @endif
+                                                                        @if($item['is_personal'] ?? false)
+                                                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-600">
+                                                                                👤 {{ __('common.personal') }}
+                                                                            </span>
+                                                                        @endif
+                                                                        @if($item['person'] ?? null)
+                                                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-600">
+                                                                                👥 {{ $item['person'] }}
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
                                                                     @if($item['notes'])
-                                                                        <span class="text-gray-500 ml-1">- {{ $item['notes'] }}</span>
+                                                                        <span class="text-gray-500 ml-1 text-xs block mt-1">- {{ $item['notes'] }}</span>
                                                                     @endif
                                                                 </div>
                                                                 <span class="font-semibold ml-2 text-gray-800">€{{ number_format($item['amount'], 2) }}</span>
@@ -271,6 +305,44 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+            </div>
+        @endif
+
+        <!-- Personal Expense Totals -->
+        @if(!empty($reportData['personal_expense_totals']))
+            <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
+                <h2 class="text-lg font-semibold mb-4 text-gray-800">{{ __('common.personal_expense_summary') }}</h2>
+                
+                <div class="space-y-3">
+                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-lg border-2 border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-base text-gray-800">
+                                {{ __('common.total_spend') }}
+                            </span>
+                            <span class="text-xl font-bold text-gray-800">
+                                €{{ number_format($reportData['personal_expense_totals']['total_spend'] ?? 0, 2) }}
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">
+                            {{ __('common.total_spend_description') }}
+                        </p>
+                    </div>
+
+                    @if(!empty($reportData['personal_expense_totals']['personal_by_person']))
+                        @foreach($reportData['personal_expense_totals']['personal_by_person'] as $personName => $total)
+                            <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-lg border-2 border-blue-200">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-base text-blue-800">
+                                        {{ __('common.total_spend_personal', ['person' => $personName]) }}
+                                    </span>
+                                    <span class="text-xl font-bold text-blue-800">
+                                        €{{ number_format($total, 2) }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         @endif

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\ExpenseEntry;
 use App\Models\IncomeEntry;
+use App\Models\Person;
 use App\Models\SavingsGoal;
 use App\Models\User;
 use Carbon\Carbon;
@@ -213,29 +214,42 @@ class ReportService
     /**
      * Generate comprehensive report with all breakdowns
      */
-    public function generateComprehensiveReport(User $user, Carbon $startDate, Carbon $endDate, string $breakdownType = 'super_category'): array
+    public function generateComprehensiveReport(User $user, Carbon $startDate, Carbon $endDate, string $breakdownType = 'super_category', ?int $personId = null): array
     {
         // Income and Expenses Summary
-        $totalIncome = IncomeEntry::where('user_id', $user->id)
-            ->whereBetween('date', [$startDate, $endDate])
-            ->sum('amount');
+        $incomeQuery = IncomeEntry::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDate]);
+        
+        // Filter income by person if specified
+        if ($personId !== null) {
+            $incomeQuery->where('person_id', $personId);
+        }
+        $totalIncome = $incomeQuery->sum('amount');
 
-        $totalExpenses = ExpenseEntry::where('user_id', $user->id)
-            ->whereBetween('date', [$startDate, $endDate])
-            ->sum('amount');
+        $expenseQuery = ExpenseEntry::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDate]);
+        
+        // Filter expenses by person if specified
+        if ($personId !== null) {
+            $expenseQuery->where('person_id', $personId);
+        }
+        $totalExpenses = $expenseQuery->sum('amount');
 
         $netSavings = $totalIncome - $totalExpenses;
         $savingsRate = $totalIncome > 0 ? ($netSavings / $totalIncome) * 100 : 0;
         $totalSaved = $this->calculateTotalSaved($user);
 
         // Income breakdowns - hierarchical structure
-        $incomeHierarchical = $this->getIncomeHierarchical($user, $startDate, $endDate, $breakdownType);
+        $incomeHierarchical = $this->getIncomeHierarchical($user, $startDate, $endDate, $breakdownType, $personId);
 
         // Expense breakdowns - hierarchical structure
-        $expensesHierarchical = $this->getExpensesHierarchical($user, $startDate, $endDate, $breakdownType);
+        $expensesHierarchical = $this->getExpensesHierarchical($user, $startDate, $endDate, $breakdownType, $personId);
 
         // Goal progression
         $goalsProgress = $this->getSavingsGoalsProgressForReport($user);
+
+        // Calculate personal expense totals by person
+        $personalExpenseTotals = $this->calculatePersonalExpenseTotals($user, $startDate, $endDate);
 
         return [
             'period' => [
@@ -259,17 +273,25 @@ class ReportService
             ],
             'goals_progress' => $goalsProgress,
             'breakdown_type' => $breakdownType,
+            'person_id' => $personId,
+            'personal_expense_totals' => $personalExpenseTotals,
         ];
     }
 
     /**
      * Get expenses in hierarchical structure (Super Category -> Category -> Items)
      */
-    protected function getExpensesHierarchical(User $user, Carbon $startDate, Carbon $endDate, string $breakdownType): array
+    protected function getExpensesHierarchical(User $user, Carbon $startDate, Carbon $endDate, string $breakdownType, ?int $personId = null): array
     {
-        $entries = ExpenseEntry::where('user_id', $user->id)
-            ->whereBetween('date', [$startDate, $endDate])
-            ->with(['expenseCategory.expenseSuperCategory'])
+        $query = ExpenseEntry::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDate]);
+        
+        // Filter by person if specified (null person_id entries are included if personId is null)
+        if ($personId !== null) {
+            $query->where('person_id', $personId);
+        }
+        
+        $entries = $query->with(['expenseCategory.expenseSuperCategory', 'person'])
             ->orderBy('date', 'desc')
             ->get();
 
@@ -314,6 +336,8 @@ class ReportService
                                 'amount' => round($entry->amount, 2),
                                 'notes' => $entry->notes,
                                 'is_save_for_later' => $entry->is_save_for_later,
+                                'is_personal' => $entry->is_personal,
+                                'person' => $entry->person ? $entry->person->fullname : null,
                             ];
                         })->sortByDesc(function ($item) {
                             return $item['date'];
@@ -352,11 +376,17 @@ class ReportService
     /**
      * Get income in hierarchical structure (Category -> Items)
      */
-    protected function getIncomeHierarchical(User $user, Carbon $startDate, Carbon $endDate, string $breakdownType): array
+    protected function getIncomeHierarchical(User $user, Carbon $startDate, Carbon $endDate, string $breakdownType, ?int $personId = null): array
     {
-        $entries = IncomeEntry::where('user_id', $user->id)
-            ->whereBetween('date', [$startDate, $endDate])
-            ->with('incomeCategory')
+        $query = IncomeEntry::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDate]);
+        
+        // Filter by person if specified (null person_id entries are included if personId is null)
+        if ($personId !== null) {
+            $query->where('person_id', $personId);
+        }
+        
+        $entries = $query->with(['incomeCategory', 'person'])
             ->orderBy('date', 'desc')
             ->get();
 
@@ -386,6 +416,7 @@ class ReportService
                         'date' => $entry->date->format('d/m/Y'),
                         'amount' => round($entry->amount, 2),
                         'notes' => $entry->notes,
+                        'person' => $entry->person ? $entry->person->fullname : null,
                     ];
                 })->sortByDesc(function ($item) {
                     return $item['date'];
@@ -524,6 +555,56 @@ class ReportService
                 ];
             })
             ->toArray();
+    }
+
+    /**
+     * Calculate personal expense totals by person
+     * Returns:
+     * - total_spend: Expenses where is_personal = false
+     * - personal_by_person: Array of [person_name => total] for expenses where is_personal = true
+     */
+    protected function calculatePersonalExpenseTotals(User $user, Carbon $startDate, Carbon $endDate): array
+    {
+        // Total Spend: expenses where is_personal = false
+        $totalSpend = ExpenseEntry::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDate])
+            ->where('is_personal', false)
+            ->sum('amount');
+
+        // Get all persons for this user
+        $persons = Person::where('user_id', $user->id)
+            ->orderBy('fullname')
+            ->get();
+
+        // Calculate personal expenses by person
+        $personalByPerson = [];
+        foreach ($persons as $person) {
+            $personalTotal = ExpenseEntry::where('user_id', $user->id)
+                ->whereBetween('date', [$startDate, $endDate])
+                ->where('person_id', $person->id)
+                ->where('is_personal', true)
+                ->sum('amount');
+
+            if ($personalTotal > 0) {
+                $personalByPerson[$person->fullname] = round($personalTotal, 2);
+            }
+        }
+
+        // Also include entries with no person (person_id is null) that are personal
+        $noPersonPersonal = ExpenseEntry::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDate])
+            ->whereNull('person_id')
+            ->where('is_personal', true)
+            ->sum('amount');
+
+        if ($noPersonPersonal > 0) {
+            $personalByPerson[__('common.no_person')] = round($noPersonPersonal, 2);
+        }
+
+        return [
+            'total_spend' => round($totalSpend, 2),
+            'personal_by_person' => $personalByPerson,
+        ];
     }
 
     /**

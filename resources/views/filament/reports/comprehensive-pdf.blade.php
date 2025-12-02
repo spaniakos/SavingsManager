@@ -169,6 +169,16 @@
                                     <td style="border: 1px solid #ddd; padding: 4px; font-size: 10px;">{{ $item['date'] }}</td>
                                     <td style="border: 1px solid #ddd; padding: 4px; text-align: right; font-size: 10px; font-weight: bold;">
                                         €{{ number_format($item['amount'], 2) }}
+                                        @if($item['person'] ?? null)
+                                            <div style="margin-top: 2px; font-size: 9px; font-weight: normal; text-align: right;">
+                                                <span style="display: inline-block; padding: 1px 4px; background-color: #d1fae5; color: #065f46; border-radius: 3px;">
+                                                    @php
+                                                        $emojiImg = \App\Helpers\EmojiHelper::emojiToImageTag('👥', 10);
+                                                    @endphp
+                                                    {!! $emojiImg !!} {{ $item['person'] }}
+                                                </span>
+                                            </div>
+                                        @endif
                                     </td>
                                     <td style="border: 1px solid #ddd; padding: 4px; font-size: 10px; color: #666;">{{ $item['notes'] ?? '-' }}</td>
                                 </tr>
@@ -258,9 +268,32 @@
                                                     <td style="border: 1px solid #ddd; padding: 4px; font-size: 10px;">{{ $item['date'] }}</td>
                                                     <td style="border: 1px solid #ddd; padding: 4px; text-align: right; font-size: 10px; font-weight: bold;">
                                                         €{{ number_format($item['amount'], 2) }}
-                                                        @if($item['is_save_for_later'])
-                                                            ({{ __('common.save_for_later') }})
-                                                        @endif
+                                                        <div style="margin-top: 2px; font-size: 9px; font-weight: normal;">
+                                                            @if($item['is_save_for_later'] ?? false)
+                                                                <span style="display: inline-block; padding: 1px 4px; background-color: #e9d5ff; color: #6b21a8; border-radius: 3px; margin-right: 2px;">
+                                                                    @php
+                                                                        $emojiImg = \App\Helpers\EmojiHelper::emojiToImageTag('💰', 10);
+                                                                    @endphp
+                                                                    {!! $emojiImg !!} {{ __('common.save_for_later') }}
+                                                                </span>
+                                                            @endif
+                                                            @if($item['is_personal'] ?? false)
+                                                                <span style="display: inline-block; padding: 1px 4px; background-color: #dbeafe; color: #1e40af; border-radius: 3px; margin-right: 2px;">
+                                                                    @php
+                                                                        $emojiImg = \App\Helpers\EmojiHelper::emojiToImageTag('👤', 10);
+                                                                    @endphp
+                                                                    {!! $emojiImg !!} {{ __('common.personal') }}
+                                                                </span>
+                                                            @endif
+                                                            @if($item['person'] ?? null)
+                                                                <span style="display: inline-block; padding: 1px 4px; background-color: #d1fae5; color: #065f46; border-radius: 3px; margin-right: 2px;">
+                                                                    @php
+                                                                        $emojiImg = \App\Helpers\EmojiHelper::emojiToImageTag('👥', 10);
+                                                                    @endphp
+                                                                    {!! $emojiImg !!} {{ $item['person'] }}
+                                                                </span>
+                                                            @endif
+                                                        </div>
                                                     </td>
                                                     <td style="border: 1px solid #ddd; padding: 4px; font-size: 10px; color: #666;">{{ $item['notes'] ?? '-' }}</td>
                                                 </tr>
@@ -291,6 +324,46 @@
                 </div>
             </div>
         @endforeach
+    @endif
+
+    <!-- Personal Expense Totals -->
+    @if(!empty($reportData['personal_expense_totals']))
+        <h2>{{ __('common.personal_expense_summary') }}</h2>
+        
+        <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9;">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="border: none; font-weight: bold; font-size: 12px;">
+                        {{ __('common.total_spend') }}
+                    </td>
+                    <td style="border: none; text-align: right; font-weight: bold; font-size: 14px;">
+                        €{{ number_format($reportData['personal_expense_totals']['total_spend'] ?? 0, 2) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: none; font-size: 10px; color: #666;" colspan="2">
+                        {{ __('common.total_spend_description') }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        @if(!empty($reportData['personal_expense_totals']['personal_by_person']))
+            @foreach($reportData['personal_expense_totals']['personal_by_person'] as $personName => $total)
+                <div style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; background-color: #e6f3ff;">
+                    <table style="width: 100%; border: none;">
+                        <tr>
+                            <td style="border: none; font-weight: bold; font-size: 12px;">
+                                {{ __('common.total_spend_personal', ['person' => $personName]) }}
+                            </td>
+                            <td style="border: none; text-align: right; font-weight: bold; font-size: 14px;">
+                                €{{ number_format($total, 2) }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            @endforeach
+        @endif
     @endif
 
     <p style="margin-top: 30px; font-size: 10px; color: #666;">

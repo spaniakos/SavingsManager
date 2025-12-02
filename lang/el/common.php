@@ -331,4 +331,9 @@ return [
     'personal_expense' => 'Προσωπικό Έξοδο',
     'personal_expense_help' => 'Σημειώστε αυτό το έξοδο ως προσωπικό για σκοπούς αναφοράς',
     'personal' => 'Προσωπικό',
+    'breakdown_by_person' => 'Ανάλυση ανά Πρόσωπο',
+    'personal_expense_summary' => 'Σύνοψη Προσωπικών Εξόδων',
+    'total_spend' => 'Συνολικά Έξοδα',
+    'total_spend_description' => 'Έξοδα που δεν σημειώνονται ως προσωπικά',
+    'total_spend_personal' => 'Συνολικά Έξοδα :person Προσωπικά',
 ];
