@@ -41,7 +41,7 @@
                     <span class="text-gray-500">→</span>
                 </div>
             </a>
-            <a href="{{ route('mobile.persons.create') }}" class="block p-3 bg-amber-50 rounded-lg border border-amber-200 hover:bg-amber-100 transition">
+            <a href="{{ route('mobile.persons.create') }}" class="block p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition">
                 <div class="flex items-center">
                     <span class="text-2xl mr-3">➕</span>
                     <span class="font-medium">{{ __('common.create_person') }}</span>

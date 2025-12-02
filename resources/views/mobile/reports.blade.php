@@ -314,31 +314,36 @@
             <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
                 <h2 class="text-lg font-semibold mb-4 text-gray-800">{{ __('common.personal_expense_summary') }}</h2>
                 
-                <div class="space-y-3">
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-lg border-2 border-gray-200">
-                        <div class="flex justify-between items-center">
-                            <span class="font-semibold text-base text-gray-800">
-                                {{ __('common.total_spend') }}
-                            </span>
-                            <span class="text-xl font-bold text-gray-800">
-                                €{{ number_format($reportData['personal_expense_totals']['total_spend'] ?? 0, 2) }}
-                            </span>
+                <div class="space-y-4">
+                    <!-- Total Spend Card -->
+                    <div class="border-2 border-gray-200 rounded-lg overflow-hidden">
+                        <div class="bg-gray-100 p-3 border-b-2 border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-base text-gray-800">{{ __('common.total_spend') }}</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-base text-gray-800">€{{ number_format($reportData['personal_expense_totals']['total_spend'] ?? 0, 2) }}</div>
+                                    <div class="text-xs text-gray-600">
+                                        {{ __('common.total_spend_description') }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-xs text-gray-600 mt-1">
-                            {{ __('common.total_spend_description') }}
-                        </p>
                     </div>
 
                     @if(!empty($reportData['personal_expense_totals']['personal_by_person']))
                         @foreach($reportData['personal_expense_totals']['personal_by_person'] as $personName => $total)
-                            <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-lg border-2 border-blue-200">
-                                <div class="flex justify-between items-center">
-                                    <span class="font-semibold text-base text-blue-800">
-                                        {{ __('common.total_spend_personal', ['person' => $personName]) }}
-                                    </span>
-                                    <span class="text-xl font-bold text-blue-800">
-                                        €{{ number_format($total, 2) }}
-                                    </span>
+                            <div class="border-2 border-gray-200 rounded-lg overflow-hidden">
+                                <div class="bg-gray-100 p-3 border-b-2 border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold text-base text-gray-800">{{ __('common.total_spend_personal', ['person' => $personName]) }}</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-bold text-base text-gray-800">€{{ number_format($total, 2) }}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -349,37 +354,42 @@
 
         <!-- Non-Personal Expenses Breakdown by Person (Household Contribution) -->
         @if(!empty($reportData['non_personal_expenses_by_person']) && $reportData['non_personal_expenses_by_person']['total'] > 0)
-            <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-xl border-2 border-amber-300 sticky bottom-0 z-10 shadow-lg">
-                <h2 class="text-lg font-semibold mb-3 text-gray-800">{{ __('common.non_personal_expenses_breakdown') }}</h2>
-                <p class="text-xs text-gray-600 mb-3">{{ __('common.household_contribution_note') }}</p>
+            <div class="bg-white p-4 rounded-xl border-2 border-gray-200 sticky bottom-0 z-10 shadow-lg">
+                <h2 class="text-lg font-semibold mb-4 text-gray-800">{{ __('common.non_personal_expenses_breakdown') }}</h2>
+                <p class="text-xs text-gray-600 mb-4">{{ __('common.household_contribution_note') }}</p>
                 
-                <div class="bg-white p-3 rounded-lg border border-amber-200 mb-3">
-                    <div class="flex justify-between items-center">
-                        <span class="font-semibold text-base text-gray-800">
-                            {{ __('common.total') }}:
-                        </span>
-                        <span class="text-xl font-bold text-amber-800">
-                            €{{ number_format($reportData['non_personal_expenses_by_person']['total'], 2) }}
-                        </span>
+                <div class="space-y-4">
+                    <!-- Total Card -->
+                    <div class="border-2 border-gray-200 rounded-lg overflow-hidden">
+                        <div class="bg-gray-100 p-3 border-b-2 border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-base text-gray-800">{{ __('common.total') }}</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-base text-gray-800">€{{ number_format($reportData['non_personal_expenses_by_person']['total'], 2) }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                @if(!empty($reportData['non_personal_expenses_by_person']['by_person']))
-                    <div class="space-y-2">
+                    @if(!empty($reportData['non_personal_expenses_by_person']['by_person']))
                         @foreach($reportData['non_personal_expenses_by_person']['by_person'] as $personName => $amount)
-                            <div class="bg-white p-3 rounded-lg border border-amber-200">
-                                <div class="flex justify-between items-center">
-                                    <span class="font-medium text-sm text-gray-700">
-                                        {{ $personName }} {{ __('common.spent') }} ({{ __('common.non_personal') }})
-                                    </span>
-                                    <span class="text-lg font-bold text-amber-800">
-                                        €{{ number_format($amount, 2) }}
-                                    </span>
+                            <div class="border-2 border-gray-200 rounded-lg overflow-hidden">
+                                <div class="bg-gray-100 p-3 border-b-2 border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold text-base text-gray-800">{{ $personName }} {{ __('common.spent') }} ({{ __('common.non_personal') }})</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-bold text-base text-gray-800">€{{ number_format($amount, 2) }}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
-                    </div>
-                @endif
+                    @endif
+                </div>
             </div>
         @endif
     @endif
