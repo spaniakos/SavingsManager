@@ -136,6 +136,137 @@
             border-color: #4b5563;
         }
         
+        /* Button dark mode support */
+        body.dark .bg-amber-500,
+        body.dark .bg-amber-600 {
+            background: #d97706;
+        }
+        body.dark .bg-amber-50 {
+            background: #78350f;
+        }
+        body.dark .border-amber-200 {
+            border-color: #92400e;
+        }
+        body.dark a.bg-amber-50:hover,
+        body.dark button.bg-amber-50:hover {
+            background: #92400e;
+        }
+        body.dark .bg-red-600 {
+            background: #dc2626;
+        }
+        body.dark .bg-blue-600 {
+            background: #2563eb;
+        }
+        body.dark .bg-blue-100 {
+            background: #1e3a8a;
+        }
+        body.dark .text-blue-700 {
+            color: #93c5fd;
+        }
+        body.dark a.bg-gray-50,
+        body.dark div.bg-gray-50 {
+            background: #374151;
+        }
+        body.dark a.bg-gray-50:hover,
+        body.dark button.bg-gray-50:hover,
+        body.dark div.bg-gray-50:hover {
+            background: #4b5563;
+        }
+        body.dark .bg-red-50 {
+            background: #7f1d1d;
+        }
+        body.dark .text-red-700 {
+            color: #fca5a5;
+        }
+        body.dark .border-red-200 {
+            border-color: #991b1b;
+        }
+        body.dark a.bg-red-50:hover,
+        body.dark button.bg-red-50:hover {
+            background: #991b1b;
+        }
+        
+        /* Gradient backgrounds for dark mode - override Tailwind gradients */
+        body.dark [class*="from-gray-50"][class*="to-gray-100"] {
+            background: linear-gradient(to bottom right, #374151, #4b5563) !important;
+        }
+        body.dark [class*="from-blue-50"][class*="to-cyan-50"] {
+            background: linear-gradient(to bottom right, #1e3a8a, #164e63) !important;
+        }
+        body.dark [class*="from-amber-50"][class*="to-orange-50"] {
+            background: linear-gradient(to bottom right, #78350f, #7c2d12) !important;
+        }
+        body.dark [class*="from-green-50"][class*="to-green-100"] {
+            background: linear-gradient(to bottom right, #14532d, #166534) !important;
+        }
+        body.dark [class*="from-red-50"][class*="to-red-100"] {
+            background: linear-gradient(to bottom right, #7f1d1d, #991b1b) !important;
+        }
+        body.dark [class*="from-blue-50"][class*="to-blue-100"] {
+            background: linear-gradient(to bottom right, #1e3a8a, #1e40af) !important;
+        }
+        body.dark [class*="from-purple-50"][class*="to-purple-100"] {
+            background: linear-gradient(to bottom right, #581c87, #6b21a8) !important;
+        }
+        body.dark [class*="from-amber-50"][class*="to-amber-100"] {
+            background: linear-gradient(to bottom right, #78350f, #92400e) !important;
+        }
+        
+        /* Text colors for dark mode in report sections */
+        body.dark .text-blue-800 {
+            color: #93c5fd;
+        }
+        body.dark .text-amber-800 {
+            color: #fbbf24;
+        }
+        body.dark .text-amber-900 {
+            color: #fcd34d;
+        }
+        body.dark .text-green-900 {
+            color: #86efac;
+        }
+        body.dark .text-red-900 {
+            color: #fca5a5;
+        }
+        body.dark .text-purple-900 {
+            color: #c4b5fd;
+        }
+        body.dark .text-green-700 {
+            color: #6ee7b7;
+        }
+        body.dark .text-red-700 {
+            color: #fca5a5;
+        }
+        body.dark .text-blue-700 {
+            color: #93c5fd;
+        }
+        body.dark .text-purple-700 {
+            color: #c4b5fd;
+        }
+        body.dark .text-amber-700 {
+            color: #fbbf24;
+        }
+        
+        /* Border colors for dark mode */
+        body.dark .border-blue-200 {
+            border-color: #1e40af;
+        }
+        body.dark .border-amber-200 {
+            border-color: #92400e;
+        }
+        body.dark .border-amber-300 {
+            border-color: #b45309;
+        }
+        body.dark .border-green-200 {
+            border-color: #166534;
+        }
+        body.dark .border-red-200 {
+            border-color: #991b1b;
+        }
+        body.dark .border-purple-200 {
+            border-color: #7c3aed;
+        }
+        
         /* Chart containers - responsive height */
         .chart-container {
             position: relative;

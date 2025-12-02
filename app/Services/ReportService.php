@@ -219,7 +219,7 @@ class ReportService
         // Income and Expenses Summary
         $incomeQuery = IncomeEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate]);
-        
+
         // Filter income by person if specified
         if ($personId !== null) {
             $incomeQuery->where('person_id', $personId);
@@ -228,7 +228,7 @@ class ReportService
 
         $expenseQuery = ExpenseEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate]);
-        
+
         // Filter expenses by person if specified
         if ($personId !== null) {
             $expenseQuery->where('person_id', $personId);
@@ -289,12 +289,12 @@ class ReportService
     {
         $query = ExpenseEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate]);
-        
+
         // Filter by person if specified (null person_id entries are included if personId is null)
         if ($personId !== null) {
             $query->where('person_id', $personId);
         }
-        
+
         $entries = $query->with(['expenseCategory.expenseSuperCategory', 'person'])
             ->orderBy('date', 'desc')
             ->get();
@@ -384,12 +384,12 @@ class ReportService
     {
         $query = IncomeEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate]);
-        
+
         // Filter by person if specified (null person_id entries are included if personId is null)
         if ($personId !== null) {
             $query->where('person_id', $personId);
         }
-        
+
         $entries = $query->with(['incomeCategory', 'person'])
             ->orderBy('date', 'desc')
             ->get();
