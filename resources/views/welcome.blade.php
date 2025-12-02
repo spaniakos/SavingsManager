@@ -219,15 +219,13 @@
             <ul class="feature-list">
                 <li>Track income and expenses with detailed categorization</li>
                 <li>Set and monitor savings goals with progress tracking</li>
-                <li>Joint savings goals with member collaboration</li>
                 <li>50/30/20 budget allocation system (Essentials/Lifestyle/Savings)</li>
-                <li>Recurring expense management with auto-generation</li>
                 <li>Save-for-later functionality for future expenses</li>
                 <li>Comprehensive financial reports (Monthly, Category, Savings)</li>
                 <li>Bilingual support (English / Ελληνικά)</li>
                 <li>Positive reinforcement and milestone notifications</li>
                 <li>Net worth calculation and seed capital tracking</li>
-                <li>Expenses can be per person</li>
+                <li>Expenses can be per person but all use the same account</li>
             </ul>
         </div>
         
