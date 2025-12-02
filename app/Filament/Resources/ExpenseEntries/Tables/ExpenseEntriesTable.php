@@ -37,6 +37,11 @@ class ExpenseEntriesTable
                     ->label(__('common.date'))
                     ->date('d/m/Y')
                     ->sortable(),
+                TextColumn::make('person.fullname')
+                    ->label(__('common.person'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('notes')
                     ->label(__('common.notes'))
                     ->limit(30)
@@ -51,6 +56,10 @@ class ExpenseEntriesTable
                 SelectFilter::make('expense_category_id')
                     ->label(__('common.category'))
                     ->relationship('expenseCategory', 'name')
+                    ->searchable(),
+                SelectFilter::make('person_id')
+                    ->label(__('common.person'))
+                    ->relationship('person', 'fullname')
                     ->searchable(),
             ])
             ->defaultSort('date', 'desc')

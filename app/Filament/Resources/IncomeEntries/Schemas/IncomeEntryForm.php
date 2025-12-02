@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\IncomeEntries\Schemas;
 
 use App\Models\IncomeCategory;
+use App\Models\Person;
 use App\Models\SavingsGoal;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
@@ -75,6 +76,23 @@ class IncomeEntryForm
                             : __('common.date_current_or_previous_month');
                     })
                     ->disabled(fn ($record) => $record && $record->date && Carbon::parse($record->date)->startOfMonth()->lt(Carbon::now()->subMonth()->startOfMonth())),
+                Select::make('person_id')
+                    ->label(__('common.person'))
+                    ->options(function () {
+                        $userId = Auth::id();
+                        if (! $userId) {
+                            return [];
+                        }
+
+                        return Person::where('user_id', $userId)
+                            ->orderBy('fullname')
+                            ->get()
+                            ->mapWithKeys(function ($person) {
+                                return [$person->id => $person->fullname];
+                            });
+                    })
+                    ->searchable()
+                    ->nullable(),
                 Textarea::make('notes')
                     ->label(__('common.notes'))
                     ->rows(3)

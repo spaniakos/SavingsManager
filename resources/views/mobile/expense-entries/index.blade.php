@@ -36,6 +36,16 @@
                 @endforeach
             </select>
             
+            <!-- Person Filter -->
+            <select name="person_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-3" onchange="document.getElementById('filterForm').submit()">
+                <option value="">{{ __('common.all_persons') }}</option>
+                @foreach($persons as $person)
+                    <option value="{{ $person->id }}" {{ request('person_id') == $person->id ? 'selected' : '' }}>
+                        {{ $person->fullname }}
+                    </option>
+                @endforeach
+            </select>
+            
             <!-- Date Range -->
             <div class="grid grid-cols-2 gap-2 mb-3">
                 <input type="date" name="date_from" value="{{ request('date_from') }}" placeholder="{{ __('common.from') }}" class="px-4 py-2 border border-gray-300 rounded-lg">
@@ -57,15 +67,25 @@
                             {{ $entry->expenseCategory->expenseSuperCategory->getTranslatedName() }} → 
                             {{ $entry->expenseCategory->getTranslatedName() }}
                         </div>
+                        @if($entry->person)
+                            <div class="text-xs text-blue-600 mt-1">👤 {{ $entry->person->fullname }}</div>
+                        @endif
                         <div class="text-xs text-gray-500">{{ $entry->date->format('d/m/Y') }}</div>
                         @if($entry->notes)
                             <div class="text-sm text-gray-600 mt-1">{{ $entry->notes }}</div>
                         @endif
-                        @if($entry->is_save_for_later)
-                            <span class="inline-flex items-center mt-1 px-3 py-1 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 text-xs font-semibold rounded-full border border-purple-300">
-                                💰 {{ __('common.save_for_later') }}
-                            </span>
-                        @endif
+                        <div class="flex flex-wrap gap-2 mt-1">
+                            @if($entry->is_save_for_later)
+                                <span class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 text-xs font-semibold rounded-full border border-purple-300">
+                                    💰 {{ __('common.save_for_later') }}
+                                </span>
+                            @endif
+                            @if($entry->is_personal)
+                                <span class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 text-xs font-semibold rounded-full border border-blue-300">
+                                    👤 {{ __('common.personal_expense') }}
+                                </span>
+                            @endif
+                        </div>
                     </div>
                     @php
                         $entryMonth = \Carbon\Carbon::parse($entry->date)->startOfMonth();

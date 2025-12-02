@@ -41,6 +41,18 @@
         </div>
         
         <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('common.person') }}</label>
+            <select name="person_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                <option value="">{{ __('common.no_person') }}</option>
+                @foreach($persons as $person)
+                    <option value="{{ $person->id }}" {{ old('person_id') == $person->id ? 'selected' : '' }}>
+                        {{ $person->fullname }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        
+        <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('common.notes') }}</label>
             <textarea name="notes" rows="3"
                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"

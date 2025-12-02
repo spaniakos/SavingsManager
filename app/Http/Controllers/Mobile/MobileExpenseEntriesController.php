@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseEntry;
 use App\Models\ExpenseSuperCategory;
+use App\Models\Person;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class MobileExpenseEntriesController extends Controller
         $user = Auth::user();
 
         $query = ExpenseEntry::where('user_id', $user->id)
-            ->with(['expenseCategory.expenseSuperCategory']);
+            ->with(['expenseCategory.expenseSuperCategory', 'person']);
 
         // Search
         if ($request->has('search') && $request->search) {
@@ -43,6 +44,11 @@ class MobileExpenseEntriesController extends Controller
             });
         }
 
+        // Filter by person
+        if ($request->has('person_id') && $request->person_id) {
+            $query->where('person_id', $request->person_id);
+        }
+
         // Filter by date range
         if ($request->has('date_from') && $request->date_from) {
             $query->where('date', '>=', $request->date_from);
@@ -64,10 +70,14 @@ class MobileExpenseEntriesController extends Controller
             ->orderBy('name')
             ->get();
 
+        $persons = Person::where('user_id', $user->id)
+            ->orderBy('fullname')
+            ->get();
+
         // Check if previous month was calculated
         $previousMonthCalculated = $this->isPreviousMonthCalculated();
 
-        return view('mobile.expense-entries.index', compact('entries', 'categories', 'superCategories', 'previousMonthCalculated'));
+        return view('mobile.expense-entries.index', compact('entries', 'categories', 'superCategories', 'persons', 'previousMonthCalculated'));
     }
 
     public function edit($id)
@@ -87,7 +97,11 @@ class MobileExpenseEntriesController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('mobile.expense-entries.edit', compact('entry', 'categories', 'minDate', 'previousMonthCalculated'));
+        $persons = Person::where('user_id', Auth::id())
+            ->orderBy('fullname')
+            ->get();
+
+        return view('mobile.expense-entries.edit', compact('entry', 'categories', 'persons', 'minDate', 'previousMonthCalculated'));
     }
 
     public function update(Request $request, $id)
@@ -115,6 +129,8 @@ class MobileExpenseEntriesController extends Controller
             'date' => 'required|date|after_or_equal:'.$minDate->format('Y-m-d').'|before_or_equal:'.Carbon::now()->endOfMonth()->format('Y-m-d'),
             'notes' => 'nullable|string|max:255',
             'is_save_for_later' => 'boolean',
+            'is_personal' => 'boolean',
+            'person_id' => 'nullable|exists:persons,id',
         ], [
             'date.after_or_equal' => $previousMonthCalculated
                 ? __('common.cannot_create_past_month_entry')

@@ -83,6 +83,18 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin/mobile/income-entries/{id}', [\App\Http\Controllers\Mobile\MobileIncomeEntriesController::class, 'destroy'])
         ->name('mobile.income-entries.destroy');
 
+    // Persons
+    Route::get('/admin/mobile/persons', [\App\Http\Controllers\Mobile\MobilePersonsController::class, 'index'])
+        ->name('mobile.persons.index');
+    Route::get('/admin/mobile/persons/create', [\App\Http\Controllers\Mobile\MobilePersonsController::class, 'create'])
+        ->name('mobile.persons.create');
+    Route::post('/admin/mobile/persons', [\App\Http\Controllers\Mobile\MobilePersonsController::class, 'store'])
+        ->name('mobile.persons.store');
+    Route::get('/admin/mobile/persons/{id}/edit', [\App\Http\Controllers\Mobile\MobilePersonsController::class, 'edit'])
+        ->name('mobile.persons.edit');
+    Route::put('/admin/mobile/persons/{id}', [\App\Http\Controllers\Mobile\MobilePersonsController::class, 'update'])
+        ->name('mobile.persons.update');
+
     // Expense Super Categories
     Route::get('/admin/mobile/expense-super-categories', [\App\Http\Controllers\Mobile\MobileExpenseSuperCategoriesController::class, 'index'])
         ->name('mobile.expense-super-categories.index');

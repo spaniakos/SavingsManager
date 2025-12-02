@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\IncomeCategory;
 use App\Models\IncomeEntry;
+use App\Models\Person;
 use App\Models\SavingsGoal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,11 +34,16 @@ class MobileIncomeController extends Controller
             ? Carbon::now()->startOfMonth()
             : Carbon::now()->subMonth()->startOfMonth();
 
+        $persons = Person::where('user_id', $userId)
+            ->orderBy('fullname')
+            ->get();
+
         return view('mobile.income.create', [
             'category' => $category,
             'minDate' => $minDate,
             'maxDate' => Carbon::now()->endOfMonth(),
             'previousMonthCalculated' => $previousMonthCalculated,
+            'persons' => $persons,
         ]);
     }
 
@@ -56,6 +62,7 @@ class MobileIncomeController extends Controller
             'amount' => 'required|numeric|min:0.01',
             'date' => 'required|date|after_or_equal:'.$minDate->format('Y-m-d').'|before_or_equal:'.Carbon::now()->endOfMonth()->format('Y-m-d'),
             'notes' => 'nullable|string|max:255',
+            'person_id' => 'nullable|exists:persons,id',
         ], [
             'date.after_or_equal' => $previousMonthCalculated
                 ? __('common.cannot_create_past_month_entry')
@@ -66,6 +73,7 @@ class MobileIncomeController extends Controller
         IncomeEntry::create([
             'user_id' => $userId,
             'income_category_id' => $categoryId,
+            'person_id' => $validated['person_id'] ?? null,
             'amount' => $validated['amount'],
             'date' => $validated['date'],
             'notes' => $validated['notes'] ?? null,

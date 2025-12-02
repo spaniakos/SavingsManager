@@ -312,4 +312,23 @@ return [
     'user' => 'Χρήστης',
     'refresh' => 'Ανανέωση',
     'items' => 'αντικείμενα',
+
+    // Persons
+    'person' => 'Πρόσωπο',
+    'persons' => 'Πρόσωπα',
+    'person_management' => 'Διαχείριση Προσώπων',
+    'create_person' => 'Δημιουργία Προσώπου',
+    'edit_person' => 'Επεξεργασία Προσώπου',
+    'fullname' => 'Πλήρες Όνομα',
+    'fullname_placeholder' => 'Εισάγετε πλήρες όνομα...',
+    'select_person' => 'Επιλέξτε Πρόσωπο',
+    'no_person' => 'Κανένα Πρόσωπο',
+    'filter_by_person' => 'Φίλτρο ανά Πρόσωπο',
+    'all_persons' => 'Όλα τα Πρόσωπα',
+    'no_persons_found' => 'Δεν βρέθηκαν πρόσωπα. Δημιουργήστε ένα για να ξεκινήσετε!',
+
+    // Personal Expense
+    'personal_expense' => 'Προσωπικό Έξοδο',
+    'personal_expense_help' => 'Σημειώστε αυτό το έξοδο ως προσωπικό για σκοπούς αναφοράς',
+    'personal' => 'Προσωπικό',
 ];

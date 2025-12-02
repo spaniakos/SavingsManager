@@ -41,6 +41,18 @@
         </div>
         
         <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('common.person') }}</label>
+            <select name="person_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                <option value="">{{ __('common.no_person') }}</option>
+                @foreach($persons as $person)
+                    <option value="{{ $person->id }}" {{ old('person_id') == $person->id ? 'selected' : '' }}>
+                        {{ $person->fullname }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        
+        <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('common.notes') }}</label>
             <textarea name="notes" rows="3"
                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
@@ -92,6 +104,55 @@
                 const checkbox = document.getElementById('is_save_for_later');
                 if (checkbox) {
                     toggleSaveForLater(checkbox);
+                }
+            });
+        </script>
+        
+        <!-- Personal Expense Toggle -->
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-xl border-2 border-blue-200">
+            <label for="is_personal" class="flex items-center justify-between cursor-pointer">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0">
+                        <input type="checkbox" name="is_personal" id="is_personal" value="1"
+                               class="w-6 h-6 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                               onchange="togglePersonal(this)">
+                        <div id="personal-icon" class="hidden text-2xl mt-1">👤</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-blue-900">{{ __('common.personal_expense') }}</div>
+                        <div class="text-xs text-blue-700 mt-1">{{ __('common.personal_expense_help') }}</div>
+                    </div>
+                </div>
+                <div id="personal-badge" class="hidden px-3 py-1 bg-blue-600 text-white text-xs font-semibold rounded-full">
+                    {{ __('common.personal') }}
+                </div>
+            </label>
+        </div>
+        
+        <script>
+            function togglePersonal(checkbox) {
+                const icon = document.getElementById('personal-icon');
+                const badge = document.getElementById('personal-badge');
+                const container = checkbox.closest('.bg-gradient-to-br');
+                
+                if (checkbox.checked) {
+                    icon.classList.remove('hidden');
+                    badge.classList.remove('hidden');
+                    container.classList.remove('from-blue-50', 'to-cyan-50', 'border-blue-200');
+                    container.classList.add('from-blue-100', 'to-cyan-100', 'border-blue-400');
+                } else {
+                    icon.classList.add('hidden');
+                    badge.classList.add('hidden');
+                    container.classList.remove('from-blue-100', 'to-cyan-100', 'border-blue-400');
+                    container.classList.add('from-blue-50', 'to-cyan-50', 'border-blue-200');
+                }
+            }
+            
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkbox = document.getElementById('is_personal');
+                if (checkbox) {
+                    togglePersonal(checkbox);
                 }
             });
         </script>

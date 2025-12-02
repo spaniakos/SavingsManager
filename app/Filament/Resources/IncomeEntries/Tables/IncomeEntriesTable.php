@@ -32,6 +32,11 @@ class IncomeEntriesTable
                     ->label(__('common.date'))
                     ->date('d/m/Y')
                     ->sortable(),
+                TextColumn::make('person.fullname')
+                    ->label(__('common.person'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('notes')
                     ->label(__('common.notes'))
                     ->limit(30)
@@ -46,6 +51,10 @@ class IncomeEntriesTable
                 SelectFilter::make('income_category_id')
                     ->label(__('common.category'))
                     ->relationship('incomeCategory', 'name')
+                    ->searchable(),
+                SelectFilter::make('person_id')
+                    ->label(__('common.person'))
+                    ->relationship('person', 'fullname')
                     ->searchable(),
             ])
             ->defaultSort('date', 'desc')

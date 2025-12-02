@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ExpenseEntries\Schemas;
 
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseSuperCategory;
+use App\Models\Person;
 use App\Models\SavingsGoal;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
@@ -100,6 +101,27 @@ class ExpenseEntryForm
                     ->label(__('common.save_for_later'))
                     ->helperText(__('common.save_for_later_expense_help'))
                     ->default(false),
+                Toggle::make('is_personal')
+                    ->label(__('common.personal_expense'))
+                    ->helperText(__('common.personal_expense_help'))
+                    ->default(false),
+                Select::make('person_id')
+                    ->label(__('common.person'))
+                    ->options(function () {
+                        $userId = Auth::id();
+                        if (! $userId) {
+                            return [];
+                        }
+
+                        return Person::where('user_id', $userId)
+                            ->orderBy('fullname')
+                            ->get()
+                            ->mapWithKeys(function ($person) {
+                                return [$person->id => $person->fullname];
+                            });
+                    })
+                    ->searchable()
+                    ->nullable(),
                 Textarea::make('notes')
                     ->label(__('common.notes'))
                     ->rows(3)

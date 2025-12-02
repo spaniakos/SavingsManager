@@ -312,4 +312,23 @@ return [
     'user' => 'User',
     'refresh' => 'Refresh',
     'items' => 'items',
+
+    // Persons
+    'person' => 'Person',
+    'persons' => 'Persons',
+    'person_management' => 'Person Management',
+    'create_person' => 'Create Person',
+    'edit_person' => 'Edit Person',
+    'fullname' => 'Full Name',
+    'fullname_placeholder' => 'Enter full name...',
+    'select_person' => 'Select Person',
+    'no_person' => 'No Person',
+    'filter_by_person' => 'Filter by Person',
+    'all_persons' => 'All Persons',
+    'no_persons_found' => 'No persons found. Create one to get started!',
+
+    // Personal Expense
+    'personal_expense' => 'Personal Expense',
+    'personal_expense_help' => 'Mark this expense as personal for reporting purposes',
+    'personal' => 'Personal',
 ];

@@ -83,6 +83,11 @@ class User extends Authenticatable
         return $this->hasMany(SavingsGoal::class);
     }
 
+    public function persons(): HasMany
+    {
+        return $this->hasMany(Person::class);
+    }
+
     /**
      * Get net worth (seed capital + current savings from all goals)
      */

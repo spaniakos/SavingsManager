@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\IncomeCategory;
 use App\Models\IncomeEntry;
+use App\Models\Person;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class MobileIncomeEntriesController extends Controller
         $user = Auth::user();
 
         $query = IncomeEntry::where('user_id', $user->id)
-            ->with('incomeCategory');
+            ->with(['incomeCategory', 'person']);
 
         // Search
         if ($request->has('search') && $request->search) {
@@ -33,6 +34,11 @@ class MobileIncomeEntriesController extends Controller
         // Filter by category
         if ($request->has('category_id') && $request->category_id) {
             $query->where('income_category_id', $request->category_id);
+        }
+
+        // Filter by person
+        if ($request->has('person_id') && $request->person_id) {
+            $query->where('person_id', $request->person_id);
         }
 
         // Filter by date range
@@ -52,10 +58,14 @@ class MobileIncomeEntriesController extends Controller
             ->orderBy('name')
             ->get();
 
+        $persons = Person::where('user_id', $user->id)
+            ->orderBy('fullname')
+            ->get();
+
         // Check if previous month was calculated
         $previousMonthCalculated = $this->isPreviousMonthCalculated();
 
-        return view('mobile.income-entries.index', compact('entries', 'categories', 'previousMonthCalculated'));
+        return view('mobile.income-entries.index', compact('entries', 'categories', 'persons', 'previousMonthCalculated'));
     }
 
     public function edit($id)
@@ -75,7 +85,11 @@ class MobileIncomeEntriesController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('mobile.income-entries.edit', compact('entry', 'categories', 'minDate', 'previousMonthCalculated'));
+        $persons = Person::where('user_id', Auth::id())
+            ->orderBy('fullname')
+            ->get();
+
+        return view('mobile.income-entries.edit', compact('entry', 'categories', 'persons', 'minDate', 'previousMonthCalculated'));
     }
 
     public function update(Request $request, $id)
@@ -102,6 +116,7 @@ class MobileIncomeEntriesController extends Controller
             'amount' => 'required|numeric|min:0.01',
             'date' => 'required|date|after_or_equal:'.$minDate->format('Y-m-d').'|before_or_equal:'.Carbon::now()->endOfMonth()->format('Y-m-d'),
             'notes' => 'nullable|string|max:255',
+            'person_id' => 'nullable|exists:persons,id',
         ], [
             'date.after_or_equal' => $previousMonthCalculated
                 ? __('common.cannot_create_past_month_entry')

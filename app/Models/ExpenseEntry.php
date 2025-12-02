@@ -13,10 +13,12 @@ class ExpenseEntry extends Model
     protected $fillable = [
         'user_id',
         'expense_category_id',
+        'person_id',
         'amount',
         'date',
         'notes',
         'is_save_for_later',
+        'is_personal',
     ];
 
     protected function casts(): array
@@ -25,6 +27,7 @@ class ExpenseEntry extends Model
             'amount' => 'decimal:2',
             'date' => 'date',
             'is_save_for_later' => 'boolean',
+            'is_personal' => 'boolean',
         ];
     }
 
@@ -36,5 +39,10 @@ class ExpenseEntry extends Model
     public function expenseCategory(): BelongsTo
     {
         return $this->belongsTo(ExpenseCategory::class);
+    }
+
+    public function person(): BelongsTo
+    {
+        return $this->belongsTo(Person::class);
     }
 }

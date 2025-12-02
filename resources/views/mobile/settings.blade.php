@@ -28,6 +28,28 @@
         </form>
     </div>
     
+    <!-- Person Management -->
+    <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
+        <h2 class="text-lg font-semibold mb-4">{{ __('common.person_management') }}</h2>
+        <div class="space-y-2">
+            <a href="{{ route('mobile.persons.index') }}" class="block p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">👥</span>
+                        <span class="font-medium">{{ __('common.persons') }}</span>
+                    </div>
+                    <span class="text-gray-500">→</span>
+                </div>
+            </a>
+            <a href="{{ route('mobile.persons.create') }}" class="block p-3 bg-amber-50 rounded-lg border border-amber-200 hover:bg-amber-100 transition">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-3">➕</span>
+                    <span class="font-medium">{{ __('common.create_person') }}</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    
     <!-- Quick Links -->
     <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
         <h2 class="text-lg font-semibold mb-4">{{ __('common.quick_links') }}</h2>
