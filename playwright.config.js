@@ -21,10 +21,15 @@ export default defineConfig({
       use: { ...devices['Pixel 5'] },
     },
   ],
-  webServer: {
+  webServer: process.env.CI ? {
+    command: 'php artisan serve --host=0.0.0.0',
+    url: 'http://localhost:8000',
+    reuseExistingServer: false,
+    timeout: 120 * 1000,
+  } : {
     command: 'php artisan serve',
     url: 'http://localhost:8000',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
   },
 });
 

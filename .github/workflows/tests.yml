@@ -220,25 +220,11 @@ jobs:
           DB_USERNAME: testuser
           DB_PASSWORD: password
 
-      - name: Start Laravel server
-        run: php artisan serve --host=0.0.0.0 --port=8000 &
-        env:
-          APP_URL: http://localhost:8000
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: testing
-          DB_USERNAME: testuser
-          DB_PASSWORD: password
-
-      - name: Wait for server
-        run: |
-          timeout 30 bash -c 'until curl -f http://localhost:8000/admin/login; do sleep 1; done'
-
       - name: Run Playwright tests
         run: npm run test:e2e
         env:
           APP_URL: http://localhost:8000
+          APP_ENV: testing
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
