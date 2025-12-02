@@ -366,6 +366,45 @@
         @endif
     @endif
 
+    <!-- Non-Personal Expenses Breakdown by Person (Household Contribution) -->
+    @if(!empty($reportData['non_personal_expenses_by_person']) && $reportData['non_personal_expenses_by_person']['total'] > 0)
+        <h2>{{ __('common.non_personal_expenses_breakdown') }}</h2>
+        
+        <div style="margin-bottom: 10px; padding: 8px; border: 1px solid #ddd; background-color: #fff8e1;">
+            <p style="font-size: 10px; color: #666; margin-bottom: 10px;">
+                {{ __('common.household_contribution_note') }}
+            </p>
+            
+            <table style="width: 100%; border: none; margin-bottom: 15px;">
+                <tr>
+                    <td style="border: none; font-weight: bold; font-size: 12px;">
+                        {{ __('common.total') }}:
+                    </td>
+                    <td style="border: none; text-align: right; font-weight: bold; font-size: 14px;">
+                        €{{ number_format($reportData['non_personal_expenses_by_person']['total'], 2) }}
+                    </td>
+                </tr>
+            </table>
+
+            @if(!empty($reportData['non_personal_expenses_by_person']['by_person']))
+                @foreach($reportData['non_personal_expenses_by_person']['by_person'] as $personName => $amount)
+                    <div style="margin-bottom: 8px; padding: 8px; border: 1px solid #ddd; background-color: #fffde7;">
+                        <table style="width: 100%; border: none;">
+                            <tr>
+                                <td style="border: none; font-weight: bold; font-size: 11px;">
+                                    {{ $personName }} {{ __('common.spent') }} ({{ __('common.non_personal') }})
+                                </td>
+                                <td style="border: none; text-align: right; font-weight: bold; font-size: 13px;">
+                                    €{{ number_format($amount, 2) }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+    @endif
+
     <p style="margin-top: 30px; font-size: 10px; color: #666;">
         {{ __('common.generated_on') }}: {{ now()->format('d/m/Y H:i') }}
     </p>

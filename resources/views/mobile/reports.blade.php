@@ -346,6 +346,42 @@
                 </div>
             </div>
         @endif
+
+        <!-- Non-Personal Expenses Breakdown by Person (Household Contribution) -->
+        @if(!empty($reportData['non_personal_expenses_by_person']) && $reportData['non_personal_expenses_by_person']['total'] > 0)
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-xl border-2 border-amber-300 sticky bottom-0 z-10 shadow-lg">
+                <h2 class="text-lg font-semibold mb-3 text-gray-800">{{ __('common.non_personal_expenses_breakdown') }}</h2>
+                <p class="text-xs text-gray-600 mb-3">{{ __('common.household_contribution_note') }}</p>
+                
+                <div class="bg-white p-3 rounded-lg border border-amber-200 mb-3">
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold text-base text-gray-800">
+                            {{ __('common.total') }}:
+                        </span>
+                        <span class="text-xl font-bold text-amber-800">
+                            €{{ number_format($reportData['non_personal_expenses_by_person']['total'], 2) }}
+                        </span>
+                    </div>
+                </div>
+
+                @if(!empty($reportData['non_personal_expenses_by_person']['by_person']))
+                    <div class="space-y-2">
+                        @foreach($reportData['non_personal_expenses_by_person']['by_person'] as $personName => $amount)
+                            <div class="bg-white p-3 rounded-lg border border-amber-200">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-medium text-sm text-gray-700">
+                                        {{ $personName }} {{ __('common.spent') }} ({{ __('common.non_personal') }})
+                                    </span>
+                                    <span class="text-lg font-bold text-amber-800">
+                                        €{{ number_format($amount, 2) }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        @endif
     @endif
 </div>
 @endsection

@@ -318,6 +318,48 @@
                         </div>
                     </x-filament::section>
                 @endif
+
+                <!-- Non-Personal Expenses Breakdown by Person (Household Contribution) -->
+                @if(!empty($this->reportData['non_personal_expenses_by_person']) && $this->reportData['non_personal_expenses_by_person']['total'] > 0)
+                    <x-filament::section class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-800/20 border-2 border-amber-300 dark:border-amber-700 sticky bottom-0 z-10 shadow-lg">
+                        <x-slot name="heading">
+                            {{ __('common.non_personal_expenses_breakdown') }}
+                        </x-slot>
+                        <x-slot name="description">
+                            {{ __('common.household_contribution_note') }}
+                        </x-slot>
+
+                        <div class="space-y-4">
+                            <div class="p-4 bg-white dark:bg-gray-800 rounded-lg border border-amber-200 dark:border-amber-700">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-lg text-gray-800 dark:text-gray-200">
+                                        {{ __('common.total') }}:
+                                    </span>
+                                    <span class="text-2xl font-bold text-amber-800 dark:text-amber-200">
+                                        €{{ number_format($this->reportData['non_personal_expenses_by_person']['total'], 2) }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            @if(!empty($this->reportData['non_personal_expenses_by_person']['by_person']))
+                                <div class="space-y-2">
+                                    @foreach($this->reportData['non_personal_expenses_by_person']['by_person'] as $personName => $amount)
+                                        <div class="p-3 bg-white dark:bg-gray-800 rounded-lg border border-amber-200 dark:border-amber-700">
+                                            <div class="flex justify-between items-center">
+                                                <span class="font-medium text-base text-gray-700 dark:text-gray-300">
+                                                    {{ $personName }} {{ __('common.spent') }} ({{ __('common.non_personal') }})
+                                                </span>
+                                                <span class="text-xl font-bold text-amber-800 dark:text-amber-200">
+                                                    €{{ number_format($amount, 2) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    </x-filament::section>
+                @endif
             </div>
         @endif
     </div>

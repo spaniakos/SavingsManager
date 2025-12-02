@@ -218,14 +218,17 @@
             <h3>Key Features</h3>
             <ul class="feature-list">
                 <li>Track income and expenses with detailed categorization</li>
+                <li>Person tracking - Assign entries to household members for better organization</li>
+                <li>Personal expense flag - Separate personal spending from shared household expenses</li>
                 <li>Set and monitor savings goals with progress tracking</li>
-                <li>50/30/20 budget allocation system (Essentials/Lifestyle/Savings)</li>
+                <li>Customizable budget allocation system (Essentials/Lifestyle/Savings)</li>
                 <li>Save-for-later functionality for future expenses</li>
-                <li>Comprehensive financial reports (Monthly, Category, Savings)</li>
+                <li>Comprehensive financial reports with person-based filtering and breakdowns</li>
+                <li>Household contribution breakdown - See non-personal expenses by person</li>
                 <li>Bilingual support (English / Ελληνικά)</li>
                 <li>Positive reinforcement and milestone notifications</li>
                 <li>Net worth calculation and seed capital tracking</li>
-                <li>Expenses can be per person but all use the same account</li>
+                <li>Mobile-first responsive interface</li>
             </ul>
         </div>
         
@@ -245,7 +248,8 @@
             </p>
             <p style="margin-top: 0.5rem;">
                 <strong>Status:</strong> Production Ready ✅ | 
-                <strong>Tests:</strong> 44 tests passing (88 assertions)
+                <strong>Tests:</strong> 56 tests passing (124 assertions) | 
+                <strong>PHP:</strong> 8.4+
             </p>
         </div>
     </div>

@@ -336,4 +336,8 @@ return [
     'total_spend' => 'Total Spend',
     'total_spend_description' => 'Expenses that are not marked as personal',
     'total_spend_personal' => 'Total Spend :person Personal',
+    'non_personal_expenses_breakdown' => 'Non-Personal Expenses Breakdown',
+    'household_contribution_note' => 'Since all members of the household have to contribute equally if applicable:',
+    'non_personal' => 'Non-Personal',
+    'total' => 'Total',
 ];

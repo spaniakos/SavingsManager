@@ -336,4 +336,8 @@ return [
     'total_spend' => 'Συνολικά Έξοδα',
     'total_spend_description' => 'Έξοδα που δεν σημειώνονται ως προσωπικά',
     'total_spend_personal' => 'Συνολικά Έξοδα :person Προσωπικά',
+    'non_personal_expenses_breakdown' => 'Ανάλυση Μη-Προσωπικών Εξόδων',
+    'household_contribution_note' => 'Εφόσον όλα τα μέλη του νοικοκυριού πρέπει να συνεισφέρουν εξίσου, εφόσον ισχύει:',
+    'non_personal' => 'Μη-Προσωπικά',
+    'total' => 'Συνολικά',
 ];

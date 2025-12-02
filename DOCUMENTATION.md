@@ -43,11 +43,12 @@ resources/
 ### Core Tables
 
 - `users` - User accounts with financial settings (seed_capital, median_monthly_income)
+- `persons` - Person definitions for tracking household members (user_id, fullname)
 - `income_categories` - Income category definitions
-- `income_entries` - Income transactions
+- `income_entries` - Income transactions with optional `person_id` for person tracking
 - `expense_super_categories` - Fixed super categories (Essentials, Lifestyle, Savings) with allocation percentages
 - `expense_categories` - Expense category definitions with emoji support
-- `expense_entries` - Expense transactions with `is_save_for_later` flag
+- `expense_entries` - Expense transactions with `is_save_for_later` flag, `is_personal` flag, and optional `person_id` for person tracking
 - `savings_goals` - Savings goal definitions with `current_amount`, `initial_checkpoint`, and `last_monthly_calculation_at`
 
 ## Key Services
@@ -75,10 +76,12 @@ Manages budget allocation with customizable percentages per super category, calc
 Generates comprehensive financial reports with hierarchical breakdowns (by item, category, super category), goal progression tracking, and PDF export functionality.
 
 **Key Methods:**
-- `generateComprehensiveReport()` - Full report with all breakdowns
-- `getExpensesHierarchical()` - Hierarchical expense structure
-- `getIncomeHierarchical()` - Hierarchical income structure
+- `generateComprehensiveReport()` - Full report with all breakdowns, person filtering, and personal expense summaries
+- `getExpensesHierarchical()` - Hierarchical expense structure with person and personal expense data
+- `getIncomeHierarchical()` - Hierarchical income structure with person data
 - `calculateTotalSaved()` - Total saved amount (seed_capital + all goals)
+- `calculatePersonalExpenseTotals()` - Calculate personal expense totals by person
+- `calculateNonPersonalExpensesByPerson()` - Calculate non-personal expenses by person for household contribution breakdown
 - `exportToCsv()` - CSV export functionality
 
 ### ChartDataService

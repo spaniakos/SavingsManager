@@ -251,6 +251,9 @@ class ReportService
         // Calculate personal expense totals by person
         $personalExpenseTotals = $this->calculatePersonalExpenseTotals($user, $startDate, $endDate);
 
+        // Calculate non-personal expenses by person (for household contribution breakdown)
+        $nonPersonalExpensesByPerson = $this->calculateNonPersonalExpensesByPerson($user, $startDate, $endDate);
+
         return [
             'period' => [
                 'start' => $startDate->format('Y-m-d'),
@@ -275,6 +278,7 @@ class ReportService
             'breakdown_type' => $breakdownType,
             'person_id' => $personId,
             'personal_expense_totals' => $personalExpenseTotals,
+            'non_personal_expenses_by_person' => $nonPersonalExpensesByPerson,
         ];
     }
 
@@ -604,6 +608,54 @@ class ReportService
         return [
             'total_spend' => round($totalSpend, 2),
             'personal_by_person' => $personalByPerson,
+        ];
+    }
+
+    /**
+     * Calculate non-personal expenses by person (for household contribution breakdown)
+     * This shows how much each person spent on non-personal (shared) expenses
+     */
+    protected function calculateNonPersonalExpensesByPerson(User $user, Carbon $startDate, Carbon $endDate): array
+    {
+        // Total non-personal expenses (is_personal = false)
+        $totalNonPersonal = ExpenseEntry::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDate])
+            ->where('is_personal', false)
+            ->sum('amount');
+
+        // Get all persons for this user
+        $persons = Person::where('user_id', $user->id)
+            ->orderBy('fullname')
+            ->get();
+
+        // Calculate non-personal expenses by person
+        $nonPersonalByPerson = [];
+        foreach ($persons as $person) {
+            $nonPersonalTotal = ExpenseEntry::where('user_id', $user->id)
+                ->whereBetween('date', [$startDate, $endDate])
+                ->where('person_id', $person->id)
+                ->where('is_personal', false)
+                ->sum('amount');
+
+            if ($nonPersonalTotal > 0) {
+                $nonPersonalByPerson[$person->fullname] = round($nonPersonalTotal, 2);
+            }
+        }
+
+        // Also include entries with no person (person_id is null) that are non-personal
+        $noPersonNonPersonal = ExpenseEntry::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDate])
+            ->whereNull('person_id')
+            ->where('is_personal', false)
+            ->sum('amount');
+
+        if ($noPersonNonPersonal > 0) {
+            $nonPersonalByPerson[__('common.no_person')] = round($noPersonNonPersonal, 2);
+        }
+
+        return [
+            'total' => round($totalNonPersonal, 2),
+            'by_person' => $nonPersonalByPerson,
         ];
     }
 

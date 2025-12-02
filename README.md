@@ -32,12 +32,18 @@ This application helps individuals manage their finances, track savings goals, a
 ## ✨ Key Features
 
 - **Income & Expense Management**: Track all financial transactions with detailed categorization
+- **Person Tracking**: Assign income and expense entries to specific persons (household members) for better tracking
+- **Personal Expense Flag**: Mark expenses as personal to separate personal spending from shared household expenses
 - **Savings Goals**: Create and track savings goals with progress visualization
 - **Budget System**: 3-tier allocation (Essentials, Lifestyle, Savings) with customizable percentages
 - **Save-for-Later**: Mark expenses as savings that directly add to savings goals
 - **Budget Tracking**: Real-time monitoring of spent vs allowance per super category
 - **Monthly Calculation**: One-click calculation to adjust savings goals based on previous month's net savings
-- **Comprehensive Reporting**: Generate detailed reports with hierarchical breakdowns (by item, category, super category) and PDF export
+- **Comprehensive Reporting**: 
+  - Generate detailed reports with hierarchical breakdowns (by item, category, super category) and PDF export
+  - Person-based filtering and breakdowns
+  - Personal vs non-personal expense summaries
+  - Household contribution breakdown showing non-personal expenses by person
 - **Mobile-First UI**: Responsive mobile interface with emoji-enabled category buttons
 - **Analytics Dashboard**: Interactive charts showing income trends, expense trends, and savings progress
 - **Bilingual Support**: Full English/Greek translation
@@ -91,6 +97,33 @@ Visit `http://localhost:8000` and navigate to `/admin/login` to access the appli
 **Default Test User**: `test@makeasite.gr` / `12341234` (created by seeders)
 
 For detailed installation instructions, see [INSTALLATION.md](INSTALLATION.md).
+
+### Updating
+
+To update an existing installation:
+
+```bash
+# Pull latest changes
+git pull origin main
+
+# Update dependencies
+composer install
+npm install
+
+# Run new migrations
+php artisan migrate
+
+# Rebuild assets
+npm run build
+
+# Clear caches (optional but recommended)
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+```
+
+**Note**: Always backup your database before running migrations in production!
 
 ## 📚 Documentation
 
