@@ -94,5 +94,4 @@ Current test coverage:
 - **124 assertions**
 - **6 E2E test files** (Playwright)
 
-See `TEST_RESULTS.md` for detailed test results.
-
+See `TEST_RESULTS.md` for detailed test results.]
