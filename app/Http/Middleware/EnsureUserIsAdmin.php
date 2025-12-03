@@ -17,11 +17,10 @@ class EnsureUserIsAdmin
     {
         // This middleware only runs on authenticated routes (via authMiddleware)
         // So we can safely check if user is admin
-        if (!auth()->user()->is_admin) {
+        if (! auth()->user()->is_admin) {
             abort(403, 'Access denied. Admin privileges required.');
         }
 
         return $next($request);
     }
 }
-

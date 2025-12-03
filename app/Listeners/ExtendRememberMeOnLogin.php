@@ -3,8 +3,6 @@
 namespace App\Listeners;
 
 use Illuminate\Auth\Events\Login;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 
 class ExtendRememberMeOnLogin
 {
@@ -19,4 +17,3 @@ class ExtendRememberMeOnLogin
         // The ExtendRememberMeCookie middleware will handle refreshing it on subsequent requests
     }
 }
-

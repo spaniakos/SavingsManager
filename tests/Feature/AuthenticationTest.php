@@ -155,7 +155,7 @@ class AuthenticationTest extends TestCase
     public function test_user_can_login_via_mobile_auth(): void
     {
         $user = User::where('email', 'test@makeasite.gr')->first();
-        
+
         $response = $this->post('/mobile/login', [
             'email' => 'test@makeasite.gr',
             'password' => '12341234',
@@ -181,12 +181,12 @@ class AuthenticationTest extends TestCase
         // This test verifies admin user exists and has is_admin flag set
         // The key test is that regular users CANNOT access admin panel (test_regular_user_cannot_access_admin_panel)
         $admin = User::where('email', 'admin@makeasite.gr')->first();
-        
-        if (!$admin) {
+
+        if (! $admin) {
             // Admin user should be created by seeder
             $this->markTestSkipped('Admin user not found. Run seeders to create admin user.');
         }
-        
+
         // Verify admin flag is set
         $this->assertTrue($admin->is_admin, 'Admin user should have is_admin flag set to true');
     }
@@ -205,7 +205,7 @@ class AuthenticationTest extends TestCase
     {
         // Try to access protected mobile route
         $response = $this->get('/mobile/dashboard');
-        
+
         // Should redirect to login (either /login which redirects to /mobile/login, or directly to /mobile/login)
         $response->assertRedirect();
         $location = $response->headers->get('Location');

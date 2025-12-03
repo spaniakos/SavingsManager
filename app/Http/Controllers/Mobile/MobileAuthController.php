@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Mobile;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use App\Models\User;
 
 class MobileAuthController extends Controller
 {
@@ -19,7 +19,7 @@ class MobileAuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('mobile.dashboard');
         }
-        
+
         return view('mobile.auth.login');
     }
 
@@ -34,10 +34,10 @@ class MobileAuthController extends Controller
         ]);
 
         $remember = $request->boolean('remember');
-        
+
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            
+
             // The ExtendRememberMeCookie middleware will handle extending the cookie
             // to 1 year on the next request, so we just redirect normally
             return redirect()->intended(route('mobile.dashboard'));
@@ -56,7 +56,7 @@ class MobileAuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('mobile.dashboard');
         }
-        
+
         return view('mobile.auth.register');
     }
 
@@ -94,4 +94,3 @@ class MobileAuthController extends Controller
         return redirect()->route('mobile.auth.login');
     }
 }
-

@@ -47,4 +47,3 @@ class ExtendRememberMeCookie
         return $response;
     }
 }
-

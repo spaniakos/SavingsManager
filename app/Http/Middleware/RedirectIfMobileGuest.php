@@ -23,4 +23,3 @@ class RedirectIfMobileGuest
         return $next($request);
     }
 }
-

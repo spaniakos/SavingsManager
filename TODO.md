@@ -133,7 +133,23 @@
   - ✅ Removed duplicate smoke test file
   - ✅ Enhanced smoke tests with 4 comprehensive tests
 
-#### 0.6 Future Admin Features
+#### 0.6 Email Notifications & Password Reset
+- [ ] Implement forgot password functionality:
+  - Create password reset routes (`/mobile/forgot-password`, `/mobile/reset-password/{token}`)
+  - Create password reset controller with email sending
+  - Create password reset views (request form, reset form)
+  - Add password reset email template
+  - Test password reset flow
+- [ ] Implement email notifications:
+  - Send welcome email on user registration
+  - Send password reset email when requested
+  - Configure email settings (SMTP/Mailgun/etc.)
+  - Create email templates (welcome, password reset)
+  - Test email delivery in development and production
+- [ ] Add email configuration to `.env.example`
+- [ ] Update documentation with email setup instructions
+
+#### 0.7 Future Admin Features
 - [ ] As new features are added (subscriptions, etc.), add corresponding admin resources:
   - Subscription management (when subscription system is implemented)
   - Recurring expenses management (when recurring expenses are implemented)
