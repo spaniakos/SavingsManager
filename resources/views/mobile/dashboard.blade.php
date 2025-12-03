@@ -39,6 +39,12 @@
     // Total saved (seed + savings goals + save for later)
     $totalSaved = $reportService->calculateTotalSaved($user);
     
+    // Get savings super category ID for links
+    $savingsSuperCategory = \App\Models\ExpenseSuperCategory::where('name', 'savings')
+        ->where('is_system', true)
+        ->first();
+    $savingsSuperCategoryId = $savingsSuperCategory ? $savingsSuperCategory->id : null;
+    
     // Active savings goals
     $activeGoals = $user->savingsGoals()
         ->where(function($q) use ($now) {
@@ -65,6 +71,7 @@
         $allowance = $medianIncome * ($item->allocation_percentage / 100);
         $percentage = $allowance > 0 ? min(100, round(($item->total / $allowance) * 100, 1)) : 0;
         return [
+            'id' => $item->id,
             'name' => $item->name,
             'emoji' => $item->emoji,
             'current' => $item->total,
@@ -77,6 +84,11 @@
     $totalSavingsCurrent = $activeGoals->sum('current_amount');
     $totalSavingsTarget = $activeGoals->sum('target_amount');
     $savingsProgressPercentage = $totalSavingsTarget > 0 ? min(100, round(($totalSavingsCurrent / $totalSavingsTarget) * 100, 1)) : 0;
+    
+    // Calculate earliest goal start date for savings goals link
+    $earliestGoalStartDate = $activeGoals->count() > 0 
+        ? $activeGoals->min('start_date') 
+        : '1970-11-30';
     
     // Income trend (last 6 months)
     $incomeTrend = [];
@@ -149,29 +161,56 @@
     
     <!-- Quick Stats Cards -->
     <div class="grid grid-cols-2 gap-3">
-        <a href="{{ route('mobile.income-entries.index') }}" class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border-2 border-green-200 hover:border-green-300 hover:shadow-md transition-all cursor-pointer block">
+        <a href="{{ route('mobile.income-entries.index', [
+            'search' => '',
+            'category_id' => '',
+            'person_id' => '',
+            'date_from' => $startOfMonth->format('Y-m-d'),
+            'date_to' => $now->format('Y-m-d'),
+        ]) }}" class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border-2 border-green-200 hover:border-green-300 hover:shadow-md transition-all cursor-pointer block">
             <div class="text-xs text-green-700 mb-1">{{ __('common.income') }}</div>
             <div class="text-2xl font-bold text-green-800">€{{ number_format($currentIncome, 2) }}</div>
             <div class="text-xs text-green-600 mt-1">{{ __('common.this_month') }}</div>
         </a>
         
-        <a href="{{ route('mobile.expense-entries.index') }}" class="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-xl border-2 border-red-200 hover:border-red-300 hover:shadow-md transition-all cursor-pointer block">
+        <a href="{{ route('mobile.expense-entries.index', [
+            'search' => '',
+            'category_id' => '',
+            'super_category_id' => '',
+            'person_id' => '',
+            'date_from' => $startOfMonth->format('Y-m-d'),
+            'date_to' => $now->format('Y-m-d'),
+        ]) }}" class="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-xl border-2 border-red-200 hover:border-red-300 hover:shadow-md transition-all cursor-pointer block">
             <div class="text-xs text-red-700 mb-1">{{ __('common.expenses') }}</div>
             <div class="text-2xl font-bold text-red-800">€{{ number_format($currentExpenses, 2) }}</div>
             <div class="text-xs text-red-600 mt-1">{{ __('common.this_month') }}</div>
         </a>
         
-        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border-2 border-blue-200">
+        <a href="{{ route('mobile.expense-entries.index', [
+            'search' => '',
+            'category_id' => '',
+            'super_category_id' => $savingsSuperCategoryId,
+            'person_id' => '',
+            'date_from' => $startOfMonth->format('Y-m-d'),
+            'date_to' => $now->format('Y-m-d'),
+        ]) }}" class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border-2 border-blue-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer block">
             <div class="text-xs text-blue-700 mb-1">{{ __('common.current_savings') }}</div>
             <div class="text-2xl font-bold text-blue-800">€{{ number_format($currentSavings, 2) }}</div>
             <div class="text-xs text-blue-600 mt-1">{{ __('common.this_month') }}</div>
-        </div>
+        </a>
         
-        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border-2 border-purple-200">
+        <a href="{{ route('mobile.expense-entries.index', [
+            'search' => '',
+            'category_id' => '',
+            'super_category_id' => $savingsSuperCategoryId,
+            'person_id' => '',
+            'date_from' => '1970-11-30',
+            'date_to' => $now->format('Y-m-d'),
+        ]) }}" class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border-2 border-purple-200 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer block">
             <div class="text-xs text-purple-700 mb-1">{{ __('common.total_saved') }}</div>
             <div class="text-2xl font-bold text-purple-800">€{{ number_format($totalSaved, 2) }}</div>
             <div class="text-xs text-purple-600 mt-1">{{ __('common.all_time') }}</div>
-        </div>
+        </a>
     </div>
     
     <!-- Projection Card -->
@@ -236,7 +275,14 @@
         <h3 class="text-lg font-semibold mb-4">{{ __('common.expenses_by_category') }}</h3>
         <div class="space-y-4">
             @foreach($superCategoryProgress as $progress)
-            <div>
+            <a href="{{ route('mobile.expense-entries.index', [
+                'search' => '',
+                'category_id' => '',
+                'super_category_id' => $progress['id'],
+                'person_id' => '',
+                'date_from' => $startOfMonth->format('Y-m-d'),
+                'date_to' => $now->format('Y-m-d'),
+            ]) }}" class="block hover:bg-gray-500 rounded-lg p-2 -m-2 transition-colors">
                 <div class="flex items-center justify-between mb-1">
                     <div class="flex items-center gap-2">
                         @if($progress['emoji'])
@@ -252,7 +298,7 @@
                     <div class="h-3 rounded-full {{ $progress['percentage'] > 100 ? 'bg-red-500' : ($progress['percentage'] > 80 ? 'bg-yellow-500' : 'bg-green-500') }}" 
                          style="width: {{ min(100, $progress['percentage']) }}%"></div>
                 </div>
-            </div>
+            </a>
             @endforeach
         </div>
     </div>
@@ -260,7 +306,14 @@
     
     <!-- Savings Goals Progress Bar -->
     @if($activeGoals->count() > 0 && $totalSavingsTarget > 0)
-    <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
+    <a href="{{ route('mobile.expense-entries.index', [
+        'search' => '',
+        'category_id' => '',
+        'super_category_id' => $savingsSuperCategoryId,
+        'person_id' => '',
+        'date_from' => is_string($earliestGoalStartDate) ? $earliestGoalStartDate : Carbon::parse($earliestGoalStartDate)->format('Y-m-d'),
+        'date_to' => $now->format('Y-m-d'),
+    ]) }}" class="block bg-white p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-500 hover:border-gray-300 transition-all cursor-pointer">
         <h3 class="text-lg font-semibold mb-4">{{ __('common.savings_goals_progress') }}</h3>
         <div>
             <div class="flex items-center justify-between mb-1">
@@ -274,7 +327,7 @@
                      style="width: {{ min(100, $savingsProgressPercentage) }}%"></div>
             </div>
         </div>
-    </div>
+    </a>
     @endif
     
     <!-- Active Goals -->
