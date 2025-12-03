@@ -163,7 +163,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <div class="min-h-screen pb-20">
+    <div class="min-h-screen {{ auth()->check() ? 'pb-20' : '' }}">
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative m-4" role="alert">
                 <span class="block sm:inline">{{ session('success') }}</span>
@@ -173,7 +173,9 @@
         @yield('content')
     </div>
     
-    @include('mobile.components.bottom-nav')
+    @auth
+        @include('mobile.components.bottom-nav')
+    @endauth
     
     <script>
     // Initialize dark mode on all pages

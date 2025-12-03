@@ -40,7 +40,7 @@ class SaveForLaterTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
+        $response = $this->post('/mobile/expense/category/'.$category->id, [
             'amount' => 500.00,
             'date' => Carbon::now()->format('Y-m-d'),
             'notes' => 'Save for later',
@@ -92,7 +92,7 @@ class SaveForLaterTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
+        $response = $this->post('/mobile/expense/category/'.$category->id, [
             'amount' => 300.00,
             'date' => Carbon::now()->format('Y-m-d'),
             'notes' => 'Save for later',
@@ -129,7 +129,7 @@ class SaveForLaterTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/expense/category/'.$savingsCategory->id, [
+        $response = $this->post('/mobile/expense/category/'.$savingsCategory->id, [
             'amount' => 250.00,
             'date' => Carbon::now()->format('Y-m-d'),
             'notes' => 'Direct savings',

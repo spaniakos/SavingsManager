@@ -106,7 +106,7 @@
     </div>
     
     <!-- Sign Out -->
-    <form method="POST" action="{{ route('logout') }}">
+    <form method="POST" action="{{ route('mobile.auth.logout') }}">
         @csrf
         <button type="submit" class="w-full p-4 bg-red-50 text-red-700 rounded-xl border-2 border-red-200 font-semibold hover:bg-red-100 transition">
             <div class="flex items-center justify-center">

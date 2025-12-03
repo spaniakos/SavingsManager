@@ -92,9 +92,13 @@ npm run build
 php artisan serve
 ```
 
-Visit `http://localhost:8000` and navigate to `/admin/login` to access the application.
+Visit `http://localhost:8000`:
+- Mobile app: `/mobile/login` (for regular users)
+- Admin panel: `/admin/login` (for admin users only)
 
-**Default Test User**: `test@makeasite.gr` / `12341234` (created by seeders)
+**Default Test Users** (created by seeders):
+- Regular User: `test@makeasite.gr` / `12341234` (mobile app access)
+- Admin User: `admin@makeasite.gr` / `12341234` (admin panel + mobile app access)
 
 For detailed installation instructions, see [INSTALLATION.md](INSTALLATION.md).
 
@@ -157,6 +161,29 @@ See [TEST_RESULTS.md](TEST_RESULTS.md) for detailed test results and [TEST_USER_
 - **Frontend**: Tailwind CSS 4.x, Chart.js
 - **Testing**: PHPUnit, Playwright
 - **CI/CD**: GitHub Actions
+
+## 🔮 Future Work
+
+The application is production-ready with all core features complete. Planned enhancements include:
+
+### High Priority
+- **Recurring Expenses System**: Automatically generate expense entries on scheduled dates (daily, weekly, monthly, yearly, or custom intervals)
+- **Category Filtering Enhancements**: Improve UX with dynamic category filtering based on super category selection
+- **Calendar View**: Comprehensive calendar interface for viewing and managing entries with day/week/month views
+- **Translation Management**: Admin interface for managing translations with conflict resolution and automatic key generation
+- **Multi-Goal Savings Enhancement**: Support allocating savings to multiple goals with automatic distribution logic
+
+### Medium Priority
+- **Joint Accounts/Efforts System**: Support for shared financial goals and contributions between multiple users
+- **Data Import/Export**: CSV/Excel import/export functionality for bulk data management
+- **PWA Support**: Progressive Web App features for mobile installation
+- **Social Login**: OAuth integration for Google, Facebook, etc.
+
+### Low Priority
+- **Mobile Apps**: Native iOS and Android applications
+- **SaaS & AI Integration**: Subscription system and AI-powered financial insights
+
+For detailed task breakdowns, see [TODO.md](TODO.md).
 
 ## 📝 License
 

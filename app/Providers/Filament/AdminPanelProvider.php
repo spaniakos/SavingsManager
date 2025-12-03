@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\UserResource;
 use App\Http\Middleware\DetectMobile;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -26,15 +27,21 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->registration()
+            ->registration(false) // Disable registration - only admins can access
             ->brandName(__('common.app_name'))
             ->colors([
                 'primary' => Color::Amber,
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->navigation(false) // Completely hide navigation - we use mobile menu
             ->spa() // Enable SPA mode for better mobile experience
-            // Resources, Pages, and Widgets are not used - we only use Filament for login/registration
+            ->pages([
+                \App\Filament\Pages\AdminHome::class,
+            ])
+            ->resources([
+                UserResource::class,
+            ])
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->homeUrl(fn () => route('filament.admin.pages.admin-home'))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -46,9 +53,11 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 DetectMobile::class,
+                \App\Http\Middleware\ExtendRememberMeCookie::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
+                \App\Http\Middleware\EnsureUserIsAdmin::class,
             ]);
     }
 }

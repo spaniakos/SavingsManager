@@ -108,7 +108,7 @@ class MobileExpenseController extends Controller
             $this->addToSavingsGoals($expense);
         }
 
-        return redirect('/admin/mobile')->with('success', __('common.created_successfully'));
+        return redirect()->route('mobile.dashboard')->with('success', __('common.created_successfully'));
     }
 
     protected function addToSavingsGoals(ExpenseEntry $entry): void

@@ -15,19 +15,8 @@ class DetectMobile
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Always redirect authenticated users to mobile interface
-        // Only redirect if user is authenticated and on admin routes (not login/register)
-        if ($request->user() && $request->is('admin*') && ! $request->is('admin/mobile*') && ! $request->is('admin/login*') && ! $request->is('admin/register*')) {
-            // Convert any admin route to mobile equivalent
-            $path = $request->path();
-            if ($path === 'admin') {
-                return redirect('/admin/mobile');
-            }
-
-            // For other admin routes, redirect to mobile dashboard
-            return redirect('/admin/mobile');
-        }
-
+        // This middleware is now only used for Filament admin panel
+        // No redirects needed - Filament handles its own routing
         return $next($request);
     }
 

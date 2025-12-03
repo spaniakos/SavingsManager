@@ -67,7 +67,7 @@ class ComprehensiveReportsTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get('/admin/mobile/reports?'.http_build_query([
+        $response = $this->get('/mobile/reports?'.http_build_query([
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' => $endDate->format('Y-m-d'),
             'breakdown_type' => 'per_category',
@@ -107,7 +107,7 @@ class ComprehensiveReportsTest extends TestCase
         $this->actingAs($user);
 
         // Then export to PDF
-        $response = $this->get('/admin/mobile/reports/export-pdf?'.http_build_query([
+        $response = $this->get('/mobile/reports/export-pdf?'.http_build_query([
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' => $endDate->format('Y-m-d'),
             'breakdown_type' => 'per_category',
@@ -139,7 +139,7 @@ class ComprehensiveReportsTest extends TestCase
         $this->actingAs($user);
 
         // Test per_super_category breakdown (level 0)
-        $response = $this->get('/admin/mobile/reports?'.http_build_query([
+        $response = $this->get('/mobile/reports?'.http_build_query([
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' => $endDate->format('Y-m-d'),
             'breakdown_type' => 'per_super_category',

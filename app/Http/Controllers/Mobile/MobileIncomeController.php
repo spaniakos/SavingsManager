@@ -79,7 +79,7 @@ class MobileIncomeController extends Controller
             'notes' => $validated['notes'] ?? null,
         ]);
 
-        return redirect('/admin/mobile')->with('success', __('common.created_successfully'));
+        return redirect()->route('mobile.dashboard')->with('success', __('common.created_successfully'));
     }
 
     protected function isPreviousMonthCalculated(int $userId): bool

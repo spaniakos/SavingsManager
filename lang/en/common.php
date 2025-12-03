@@ -340,4 +340,13 @@ return [
     'household_contribution_note' => 'Since all members of the household have to contribute equally if applicable:',
     'non_personal' => 'Non-Personal',
     'total' => 'Total',
+
+    // Authentication
+    'email' => 'Email',
+    'password' => 'Password',
+    'remember_me' => 'Remember Me',
+    'dont_have_account' => "Don't have an account?",
+    'already_have_account' => 'Already have an account?',
+    'confirm_password' => 'Confirm Password',
+    'invalid_credentials' => 'The provided credentials do not match our records.',
 ];

@@ -72,7 +72,9 @@ This will create:
 - System expense super categories (3: Essentials, Lifestyle, Savings)
 - System expense categories (70+ categories)
 - Default emojis for all categories
-- Test user: `test@makeasite.gr` / `12341234`
+- Test users:
+  - Regular User: `test@makeasite.gr` / `12341234` (mobile app access)
+  - Admin User: `admin@makeasite.gr` / `12341234` (admin panel + mobile app access)
 
 ### 8. Build Frontend Assets
 
@@ -92,12 +94,15 @@ npm run dev
 php artisan serve
 ```
 
-Visit `http://localhost:8000` and navigate to `/admin/login`.
+Visit `http://localhost:8000`:
+- Mobile app: `/mobile/login` (for regular users)
+- Admin panel: `/admin/login` (for admin users only)
 
 ## First User Setup
 
-1. Use the seeded test user or register a new account:
-   - **Test User**: `test@makeasite.gr` / `12341234` (created by seeders)
+1. Use the seeded test users or register a new account:
+   - **Regular Test User**: `test@makeasite.gr` / `12341234` (mobile app access)
+   - **Admin Test User**: `admin@makeasite.gr` / `12341234` (admin panel + mobile app access)
    - Or visit `/admin/register` to create your first user account
 2. Log in at `/admin/login`
 3. Configure your financial settings (Profile Settings):

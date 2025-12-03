@@ -65,7 +65,7 @@ class MonthlyCalculationTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/monthly-calculation');
+        $response = $this->post('/mobile/monthly-calculation');
 
         $response->assertRedirect();
         $response->assertSessionHas('success');
@@ -116,7 +116,7 @@ class MonthlyCalculationTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/monthly-calculation');
+        $response = $this->post('/mobile/monthly-calculation');
 
         $response->assertRedirect();
         $response->assertSessionHas('success');
@@ -174,7 +174,7 @@ class MonthlyCalculationTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/monthly-calculation');
+        $response = $this->post('/mobile/monthly-calculation');
 
         $goal1->refresh();
         $goal2->refresh();
@@ -201,7 +201,7 @@ class MonthlyCalculationTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->post('/admin/mobile/monthly-calculation');
+        $response = $this->post('/mobile/monthly-calculation');
 
         $response->assertRedirect();
 

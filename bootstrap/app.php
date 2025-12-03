@@ -15,8 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetLocale::class,
         ]);
 
-        // Redirect unauthenticated users to Filament login page
-        $middleware->redirectGuestsTo('/admin/login');
+        // Don't set global guest redirect - we handle it per route group
+        // Mobile routes redirect to /mobile/login
+        // Admin routes redirect to /admin/login (handled by Filament)
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

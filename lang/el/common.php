@@ -340,4 +340,13 @@ return [
     'household_contribution_note' => 'Εφόσον όλα τα μέλη του νοικοκυριού πρέπει να συνεισφέρουν εξίσου, εφόσον ισχύει:',
     'non_personal' => 'Μη-Προσωπικά',
     'total' => 'Συνολικά',
+
+    // Authentication
+    'email' => 'Email',
+    'password' => 'Κωδικός',
+    'remember_me' => 'Θυμήσου με',
+    'dont_have_account' => 'Δεν έχετε λογαριασμό;',
+    'already_have_account' => 'Έχετε ήδη λογαριασμό;',
+    'confirm_password' => 'Επιβεβαίωση Κωδικού',
+    'invalid_credentials' => 'Τα στοιχεία που δώσατε δεν ταιριάζουν με τα αρχεία μας.',
 ];

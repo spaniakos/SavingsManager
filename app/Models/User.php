@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
         'seed_capital',
         'median_monthly_income',
         'income_last_verified_at',
@@ -47,6 +48,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
             'seed_capital' => 'decimal:2',
             'median_monthly_income' => 'decimal:2',
             'income_last_verified_at' => 'date',

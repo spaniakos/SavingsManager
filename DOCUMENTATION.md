@@ -122,7 +122,7 @@ ExpenseEntry::where('user_id', Auth::id())->get();
 
 The application uses a mobile-first approach:
 
-- **Main Route**: `/admin/mobile` - Mobile dashboard
+- **Main Route**: `/mobile` - Mobile dashboard
 - **Middleware**: `DetectMobile` - Automatically redirects to mobile interface
 - **Responsive UI**: All pages designed for mobile devices first
 - **Emoji Support**: Categories use emojis for visual identification

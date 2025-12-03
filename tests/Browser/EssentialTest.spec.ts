@@ -3,75 +3,49 @@ import { test, expect } from '@playwright/test';
 const TEST_EMAIL = 'test@makeasite.gr';
 const TEST_PASSWORD = '12341234';
 
-// Helper function to login and wait for successful authentication
+// Helper function to login via mobile auth and wait for successful authentication
 async function login(page: any) {
-    await page.goto('/admin/login');
+    await page.goto('/mobile/login');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(3000); // Give Livewire time to initialize
+    await page.waitForTimeout(1000);
 
     // Fill login form
-    const emailInput = page.locator('input[wire\\:model="data.email"]').or(page.locator('input[type="email"]')).first();
+    const emailInput = page.locator('input[type="email"], input[name="email"]').first();
     await emailInput.waitFor({ state: 'visible', timeout: 10000 });
     await emailInput.clear();
     await emailInput.fill(TEST_EMAIL);
 
-    const passwordInput = page.locator('input[wire\\:model="data.password"]').or(page.locator('input[type="password"]')).first();
+    const passwordInput = page.locator('input[type="password"], input[name="password"]').first();
     await passwordInput.waitFor({ state: 'visible', timeout: 10000 });
     await passwordInput.clear();
     await passwordInput.fill(TEST_PASSWORD);
 
-    // Wait a bit for Livewire to sync
-    await page.waitForTimeout(2000);
+    // Wait a bit for form to be ready
+    await page.waitForTimeout(1000);
 
-    // Try submitting via Enter key first (more reliable with Livewire)
-    await passwordInput.press('Enter');
-
-    // Wait for redirect away from login page
-    try {
-        await page.waitForURL((url) => !url.includes('/admin/login'), { timeout: 30000 });
-    } catch (e) {
-        // If Enter didn't work, try clicking the submit button
-        const currentUrl = page.url();
-        if (currentUrl.includes('/admin/login')) {
-            const submitButton = page.locator('button[type="submit"]').first();
-            await submitButton.waitFor({ state: 'visible', timeout: 10000 });
-            await submitButton.click({ force: true });
-
-            // Wait again for navigation
-            try {
-                await page.waitForURL((url) => !url.includes('/admin/login'), { timeout: 20000 });
-            } catch (e2) {
-                // If navigation still doesn't happen, wait for network and check for errors
-                await page.waitForLoadState('networkidle', { timeout: 10000 });
-                await page.waitForTimeout(3000);
-
-                // Check if we're still on login page - if so, there might be an error
-                const finalUrl = page.url();
-                if (finalUrl.includes('/admin/login')) {
-                    // Check for error messages
-                    const errorMessage = await page.locator('.text-danger, .error, [role="alert"]').first().textContent({ timeout: 2000 }).catch(() => null);
-                    if (errorMessage) {
-                        throw new Error(`Login failed: ${errorMessage}`);
-                    }
-                    throw new Error('Login failed - still on login page after submission');
-                }
-            }
-        }
-    }
+    // Submit the form
+    const submitButton = page.locator('button[type="submit"]').first();
+    await submitButton.waitFor({ state: 'visible', timeout: 10000 });
+    
+    // Submit and wait for redirect
+    await Promise.all([
+        page.waitForURL((url: URL) => !url.pathname.includes('/mobile/login'), { timeout: 15000 }),
+        submitButton.click()
+    ]);
 
     // Additional wait for any client-side redirects
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
 
     // Navigate to mobile dashboard if not already there
     const currentUrl = page.url();
-    if (!currentUrl.includes('/admin/mobile')) {
-        await page.goto('/admin/mobile');
+    if (!currentUrl.includes('/mobile/dashboard') && !currentUrl.includes('/mobile')) {
+        await page.goto('/mobile/dashboard');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(1000);
     }
 
     // Verify we're logged in by checking we're not on login page
-    expect(page.url()).not.toMatch(/.*\/admin\/login/);
+    expect(page.url()).not.toMatch(/.*\/mobile\/login/);
 }
 
 test.describe('Essential Tests', () => {
@@ -99,18 +73,18 @@ test.describe('Essential Tests', () => {
         await expect(loginLink).toBeVisible({ timeout: 5000 });
     });
 
-    test('should login successfully', async ({ page }) => {
+    test('should login successfully via mobile auth', async ({ page }) => {
         await login(page);
 
-        // Verify we're on an admin page
-        await expect(page).toHaveURL(/.*\/admin/);
+        // Verify we're on mobile dashboard
+        await expect(page).toHaveURL(/.*\/mobile/);
     });
 
     test('should access mobile dashboard after login', async ({ page }) => {
         await login(page);
 
         // Navigate to mobile dashboard
-        await page.goto('/admin/mobile');
+        await page.goto('/mobile/dashboard');
         await page.waitForLoadState('networkidle');
 
         // Verify dashboard loaded
@@ -121,18 +95,18 @@ test.describe('Essential Tests', () => {
         await login(page);
 
         // Navigate to dashboard via menu
-        await page.goto('/admin/mobile');
+        await page.goto('/mobile/dashboard');
         await page.waitForLoadState('networkidle');
-        await expect(page).toHaveURL(/.*\/admin\/mobile/);
+        await expect(page).toHaveURL(/.*\/mobile\/dashboard/);
     });
 
     test('should navigate mobile menu - settings', async ({ page }) => {
         await login(page);
 
         // Navigate to settings
-        await page.goto('/admin/mobile/settings');
+        await page.goto('/mobile/settings');
         await page.waitForLoadState('networkidle');
-        await expect(page).toHaveURL(/.*\/admin\/mobile\/settings/);
+        await expect(page).toHaveURL(/.*\/mobile\/settings/);
         await expect(page.locator('body')).toBeVisible({ timeout: 10000 });
     });
 
@@ -140,9 +114,9 @@ test.describe('Essential Tests', () => {
         await login(page);
 
         // Navigate to income entries
-        await page.goto('/admin/mobile/income-entries');
+        await page.goto('/mobile/income-entries');
         await page.waitForLoadState('networkidle');
-        await expect(page).toHaveURL(/.*\/admin\/mobile\/income-entries/);
+        await expect(page).toHaveURL(/.*\/mobile\/income-entries/);
         await expect(page.locator('body')).toBeVisible({ timeout: 10000 });
     });
 
@@ -150,9 +124,9 @@ test.describe('Essential Tests', () => {
         await login(page);
 
         // Navigate to expense entries
-        await page.goto('/admin/mobile/expense-entries');
+        await page.goto('/mobile/expense-entries');
         await page.waitForLoadState('networkidle');
-        await expect(page).toHaveURL(/.*\/admin\/mobile\/expense-entries/);
+        await expect(page).toHaveURL(/.*\/mobile\/expense-entries/);
         await expect(page.locator('body')).toBeVisible({ timeout: 10000 });
     });
 
@@ -160,7 +134,7 @@ test.describe('Essential Tests', () => {
         await login(page);
 
         // Navigate to settings to find logout
-        await page.goto('/admin/mobile/settings');
+        await page.goto('/mobile/settings');
         await page.waitForLoadState('networkidle');
 
         // Look for logout form or button
@@ -181,38 +155,39 @@ test.describe('Essential Tests', () => {
             ]);
         } else {
             // Fallback: POST to logout route directly
-            await page.request.post('/logout');
+            await page.request.post('/mobile/logout');
             await page.goto('/');
         }
 
-        // Should redirect to welcome page - be flexible with timing
+        // Should redirect to login page or welcome page
         try {
-            await page.waitForURL(/.*\/$/, { timeout: 15000 });
+            await page.waitForURL(/.*\/(mobile\/login|$)/, { timeout: 15000 });
         } catch (e) {
             // If URL doesn't change immediately, wait a bit more
             await page.waitForTimeout(2000);
         }
-        await expect(page).toHaveURL(/\/$/);
+        const finalUrl = page.url();
+        expect(finalUrl).toMatch(/\/(mobile\/login|$)/);
     });
 
-    test('should redirect to login when accessing protected route without auth', async ({ browser }) => {
+    test('should redirect to mobile login when accessing protected route without auth', async ({ browser }) => {
         // Create a fresh context with no cookies/session
         const context = await browser.newContext();
         const page = await context.newPage();
 
         try {
             // Try to access protected route
-            await page.goto('/admin/mobile', { waitUntil: 'networkidle', timeout: 20000 });
+            await page.goto('/mobile/dashboard', { waitUntil: 'networkidle', timeout: 20000 });
 
             // Wait for redirect to login page
-            await page.waitForURL(/.*\/admin\/login/, { timeout: 15000 });
+            await page.waitForURL(/.*\/mobile\/login/, { timeout: 15000 });
 
-            // Verify we're on the login page
+            // Verify we're on the mobile login page
             const currentUrl = page.url();
-            expect(currentUrl).toMatch(/.*\/admin\/login/);
+            expect(currentUrl).toMatch(/.*\/mobile\/login/);
 
             // Verify login form is visible
-            const emailInput = await page.locator('input[type="email"], input[wire\\:model*="email"]').first().isVisible({ timeout: 5000 }).catch(() => false);
+            const emailInput = await page.locator('input[type="email"], input[name="email"]').first().isVisible({ timeout: 5000 }).catch(() => false);
             expect(emailInput).toBeTruthy();
         } finally {
             await context.close();

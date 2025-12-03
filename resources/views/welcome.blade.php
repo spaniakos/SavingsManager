@@ -199,10 +199,10 @@
     <div class="page">
         <nav class="menu">
             @auth
-                <a href="/admin/mobile">{{ __('common.dashboard') }}</a>
+                <a href="{{ route('mobile.dashboard') }}">{{ __('common.dashboard') }}</a>
             @else
-                <a href="{{ url('/admin/login') }}">{{ __('common.login') }}</a>
-                <a href="{{ url('/admin/register') }}">{{ __('common.register') }}</a>
+                <a href="{{ route('mobile.auth.login') }}">{{ __('common.login') }}</a>
+                <a href="{{ route('mobile.auth.register') }}">{{ __('common.register') }}</a>
             @endauth
         </nav>
         
@@ -233,11 +233,11 @@
         </div>
         
         @auth
-            <a href="/admin/mobile" class="cta-button">
+            <a href="{{ route('mobile.dashboard') }}" class="cta-button">
                 {{ __('common.dashboard') }} →
             </a>
         @else
-            <a href="{{ url('/admin/login') }}" class="cta-button">
+            <a href="{{ route('mobile.auth.login') }}" class="cta-button">
                 {{ __('common.get_started') }} →
             </a>
         @endauth

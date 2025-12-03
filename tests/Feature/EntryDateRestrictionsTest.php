@@ -36,7 +36,7 @@ class EntryDateRestrictionsTest extends TestCase
         // Try to create expense for 2 months ago
         $oldDate = Carbon::now()->subMonths(2)->format('Y-m-d');
 
-        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
+        $response = $this->post('/mobile/expense/category/'.$category->id, [
             'amount' => 100.00,
             'date' => $oldDate,
             'notes' => 'Old expense',
@@ -56,7 +56,7 @@ class EntryDateRestrictionsTest extends TestCase
 
         $currentDate = Carbon::now()->format('Y-m-d');
 
-        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
+        $response = $this->post('/mobile/expense/category/'.$category->id, [
             'amount' => 100.00,
             'date' => $currentDate,
             'notes' => 'Current expense',
@@ -80,7 +80,7 @@ class EntryDateRestrictionsTest extends TestCase
 
         $previousMonthDate = Carbon::now()->subMonth()->addDays(5)->format('Y-m-d');
 
-        $response = $this->post('/admin/mobile/expense/category/'.$category->id, [
+        $response = $this->post('/mobile/expense/category/'.$category->id, [
             'amount' => 100.00,
             'date' => $previousMonthDate,
             'notes' => 'Previous month expense',
@@ -123,7 +123,7 @@ class EntryDateRestrictionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->put('/admin/mobile/expense-entries/'.$entry->id, [
+        $response = $this->put('/mobile/expense-entries/'.$entry->id, [
             'amount' => 200.00,
             'date' => $entry->date->format('Y-m-d'),
             'notes' => 'Updated',
@@ -167,7 +167,7 @@ class EntryDateRestrictionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->delete('/admin/mobile/expense-entries/'.$entry->id);
+        $response = $this->delete('/mobile/expense-entries/'.$entry->id);
 
         $response->assertRedirect();
 
@@ -187,7 +187,7 @@ class EntryDateRestrictionsTest extends TestCase
         // Try to create income for 2 months ago
         $oldDate = Carbon::now()->subMonths(2)->format('Y-m-d');
 
-        $response = $this->post('/admin/mobile/income/category/'.$category->id, [
+        $response = $this->post('/mobile/income/category/'.$category->id, [
             'amount' => 1000.00,
             'date' => $oldDate,
             'notes' => 'Old income',
