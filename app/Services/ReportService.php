@@ -564,42 +564,68 @@ class ReportService
     /**
      * Calculate personal expense totals by person
      * Returns:
-     * - total_spend: Expenses where is_personal = false
-     * - personal_by_person: Array of [person_name => total] for expenses where is_personal = true
+     * - total_spend: Expenses where is_personal = false (excluding savings super category)
+     * - personal_by_person: Array of [person_name => total] for expenses where is_personal = true (excluding savings super category)
      */
     protected function calculatePersonalExpenseTotals(User $user, Carbon $startDate, Carbon $endDate): array
     {
-        // Total Spend: expenses where is_personal = false
-        $totalSpend = ExpenseEntry::where('user_id', $user->id)
+        // Get savings super category to exclude it
+        $savingsSuperCategory = \App\Models\ExpenseSuperCategory::where('name', 'savings')
+            ->where('is_system', true)
+            ->first();
+
+        // Total Spend: expenses where is_personal = false, excluding savings super category
+        $totalSpendQuery = ExpenseEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate])
-            ->where('is_personal', false)
-            ->sum('amount');
+            ->where('is_personal', false);
+
+        if ($savingsSuperCategory) {
+            $totalSpendQuery->whereHas('expenseCategory', function ($q) use ($savingsSuperCategory) {
+                $q->where('expense_super_category_id', '!=', $savingsSuperCategory->id);
+            });
+        }
+
+        $totalSpend = $totalSpendQuery->sum('amount');
 
         // Get all persons for this user
         $persons = Person::where('user_id', $user->id)
             ->orderBy('fullname')
             ->get();
 
-        // Calculate personal expenses by person
+        // Calculate personal expenses by person (excluding savings super category)
         $personalByPerson = [];
         foreach ($persons as $person) {
-            $personalTotal = ExpenseEntry::where('user_id', $user->id)
+            $personalTotalQuery = ExpenseEntry::where('user_id', $user->id)
                 ->whereBetween('date', [$startDate, $endDate])
                 ->where('person_id', $person->id)
-                ->where('is_personal', true)
-                ->sum('amount');
+                ->where('is_personal', true);
+
+            if ($savingsSuperCategory) {
+                $personalTotalQuery->whereHas('expenseCategory', function ($q) use ($savingsSuperCategory) {
+                    $q->where('expense_super_category_id', '!=', $savingsSuperCategory->id);
+                });
+            }
+
+            $personalTotal = $personalTotalQuery->sum('amount');
 
             if ($personalTotal > 0) {
                 $personalByPerson[$person->fullname] = round($personalTotal, 2);
             }
         }
 
-        // Also include entries with no person (person_id is null) that are personal
-        $noPersonPersonal = ExpenseEntry::where('user_id', $user->id)
+        // Also include entries with no person (person_id is null) that are personal (excluding savings super category)
+        $noPersonPersonalQuery = ExpenseEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate])
             ->whereNull('person_id')
-            ->where('is_personal', true)
-            ->sum('amount');
+            ->where('is_personal', true);
+
+        if ($savingsSuperCategory) {
+            $noPersonPersonalQuery->whereHas('expenseCategory', function ($q) use ($savingsSuperCategory) {
+                $q->where('expense_super_category_id', '!=', $savingsSuperCategory->id);
+            });
+        }
+
+        $noPersonPersonal = $noPersonPersonalQuery->sum('amount');
 
         if ($noPersonPersonal > 0) {
             $personalByPerson[__('common.no_person')] = round($noPersonPersonal, 2);
@@ -614,40 +640,67 @@ class ReportService
     /**
      * Calculate non-personal expenses by person (for household contribution breakdown)
      * This shows how much each person spent on non-personal (shared) expenses
+     * Excludes savings super category
      */
     protected function calculateNonPersonalExpensesByPerson(User $user, Carbon $startDate, Carbon $endDate): array
     {
-        // Total non-personal expenses (is_personal = false)
-        $totalNonPersonal = ExpenseEntry::where('user_id', $user->id)
+        // Get savings super category to exclude it
+        $savingsSuperCategory = \App\Models\ExpenseSuperCategory::where('name', 'savings')
+            ->where('is_system', true)
+            ->first();
+
+        // Total non-personal expenses (is_personal = false), excluding savings super category
+        $totalNonPersonalQuery = ExpenseEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate])
-            ->where('is_personal', false)
-            ->sum('amount');
+            ->where('is_personal', false);
+
+        if ($savingsSuperCategory) {
+            $totalNonPersonalQuery->whereHas('expenseCategory', function ($q) use ($savingsSuperCategory) {
+                $q->where('expense_super_category_id', '!=', $savingsSuperCategory->id);
+            });
+        }
+
+        $totalNonPersonal = $totalNonPersonalQuery->sum('amount');
 
         // Get all persons for this user
         $persons = Person::where('user_id', $user->id)
             ->orderBy('fullname')
             ->get();
 
-        // Calculate non-personal expenses by person
+        // Calculate non-personal expenses by person (excluding savings super category)
         $nonPersonalByPerson = [];
         foreach ($persons as $person) {
-            $nonPersonalTotal = ExpenseEntry::where('user_id', $user->id)
+            $nonPersonalTotalQuery = ExpenseEntry::where('user_id', $user->id)
                 ->whereBetween('date', [$startDate, $endDate])
                 ->where('person_id', $person->id)
-                ->where('is_personal', false)
-                ->sum('amount');
+                ->where('is_personal', false);
+
+            if ($savingsSuperCategory) {
+                $nonPersonalTotalQuery->whereHas('expenseCategory', function ($q) use ($savingsSuperCategory) {
+                    $q->where('expense_super_category_id', '!=', $savingsSuperCategory->id);
+                });
+            }
+
+            $nonPersonalTotal = $nonPersonalTotalQuery->sum('amount');
 
             if ($nonPersonalTotal > 0) {
                 $nonPersonalByPerson[$person->fullname] = round($nonPersonalTotal, 2);
             }
         }
 
-        // Also include entries with no person (person_id is null) that are non-personal
-        $noPersonNonPersonal = ExpenseEntry::where('user_id', $user->id)
+        // Also include entries with no person (person_id is null) that are non-personal (excluding savings super category)
+        $noPersonNonPersonalQuery = ExpenseEntry::where('user_id', $user->id)
             ->whereBetween('date', [$startDate, $endDate])
             ->whereNull('person_id')
-            ->where('is_personal', false)
-            ->sum('amount');
+            ->where('is_personal', false);
+
+        if ($savingsSuperCategory) {
+            $noPersonNonPersonalQuery->whereHas('expenseCategory', function ($q) use ($savingsSuperCategory) {
+                $q->where('expense_super_category_id', '!=', $savingsSuperCategory->id);
+            });
+        }
+
+        $noPersonNonPersonal = $noPersonNonPersonalQuery->sum('amount');
 
         if ($noPersonNonPersonal > 0) {
             $nonPersonalByPerson[__('common.no_person')] = round($noPersonNonPersonal, 2);

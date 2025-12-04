@@ -354,7 +354,7 @@
 
         <!-- Non-Personal Expenses Breakdown by Person (Household Contribution) -->
         @if(!empty($reportData['non_personal_expenses_by_person']) && $reportData['non_personal_expenses_by_person']['total'] > 0)
-            <div class="bg-white p-4 rounded-xl border-2 border-gray-200 sticky bottom-0 z-10 shadow-lg">
+            <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
                 <h2 class="text-lg font-semibold mb-4 text-gray-800">{{ __('common.non_personal_expenses_breakdown') }}</h2>
                 <p class="text-xs text-gray-600 mb-4">{{ __('common.household_contribution_note') }}</p>
                 
